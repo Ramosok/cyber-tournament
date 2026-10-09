@@ -1,0 +1,164 @@
+.form {
+  max-width: 432px;
+  max-height: 416px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--white);
+}
+
+.title {
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.input {
+  display: flex;
+  width: 100%;
+  height: 66px;
+  padding: 20px 12px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  border-radius: 333px;
+  border: 1px solid var(--white);
+  background: var(--white);
+  margin-top: 12px;
+}
+
+.btnSubmit {
+  width: 100%;
+  display: flex;
+  padding: 10px 48px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 333px;
+  background: #f0a;
+  color: var(--white);
+  text-align: center;
+  font-family: "Alumni Sans", sans-serif;
+  font-size: 40px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 40px;
+  text-transform: uppercase;
+  margin-top: 28px;
+  cursor: pointer;
+  text-wrap: nowrap;
+
+  &:hover {
+    background: #fff500;
+    color: black;
+  }
+
+  &:disabled {
+    background: #da4bab;
+  }
+}
+
+.linkWrapper {
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+
+.link {
+  color: var(--white);
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+.error {
+  color: #fff500;
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  margin-top: 14px;
+}
+
+.successModal {
+  background: var(--white);
+  width: 347px;
+  height: 258px;
+  padding: 28px;
+  gap: 8px;
+}
+
+.tournamentConditionsModal {
+  background: var(--white);
+  width: 90vw;
+  height: 70vh;
+  overflow: hidden;
+}
+
+.tournamentConditionsModal .thumb {
+  display: none !important;
+}
+
+.tournamentConditionsModal .scroller {
+  display: block !important;
+  overflow-y: auto !important;
+  scrollbar-width: auto !important;
+  -ms-overflow-style: auto !important;
+}
+
+.tournamentConditionsModal .scroller::-webkit-scrollbar {
+  display: block !important;
+}
+
+.tournamentConditionsModal .scrollbar {
+  display: none !important;
+}
+
+@media (min-width: 460px) {
+  .form {
+    border-radius: 22px;
+    padding: 48px;
+  }
+}
+
+@media (min-width: 568px) {
+  .tournamentConditionsModal {
+    background: var(--white);
+    width: 70vw;
+    height: 70vh;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+}
+
+.main {
+  flex: 1;
+  background-image: url("shared/assets/bg1920.webp");
+  background-repeat: no-repeat;
+  background-size: 170% auto;
+  background-position: top;
+  margin-top: 65px;
+}

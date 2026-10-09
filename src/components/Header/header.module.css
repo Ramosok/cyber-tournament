@@ -1,0 +1,97 @@
+.header {
+  width: 100%;
+  background-image: url("../../shared/assets/bg360header.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--white);
+  padding: 0 20px;
+  margin-bottom: 10px;
+}
+
+.logo {
+  margin-top: 20px;
+  width: 103px;
+}
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  font-family: "Alumni Sans", sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: 0;
+  font-size: clamp(37px, 9vw, 79px);
+  line-height: 1.08;
+}
+
+.description {
+  font-family: "Alumni Sans", sans-serif;
+  font-size: clamp(24px, 6vw, 58px);
+  font-style: italic;
+  font-weight: 600;
+  line-height: clamp(24px, 6vw, 58px);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.description > span {
+  color: #fff500;
+  display: block;
+}
+
+.bonus > img {
+  max-width: 817px;
+  max-height: 246px;
+}
+
+.goose {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+}
+
+.goose > img {
+  max-width: 304px;
+  max-height: 270px;
+}
+
+@media (min-width: 568px) {
+  .header {
+    background-image: url("../../shared/assets/bg1920header.webp");
+    flex-direction: row;
+  }
+  .logo {
+    width: 157px;
+  }
+  .goose > img {
+    max-width: 693px;
+    max-height: 617px;
+  }
+  .goose {
+    width: auto;
+    align-items: flex-end;
+  }
+  .title {
+    margin-top: 31px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo {
+    width: 197px;
+  }
+}

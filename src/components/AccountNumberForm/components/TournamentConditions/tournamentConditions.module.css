@@ -1,0 +1,27 @@
+.container {
+  width: 91vw;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.doc {
+  width: 91vw;
+  height: 100%;
+  border-radius: 21px;
+}
+
+@media (min-width: 568px) {
+  .doc {
+    width: 100%;
+    height: 100%;
+    border-radius: 21px;
+  }
+  .container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+}

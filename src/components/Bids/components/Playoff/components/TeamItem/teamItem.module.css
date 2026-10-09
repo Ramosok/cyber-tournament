@@ -1,0 +1,89 @@
+.teamContainer {
+  width: 100%;
+  max-height: 78px;
+  height: 100%;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--black);
+  position: relative;
+}
+
+.teamContainer:nth-child(1n) {
+  margin-bottom: 4px;
+}
+
+.teamContainer:nth-child(2n) {
+  margin-bottom: 24px;
+}
+
+.logo {
+  width: 54px;
+  height: 48px;
+}
+
+.name {
+  color: var(--white);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  flex: 1;
+  margin: 0 12px;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scoreTitle {
+  color: var(--white);
+  text-align: center;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  opacity: 0.5;
+}
+
+.scoreInput {
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--white);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+  outline: none;
+}
+
+.winner {
+  border: 2px solid #fff500;
+  background: rgba(255, 245, 0, 0.1);
+}
+
+.trophy {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+@media (min-width: 568px) {
+  .teamContainer:nth-child(1n) {
+    margin-bottom: 0;
+  }
+
+  .teamContainer:nth-child(2n) {
+    margin-bottom: 0;
+  }
+}

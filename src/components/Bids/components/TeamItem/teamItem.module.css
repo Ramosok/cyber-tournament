@@ -1,0 +1,23 @@
+.teamItem {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  gap: 12px;
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  background: #141414;
+  padding: 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.teamItem:hover {
+  background: #272626;
+}
+
+.teamItem:disabled {
+  background: #3c3b3b;
+}

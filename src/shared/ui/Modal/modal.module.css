@@ -1,0 +1,81 @@
+.dialog {
+  background-color: transparent;
+  border: none;
+}
+
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(9px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 552px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  border-radius: 22px;
+  border: 1px solid #000;
+  background: #000;
+  overflow: hidden;
+  padding: 3px;
+  position: relative;
+}
+
+.scroller {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar {
+  position: absolute;
+  top: 1px;
+  right: 6px;
+  bottom: 1px;
+  width: 7px;
+  z-index: 10;
+  pointer-events: none;
+  background: transparent;
+}
+
+.thumb {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 0;
+  height: 20px;
+  background: #fff500;
+  border-radius: 17px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+  transition: background 0.2s ease;
+  cursor: pointer;
+  pointer-events: auto;
+  display: block;
+}
+
+.cross {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+}

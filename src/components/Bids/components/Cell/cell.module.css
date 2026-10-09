@@ -1,0 +1,69 @@
+.cell {
+  position: relative;
+  width: 100px;
+  height: 131px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    .cross {
+      display: block;
+    }
+  }
+}
+.cross {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+  display: none;
+}
+
+.placeholder {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--white);
+  border-radius: 22px;
+  width: 100px;
+  height: 100px;
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 11px;
+}
+
+.title {
+  color: var(--white);
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  opacity: 0.5;
+}
+
+.selectedTeam {
+  display: flex;
+  flex-direction: column;
+}
+
+.teamLogo {
+  width: 90px;
+  height: 90px;
+}
+
+.teamName {
+  color: var(--white);
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  margin-top: 20px;
+}

@@ -1,0 +1,100 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  padding-bottom: 48px;
+}
+
+.title {
+  color: var(--white);
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 42px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 45px;
+  padding: 0 20px;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 20px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.groupLabel {
+  color: var(--white);
+  font-family: Roboto, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.groupCells {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.verticalDivider {
+  width: 2px;
+  opacity: 0.2;
+  background: #fff;
+  flex-shrink: 0;
+  margin: 0 10px;
+}
+
+.horizontalDivider {
+  height: 2px;
+  width: 108%;
+  transform: translateX(-4%);
+  opacity: 0.2;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.msgUnvaluable {
+  height: 50vh;
+  font-size: 30px;
+  text-align: center;
+  margin-top: 30px;
+  color: #fff500;
+  padding: 0 10px;
+}
+
+@media (min-width: 568px) {
+}
+
+@media (min-width: 768px) {
+  .groupCells {
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .row {
+    gap: 40px;
+  }
+  .groupCells {
+    gap: 60px;
+  }
+}
