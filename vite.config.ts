@@ -7,6 +7,13 @@ import svgr from "vite-plugin-svgr";
 import webfontDownload from "vite-plugin-webfont-dl";
 import preload from "vite-plugin-preload";
 
+/**
+ * Dev-сервер часто открывают через прокси (песочницы, туннели, превью),
+ * а Vite по умолчанию отклоняет неизвестные Host-заголовки.
+ * Пример: VITE_ALLOWED_HOSTS=".e2b.app,localhost"
+ */
+const allowedHosts = process.env.VITE_ALLOWED_HOSTS?.split(",") ?? [];
+
 export default defineConfig({
   plugins: [
     preload({
@@ -70,6 +77,7 @@ export default defineConfig({
   base: "./",
   server: {
     port: 3000,
+    allowedHosts,
     hmr: {
       overlay: true,
     },

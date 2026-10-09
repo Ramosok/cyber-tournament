@@ -1,13 +1,11 @@
 import { useActionState, useRef } from "react";
 
 import type { FC } from "react";
-import type {
-  PlayOffTeams,
-  PredictionActionState,
-} from "@/components/AccountNumberForm/api/submitPredictionAction";
-// import type { Team } from "@/shared/config";
+import type { PredictionActionState } from "@/components/AccountNumberForm/api/predictionActionState";
+import type { PredictionForm } from "@/shared/prediction/types";
 import type { ModalHandle } from "@/shared/ui/Modal/Modal";
 
+import { INITIAL_ACTION_STATE } from "@/components/AccountNumberForm/api/predictionActionState";
 import { submitPrediction } from "@/components/AccountNumberForm/api/submitPredictionAction";
 import { SuccessModal } from "@/components/AccountNumberForm/components/SuccessModal";
 import { TournamentConditions } from "@/components/AccountNumberForm/components/TournamentConditions";
@@ -16,48 +14,42 @@ import { Modal } from "@/shared/ui/Modal/Modal";
 
 import styles from "./accountNumberForm.module.css";
 
-type AccountNumberFormProps = {
-  teamList: PlayOffTeams[];
-  onReset: () => void;
+export type AccountNumberFormProps = {
+  readonly form: PredictionForm;
+  readonly onReset: () => void;
 };
 
-const initialState: PredictionActionState = { status: "idle" };
+const ACCOUNT_MAX_LENGTH = 9;
 
 export const AccountNumberForm: FC<AccountNumberFormProps> = ({
-  teamList,
+  form,
   onReset,
 }) => {
-  const modalRef = useRef<ModalHandle>(null);
-  const tournamentConditionsRef = useRef<ModalHandle>(null);
+  const successModalRef = useRef<ModalHandle>(null);
+  const conditionsModalRef = useRef<ModalHandle>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [state, formAction, isPending] = useActionState(
-    async (prevState: PredictionActionState, formData: FormData) => {
-      const result = await submitPrediction(prevState, formData, teamList);
+  const [actionState, formAction, isPending] = useActionState<
+    PredictionActionState,
+    FormData
+  >(async (_prevState, formData) => {
+    const result = await submitPrediction(_prevState, formData, form);
 
-      if (result.status === "success" && modalRef.current) {
-        modalRef.current.showModal();
-        onReset();
-        if (formRef.current) {
-          formRef.current.reset();
-        }
-      }
-
-      return result;
-    },
-    initialState,
-  );
-
-  const handleCloseModal = (): void => {
-    if (modalRef.current) {
-      modalRef.current.close();
+    if (result.status === "success") {
+      successModalRef.current?.showModal();
+      formRef.current?.reset();
+      onReset();
     }
+
+    return result;
+  }, INITIAL_ACTION_STATE);
+
+  const handleCloseSuccessModal = (): void => {
+    successModalRef.current?.close();
   };
 
-  const handleOpenTournamentConditions = (): void => {
-    if (tournamentConditionsRef.current) {
-      tournamentConditionsRef.current.showModal();
-    }
+  const handleOpenConditions = (): void => {
+    conditionsModalRef.current?.showModal();
   };
 
   return (
@@ -67,7 +59,7 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
 
         <input
           onInput={handleInputOnlyNumber}
-          maxLength={9}
+          maxLength={ACCOUNT_MAX_LENGTH}
           name="accountNumber"
           placeholder="XXXXX"
           className={styles.input}
@@ -75,7 +67,7 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
           autoComplete="off"
         />
 
-        {state.status === "success" && (
+        {actionState.status === "success" && (
           <p className={styles.success}>Прогноз успешно отправлен</p>
         )}
 
@@ -83,8 +75,8 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
           {isPending ? "ОТПРАВКА..." : "ОСТАВИТЬ ПРОГНОЗ"}
         </button>
 
-        {state.status === "error" && state.error && (
-          <p className={styles.error}>{state.error}</p>
+        {actionState.status === "error" && (
+          <p className={styles.error}>{actionState.error}</p>
         )}
 
         <span className={styles.linkWrapper}>
@@ -103,19 +95,21 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
           disabled={isPending}
           type="button"
           className={styles.link}
-          onClick={handleOpenTournamentConditions}
+          onClick={handleOpenConditions}
         >
           Условия турнира
         </button>
       </form>
+
       <Modal
         className={styles.tournamentConditionsModal}
-        ref={tournamentConditionsRef}
+        ref={conditionsModalRef}
       >
         <TournamentConditions />
       </Modal>
-      <Modal className={styles.successModal} noCross ref={modalRef}>
-        <SuccessModal onClose={handleCloseModal} />
+
+      <Modal className={styles.successModal} noCross ref={successModalRef}>
+        <SuccessModal onClose={handleCloseSuccessModal} />
       </Modal>
     </>
   );

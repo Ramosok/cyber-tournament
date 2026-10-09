@@ -1,40 +1,36 @@
 import type { FC } from "react";
-import type { Team } from "@/shared/config";
+import type { Team, TeamId } from "@/shared/config";
 
 import styles from "./teamItem.module.css";
 
-type TeamItemProps = Team & {
-  logo: string;
-  nameTeam: string;
-  id: string;
-  isSelected: boolean;
-  onTeamSelect: ((teamId: string) => void) | undefined;
-  currentCellIndex: number | null | undefined;
+export type TeamItemProps = {
+  readonly team: Team;
+  readonly isSelected: boolean;
+  readonly onSelect: (teamId: TeamId) => void;
 };
 
-export const TeamItem: FC<TeamItemProps> = ({
-  logo,
-  id,
-  isSelected,
-  nameTeam,
-  onTeamSelect,
-  currentCellIndex,
-}) => {
+/** Команда в модалке выбора. Уже выбранную команду выбрать повторно нельзя. */
+export const TeamItem: FC<TeamItemProps> = ({ team, isSelected, onSelect }) => {
   const handleClick = (): void => {
-    if (!isSelected && currentCellIndex !== null && onTeamSelect) {
-      onTeamSelect(id);
-    }
+    onSelect(team.id);
   };
 
   return (
     <button
-      disabled={isSelected || currentCellIndex === null}
       className={styles.teamItem}
-      id={id}
+      type="button"
+      disabled={isSelected}
+      aria-pressed={isSelected}
       onClick={handleClick}
     >
-      <img width="54" height="54" src={logo} alt={nameTeam} />
-      <p>{nameTeam}</p>
+      <img
+        width="54"
+        height="54"
+        src={team.logo}
+        alt={team.nameTeam}
+        loading="lazy"
+      />
+      <p>{team.nameTeam}</p>
     </button>
   );
 };

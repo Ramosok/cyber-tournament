@@ -2,18 +2,20 @@ import type { CSSProperties, FC } from "react";
 
 import styles from "./picture.module.css";
 
-type PictureProps = {
-  src: string;
-  alt?: string;
-  sources?: {
-    srcSet: string;
-    media?: string;
-    type?: string;
-    sizes?: string;
-  }[];
-  className?: string;
-  style?: CSSProperties;
-  loading?: "lazy" | "eager";
+export type PictureSource = {
+  readonly srcSet: string;
+  readonly media?: string;
+  readonly type?: string;
+  readonly sizes?: string;
+};
+
+export type PictureProps = {
+  readonly src: string;
+  readonly alt?: string;
+  readonly sources?: readonly PictureSource[];
+  readonly className?: string;
+  readonly style?: CSSProperties;
+  readonly loading?: "lazy" | "eager";
 };
 
 export const Picture: FC<PictureProps> = ({
@@ -28,7 +30,7 @@ export const Picture: FC<PictureProps> = ({
     <picture className={className} style={style}>
       {sources.map((source) => (
         <source
-          key={Math.random()}
+          key={source.srcSet}
           srcSet={source.srcSet}
           media={source.media}
           type={source.type}

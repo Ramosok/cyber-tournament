@@ -8,32 +8,29 @@ const MILLISECONDS_PER_MINUTE = MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE;
 const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * MINUTES_PER_HOUR;
 const MILLISECONDS_PER_DAY = MILLISECONDS_PER_HOUR * HOURS_PER_DAY;
 
-export interface TimeLeft {
+export type TimeLeft = {
   days: number;
   hours: number;
   minutes: number;
   seconds: number;
-}
+};
+
+const createZeroTimeLeft = (): TimeLeft => ({
+  days: INITIAL_VALUE,
+  hours: INITIAL_VALUE,
+  minutes: INITIAL_VALUE,
+  seconds: INITIAL_VALUE,
+});
 
 export const calculateTimeLeft = (endDate: Date | null): TimeLeft => {
   if (!endDate) {
-    return {
-      days: INITIAL_VALUE,
-      hours: INITIAL_VALUE,
-      minutes: INITIAL_VALUE,
-      seconds: INITIAL_VALUE,
-    };
+    return createZeroTimeLeft();
   }
 
   const difference = endDate.getTime() - Date.now();
 
   if (difference <= INITIAL_VALUE) {
-    return {
-      days: INITIAL_VALUE,
-      hours: INITIAL_VALUE,
-      minutes: INITIAL_VALUE,
-      seconds: INITIAL_VALUE,
-    };
+    return createZeroTimeLeft();
   }
 
   return {

@@ -1,33 +1,30 @@
 import { useEffect, useState } from "react";
 
 import type { FC } from "react";
+import type { BettingStatus } from "@/shared/tournament/bettingStatus";
 
 import { Item } from "@/components/Timer/components/Item";
 import {
   calculateTimeLeft,
   MILLISECONDS_PER_SECOND,
 } from "@/components/Timer/utils/calculateTimeLeft";
-import {
-  type BettingStatus,
-  getCurrentBettingEndDate,
-} from "@/shared/utils/getCurrentBettingEndDate";
+import { getBettingStatus } from "@/shared/tournament/bettingStatus";
 
 import styles from "./timer.module.css";
 
 export const Timer: FC = () => {
-  const bettingStatus: BettingStatus = getCurrentBettingEndDate();
+  const [bettingStatus] = useState<BettingStatus>(getBettingStatus);
+  const { endsAt } = bettingStatus;
 
-  const endDate = bettingStatus.hasActiveStage ? bettingStatus.endDate : null;
-
-  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(endDate));
+  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(endsAt));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(endDate));
+      setTimeLeft(calculateTimeLeft(endsAt));
     }, MILLISECONDS_PER_SECOND);
 
     return () => clearInterval(timer);
-  }, [endDate]);
+  }, [endsAt]);
 
   return (
     <section className={styles.container}>

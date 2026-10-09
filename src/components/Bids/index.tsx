@@ -1,123 +1,163 @@
-import { useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import type { FC } from "react";
-import type { PlayOffTeams } from "@/components/AccountNumberForm/api/submitPredictionAction";
 import type { PlayoffState } from "@/components/Bids/components/Playoff/types";
-import type { Team } from "@/shared/config";
-import type { BettingStatus } from "@/shared/utils/getCurrentBettingEndDate";
+import type { TeamId } from "@/shared/config";
+import type { PredictionForm } from "@/shared/prediction/types";
+import type { BettingStatus } from "@/shared/tournament/bettingStatus";
+import type {
+  MatchSlot,
+  PlayoffRoundKey,
+} from "@/shared/tournament/playoffRounds";
+import type { CellIndex } from "@/shared/tournament/stageGrid";
+import type { StageSelection } from "@/shared/tournament/stageSelection";
+import type { ModalHandle } from "@/shared/ui/Modal/Modal";
 
 import { AccountNumberForm } from "@/components/AccountNumberForm";
 import { Playoff } from "@/components/Bids/components/Playoff";
+import { buildPlayoffPredictions } from "@/components/Bids/components/Playoff/utils/buildPlayoffPredictions";
 import { createInitialState } from "@/components/Bids/components/Playoff/utils/createInitialState";
-// import { Stage } from "@/components/Bids/components/Stage";
-// import { TeamList } from "@/components/Bids/components/TeamList";
-import { TEAM_LIST } from "@/shared/config";
-// import { Modal, type ModalHandle } from "@/shared/ui/Modal/Modal";
-import { getCurrentBettingEndDate } from "@/shared/utils/getCurrentBettingEndDate";
+import { setMatchScore } from "@/components/Bids/components/Playoff/utils/setMatchScore";
+import { Stage } from "@/components/Bids/components/Stage";
+import { TeamList } from "@/components/Bids/components/TeamList";
+import { createTeamIndex, STAGE_TEAM_LIST, TEAM_LIST } from "@/shared/config";
+import { buildStagePredictions } from "@/shared/prediction/buildStagePredictions";
+import { createPredictionForm } from "@/shared/prediction/types";
+import { getBettingClosedMessage } from "@/shared/tournament/bettingClosedMessage";
+import { getBettingStatus } from "@/shared/tournament/bettingStatus";
+import {
+  createEmptyStageSelection,
+  getSelectedTeamIds,
+  setCellTeam,
+} from "@/shared/tournament/stageSelection";
+import { Modal } from "@/shared/ui/Modal/Modal";
 
 import styles from "./bids.module.css";
 
-const CELL_COUNT = 16;
-export const initialTeams = Array(CELL_COUNT).fill(null) as (Team | null)[];
-
 export const Bids: FC = () => {
-  // const modalRef = useRef<ModalHandle>(null);
+  const [bettingStatus] = useState<BettingStatus>(getBettingStatus);
 
-  const [selectedTeams, setSelectedTeams] = useState<PlayOffTeams[]>([]);
-  const [state, setState] = useState<PlayoffState>(() => createInitialState());
-  // const [selectedTeamIds, setSelectedTeamIds] = useState<Set<string>>(
-  //   new Set(),
-  // );
-  // const [currentCellIndex, setCurrentCellIndex] = useState<number | null>(null);
+  const [stageSelection, setStageSelection] = useState<StageSelection>(
+    createEmptyStageSelection,
+  );
+  const [playoffState, setPlayoffState] = useState<PlayoffState>(() =>
+    createInitialState(TEAM_LIST),
+  );
+  const [pickedCellIndex, setPickedCellIndex] = useState<CellIndex | null>(
+    null,
+  );
 
-  // const handleCellClick = (index: number): void => {
-  //   const currentTeam = selectedTeams[index];
-  //
-  //   if (currentTeam) {
-  //     setSelectedTeams((prev) => {
-  //       const newArr = [...prev];
-  //       newArr[index] = null;
-  //       return newArr;
-  //     });
-  //
-  //     setSelectedTeamIds((prev) => {
-  //       const newSet = new Set(prev);
-  //       newSet.delete(currentTeam.id);
-  //       return newSet;
-  //     });
-  //   } else {
-  //     setCurrentCellIndex(index);
-  //     modalRef.current?.showModal();
-  //   }
-  // };
+  const teamPickerRef = useRef<ModalHandle>(null);
 
-  // const handleTeamSelect = (teamId: string): void => {
-  //   const team = TEAM_LIST.find((t) => t.id === teamId);
-  //   if (!team || currentCellIndex === null) return;
-  //
-  //   const label = CELL_LABEL_MAP[currentCellIndex];
-  //
-  //   setSelectedTeams((prev) => {
-  //     const newArr = [...prev];
-  //
-  //     newArr[currentCellIndex] = {
-  //       ...team,
-  //       metaData: label,
-  //     };
-  //
-  //     return newArr;
-  //   });
-  //
-  //   setSelectedTeamIds((prev) => new Set([...prev, teamId]));
-  //   modalRef.current?.close();
-  //   setCurrentCellIndex(null);
-  // };
+  // Для сетки 1–3 этапов — все 16 участников, для плей-офф — 8 прошедших.
+  const stageTeamIndex = useMemo(() => createTeamIndex(STAGE_TEAM_LIST), []);
+  const playoffTeamIndex = useMemo(() => createTeamIndex(TEAM_LIST), []);
+  const selectedTeamIds = useMemo(
+    () => getSelectedTeamIds(stageSelection),
+    [stageSelection],
+  );
 
-  const onResetSelectedTeams = (): void => {
-    setSelectedTeams([]);
-    setState(createInitialState());
-    // selectedTeamIds.clear();
-    // setCurrentCellIndex(null);
-  };
+  /**
+   * И сетка, и плей-офф отдают одну и ту же модель PredictionForm,
+   * поэтому форма ниже не знает, какой этап сейчас идёт.
+   */
+  const predictionForm = useMemo<PredictionForm>(() => {
+    const draft = bettingStatus.isFinalStep
+      ? buildPlayoffPredictions(playoffState, playoffTeamIndex)
+      : buildStagePredictions(stageSelection, stageTeamIndex);
 
-  const bettingStatus: BettingStatus = getCurrentBettingEndDate();
+    return createPredictionForm(bettingStatus.currentStep, draft);
+  }, [
+    bettingStatus,
+    playoffState,
+    stageSelection,
+    stageTeamIndex,
+    playoffTeamIndex,
+  ]);
+
+  const handleCellClick = useCallback(
+    (cellIndex: CellIndex): void => {
+      if (stageSelection[cellIndex] !== null) {
+        setStageSelection((prev) => setCellTeam(prev, cellIndex, null));
+        return;
+      }
+
+      setPickedCellIndex(cellIndex);
+      teamPickerRef.current?.showModal();
+    },
+    [stageSelection],
+  );
+
+  const handleTeamSelect = useCallback(
+    (teamId: TeamId): void => {
+      if (pickedCellIndex === null) {
+        return;
+      }
+
+      setStageSelection((prev) => setCellTeam(prev, pickedCellIndex, teamId));
+      teamPickerRef.current?.close();
+      setPickedCellIndex(null);
+    },
+    [pickedCellIndex],
+  );
+
+  const handleScoreChange = useCallback(
+    (
+      round: PlayoffRoundKey,
+      matchIndex: number,
+      slot: MatchSlot,
+      value: string,
+    ): void => {
+      setPlayoffState((prev) =>
+        setMatchScore(prev, round, matchIndex, slot, value),
+      );
+    },
+    [],
+  );
+
+  const handleReset = useCallback((): void => {
+    setStageSelection(createEmptyStageSelection());
+    setPlayoffState(createInitialState(TEAM_LIST));
+    setPickedCellIndex(null);
+  }, []);
+
+  if (!bettingStatus.isBettingOpen) {
+    return (
+      <div className={styles.msgUnvaluable}>
+        {getBettingClosedMessage(bettingStatus)}
+      </div>
+    );
+  }
 
   return (
-    <>
-      {bettingStatus.hasActiveStage ? (
-        <div className={styles.msgUnvaluable}>
-          Прием прогнозов закрыт! Турнир окончен
-          {/*Прием прогнозов на 3-й этап закрыт! Следующий этап откроется 8*/}
-          {/*декабря.*/}
-        </div>
-      ) : (
-        <section className={styles.container}>
-          <h2 className={styles.title}>Выбери команды</h2>
+    <section className={styles.container}>
+      <h2 className={styles.title}>Выбери команды</h2>
 
-          <Playoff
-            setState={setState}
-            state={state}
-            setSelectedTeams={setSelectedTeams}
-            teams={TEAM_LIST}
-          />
-          {/*<Stage*/}
-          {/*  handleCellClick={handleCellClick}*/}
-          {/*  selectedTeams={selectedTeams}*/}
-          {/*/>*/}
-          <AccountNumberForm
-            onReset={onResetSelectedTeams}
-            teamList={selectedTeams}
-          />
-        </section>
+      {bettingStatus.isFinalStep ? (
+        <Playoff
+          state={playoffState}
+          teams={TEAM_LIST}
+          onScoreChange={handleScoreChange}
+        />
+      ) : (
+        <Stage
+          selection={stageSelection}
+          teams={STAGE_TEAM_LIST}
+          onCellClick={handleCellClick}
+        />
       )}
 
-      {/*<Modal ref={modalRef}>*/}
-      {/*  <TeamList*/}
-      {/*    selectedTeamIds={selectedTeamIds}*/}
-      {/*    onTeamSelect={handleTeamSelect}*/}
-      {/*    currentCellIndex={currentCellIndex}*/}
-      {/*  />*/}
-      {/*</Modal>*/}
-    </>
+      <AccountNumberForm form={predictionForm} onReset={handleReset} />
+
+      {!bettingStatus.isFinalStep && (
+        <Modal ref={teamPickerRef}>
+          <TeamList
+            teams={STAGE_TEAM_LIST}
+            selectedTeamIds={selectedTeamIds}
+            onTeamSelect={handleTeamSelect}
+          />
+        </Modal>
+      )}
+    </section>
   );
 };

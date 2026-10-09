@@ -109,7 +109,7 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
         scroller.removeEventListener("scroll", handleScroll);
         resizeObserver.disconnect();
       };
-    }, []);
+    }, [updateThumb]);
 
     return (
       <dialog
@@ -124,9 +124,7 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
               <Icon width="22" height="22" icon="cross" />
             </button>
           )}
-          <section
-            className={`${className} ? ${className} : ${styles.container}`}
-          >
+          <section className={className === "" ? styles.container : className}>
             <div className={styles.scroller} ref={scrollerRef}>
               {children}
             </div>
