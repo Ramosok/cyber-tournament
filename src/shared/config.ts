@@ -72,7 +72,7 @@ export const TEAM_LIST_ROUND_2_LOSERS: readonly Team[] = [
   { logo: NinjasInPyjamas, nameTeam: "Ninjas in Pyjamas", id: "18" },
 ];
 
-/** Команды, покинувшие турнир. */
+/** Команды, покинувшие турнир (справочно, в интерфейсе не используются). */
 export const TEAM_LIST_ELIMINATED: readonly Team[] = [
   { logo: NRG, nameTeam: "NRG", id: "19" },
   { logo: TheHunsEsports, nameTeam: "The Huns Esports", id: "29" },
@@ -81,7 +81,6 @@ export const TEAM_LIST_ELIMINATED: readonly Team[] = [
   { logo: GamerLegion, nameTeam: "GamerLegion", id: "10" },
   { logo: RareAtom, nameTeam: "Rare Atom", id: "23" },
   { logo: Legacy, nameTeam: "Legacy", id: "12" },
-  { logo: FaZeClan, nameTeam: "FaZe Clan", id: "5" },
   { logo: Fluxo, nameTeam: "Fluxo", id: "6" },
 ];
 

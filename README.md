@@ -5,15 +5,17 @@
 
 ## Скрипты
 
-| Команда             | Что делает                            |
-| ------------------- | ------------------------------------- |
-| `npm run dev`       | dev-сервер Vite (`--host`, порт 3000) |
-| `npm run typecheck` | `tsc --noEmit`                        |
-| `npm run lint`      | ESLint по `src`                       |
-| `npm run lint:fix`  | ESLint с автофиксом                   |
-| `npm run format`    | Prettier по `src`                     |
-| `npm run build`     | typecheck + прод-сборка в `build/`    |
-| `npm run preview`   | отдача прод-сборки                    |
+| Команда              | Что делает                            |
+| -------------------- | ------------------------------------- |
+| `npm run dev`        | dev-сервер Vite (`--host`, порт 3000) |
+| `npm run typecheck`  | `tsc --noEmit`                        |
+| `npm run lint`       | ESLint по `src`                       |
+| `npm run lint:fix`   | ESLint с автофиксом                   |
+| `npm test`           | Vitest (однократный прогон)           |
+| `npm run test:watch` | Vitest в режиме watch                 |
+| `npm run format`     | Prettier по `src`                     |
+| `npm run build`      | typecheck + прод-сборка в `build/`    |
+| `npm run preview`    | отдача прод-сборки                    |
 
 Переменные окружения:
 
@@ -21,6 +23,10 @@
   «турнир окончен». Показывает нужный экран без правки дат.
 - `VITE_ALLOWED_HOSTS=".e2b.app,localhost"` — дополнительные Host для dev-сервера
   (превью за прокси).
+- `VITE_SKIP_WEBFONTS=1` — не тянуть шрифты с Google Fonts на сборке. Без сети
+  `vite-plugin-webfont-dl` трижды ретраит TLS и всё равно отдаёт сборку без
+  `@font-face` (шрифты откатываются к системному sans-serif), так что для CI и
+  офлайн-сборки флаг просто убирает лишние ~1.5 с ожидания.
 
 ## Какой этап показывается
 
@@ -108,6 +114,23 @@ type PredictionForm = {
 
 - плей-офф — по одной строке на матч: `Team Spirit 2:0 Team Falcons`;
 - общая сетка — по одной строке на группу: `3-0: Team Spirit, Team Falcons` (6 групп).
+
+## Тесты и CI
+
+`npm test` (Vitest) покрывает логику, которая ломается молча:
+
+- `setMatchScore` — посев 1/4, продвижение победителей, сброс зависимых раундов
+  при правке счёта, отсутствие мутаций;
+- `buildStagePredictions` / `buildPlayoffPredictions` — счётчики ячеек (16) и
+  матчей (7), `firstIncompleteRound`, чемпион;
+- `formatPredictionLines` / `buildPredictionPayload` — формат строк и раскладка
+  по `f1…f7`;
+- `getPredictionValidationError` — тексты отдельно для сетки и для плей-офф;
+- `getBettingStatus` / `getBettingClosedMessage` / `getTimerTitle` — весь
+  календарь, включая `VITE_PREVIEW_STEP`.
+
+`.github/workflows/ci.yml` на каждый push и PR гоняет typecheck → lint → test →
+build (сборка с `VITE_SKIP_WEBFONTS=1`, чтобы не зависеть от сети).
 
 ## Структура
 

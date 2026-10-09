@@ -128,7 +128,7 @@ export const Bids: FC = () => {
 
   if (!bettingStatus.isBettingOpen) {
     return (
-      <div className={styles.msgUnvaluable}>
+      <div className={styles.msgClosed}>
         {getBettingClosedMessage(bettingStatus)}
       </div>
     );

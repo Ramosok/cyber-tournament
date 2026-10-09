@@ -12,7 +12,10 @@ import { BEST_OF_BY_ROUND } from "@/shared/tournament/playoffRounds";
 const createEmptyMatches = (matchCount: number): readonly Match[] =>
   Array.from(
     { length: matchCount },
-    (): Match => ({ teams: [null, null] as const, score: createEmptyScore() }),
+    (): Match => ({
+      teams: [null, null] as const,
+      score: createEmptyScore(),
+    }),
   );
 
 /** 1/4 финала: пары соседних команд из списка (1–2, 3–4, 5–6, 7–8). */

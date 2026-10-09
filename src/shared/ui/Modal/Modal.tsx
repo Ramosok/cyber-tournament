@@ -120,7 +120,11 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
       >
         <div className={styles.content}>
           {!noCross && (
-            <button className={styles.cross} onClick={handleClose}>
+            <button
+              type="button"
+              className={styles.cross}
+              onClick={handleClose}
+            >
               <Icon width="22" height="22" icon="cross" />
             </button>
           )}

@@ -38,8 +38,12 @@ export const Steps: FC = () => {
             key={title}
             title={title}
             hasArrow={hasArrow}
-            isCurrent={bettingStatus.currentStep === step}
-            isComplete={bettingStatus.currentStep > step}
+            isCurrent={
+              !bettingStatus.isFinished && bettingStatus.currentStep === step
+            }
+            isComplete={
+              bettingStatus.isFinished || bettingStatus.currentStep > step
+            }
           />
         ))}
       </div>

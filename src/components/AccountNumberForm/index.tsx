@@ -1,6 +1,6 @@
-import { useActionState, useRef } from "react";
+import { useActionState, useRef, useState } from "react";
 
-import type { FC } from "react";
+import type { ChangeEvent, FC } from "react";
 import type { PredictionActionState } from "@/components/AccountNumberForm/api/predictionActionState";
 import type { PredictionForm } from "@/shared/prediction/types";
 import type { ModalHandle } from "@/shared/ui/Modal/Modal";
@@ -9,7 +9,11 @@ import { INITIAL_ACTION_STATE } from "@/components/AccountNumberForm/api/predict
 import { submitPrediction } from "@/components/AccountNumberForm/api/submitPredictionAction";
 import { SuccessModal } from "@/components/AccountNumberForm/components/SuccessModal";
 import { TournamentConditions } from "@/components/AccountNumberForm/components/TournamentConditions";
-import { handleInputOnlyNumber } from "@/components/AccountNumberForm/utils/handleInputOnlyNumber";
+import {
+  ACCOUNT_NUMBER_MAX_LENGTH,
+  normalizeAccountNumber,
+} from "@/components/AccountNumberForm/utils/normalizeAccountNumber";
+import { isPredictionFormComplete } from "@/shared/prediction/types";
 import { Modal } from "@/shared/ui/Modal/Modal";
 
 import styles from "./accountNumberForm.module.css";
@@ -19,30 +23,37 @@ export type AccountNumberFormProps = {
   readonly onReset: () => void;
 };
 
-const ACCOUNT_MAX_LENGTH = 9;
-
 export const AccountNumberForm: FC<AccountNumberFormProps> = ({
   form,
   onReset,
 }) => {
   const successModalRef = useRef<ModalHandle>(null);
   const conditionsModalRef = useRef<ModalHandle>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+
+  const [accountNumber, setAccountNumber] = useState("");
+
+  const isPredictionReady = isPredictionFormComplete(form);
+  const progressLabel =
+    form.mode === "playoff" ? "Заполнено матчей" : "Заполнено ячеек";
 
   const [actionState, formAction, isPending] = useActionState<
     PredictionActionState,
     FormData
-  >(async (_prevState, formData) => {
-    const result = await submitPrediction(_prevState, formData, form);
+  >(async (prevState, formData) => {
+    const result = await submitPrediction(prevState, formData, form);
 
     if (result.status === "success") {
       successModalRef.current?.showModal();
-      formRef.current?.reset();
+      setAccountNumber("");
       onReset();
     }
 
     return result;
   }, INITIAL_ACTION_STATE);
+
+  const handleAccountChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setAccountNumber(normalizeAccountNumber(event.target.value));
+  };
 
   const handleCloseSuccessModal = (): void => {
     successModalRef.current?.close();
@@ -54,24 +65,36 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
 
   return (
     <>
-      <form ref={formRef} className={styles.form} action={formAction}>
+      <form className={styles.form} action={formAction}>
         <h6 className={styles.title}>Номер игрового счёта</h6>
 
         <input
-          onInput={handleInputOnlyNumber}
-          maxLength={ACCOUNT_MAX_LENGTH}
-          name="accountNumber"
-          placeholder="XXXXX"
           className={styles.input}
+          name="accountNumber"
+          value={accountNumber}
+          onChange={handleAccountChange}
+          maxLength={ACCOUNT_NUMBER_MAX_LENGTH}
+          placeholder="XXXXX"
           type="text"
+          inputMode="numeric"
           autoComplete="off"
         />
+
+        {!isPredictionReady && (
+          <p className={styles.progress}>
+            {progressLabel}: {form.filledCount} из {form.requiredCount}
+          </p>
+        )}
 
         {actionState.status === "success" && (
           <p className={styles.success}>Прогноз успешно отправлен</p>
         )}
 
-        <button className={styles.btnSubmit} type="submit" disabled={isPending}>
+        <button
+          className={styles.btnSubmit}
+          type="submit"
+          disabled={isPending || !isPredictionReady}
+        >
           {isPending ? "ОТПРАВКА..." : "ОСТАВИТЬ ПРОГНОЗ"}
         </button>
 

@@ -8,6 +8,7 @@ import {
   calculateTimeLeft,
   MILLISECONDS_PER_SECOND,
 } from "@/components/Timer/utils/calculateTimeLeft";
+import { getTimerTitle } from "@/components/Timer/utils/getTimerTitle";
 import { getBettingStatus } from "@/shared/tournament/bettingStatus";
 
 import styles from "./timer.module.css";
@@ -28,13 +29,16 @@ export const Timer: FC = () => {
 
   return (
     <section className={styles.container}>
-      <h3 className={styles.title}>До окончания приёма прогнозов:</h3>
-      <div className={styles.timerWrapper}>
-        <Item count={timeLeft.days} label="дд" />
-        <Item count={timeLeft.hours} label="чч" />
-        <Item count={timeLeft.minutes} label="мм" />
-        <Item count={timeLeft.seconds} label="сс" isHighlighted />
-      </div>
+      <h3 className={styles.title}>{getTimerTitle(bettingStatus)}</h3>
+
+      {endsAt && (
+        <div className={styles.timerWrapper}>
+          <Item count={timeLeft.days} label="дд" />
+          <Item count={timeLeft.hours} label="чч" />
+          <Item count={timeLeft.minutes} label="мм" />
+          <Item count={timeLeft.seconds} label="сс" isHighlighted />
+        </div>
+      )}
     </section>
   );
 };
