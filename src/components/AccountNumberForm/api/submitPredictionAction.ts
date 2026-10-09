@@ -3,8 +3,8 @@ import type { PredictionForm } from "@/shared/prediction/types";
 
 import { BASE_URL } from "@/components/AccountNumberForm/api/config";
 import { buildPredictionPayload } from "@/components/AccountNumberForm/api/predictionPayload";
+import { getPredictionValidationError } from "@/components/AccountNumberForm/api/predictionValidationError";
 import { getDateAndTime } from "@/components/AccountNumberForm/utils/getDateAndTime";
-import { isPredictionFormComplete } from "@/shared/prediction/types";
 
 const ERROR_NO_ACCOUNT = "Укажите номер игрового счёта";
 const ERROR_NETWORK = "Не удалось отправить данные";
@@ -26,11 +26,10 @@ export const submitPrediction = async (
     return { status: "error", error: ERROR_NO_ACCOUNT };
   }
 
-  if (!isPredictionFormComplete(form)) {
-    return {
-      status: "error",
-      error: `Заполните все ячейки команд (${form.filledCount} из ${form.requiredCount})`,
-    };
+  const validationError = getPredictionValidationError(form);
+
+  if (validationError !== null) {
+    return { status: "error", error: validationError };
   }
 
   const payload = buildPredictionPayload(form, accountNumber, getDateAndTime());

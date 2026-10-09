@@ -47,16 +47,22 @@ export type Prediction =
   | MatchPrediction
   | WinnerPrediction;
 
+/** Какой сценарий заполняет пользователь: общая сетка или плей-офф. */
+export type PredictionMode = "stage" | "playoff";
+
 /** Результат сборки прогноза: что уже заполнено и сколько всего нужно. */
 export type PredictionDraft = {
   readonly predictions: readonly Prediction[];
   readonly filledCount: number;
   readonly requiredCount: number;
+  /** Раунд плей-офф, на котором заполнение остановилось. */
+  readonly firstIncompleteRound?: PlayoffRoundKey;
 };
 
 /** Форма прогноза, с которой работает AccountNumberForm и API. */
 export type PredictionForm = PredictionDraft & {
   readonly step: StepNumber;
+  readonly mode: PredictionMode;
 };
 
 export const isPredictionFormComplete = (form: PredictionForm): boolean =>
@@ -64,8 +70,9 @@ export const isPredictionFormComplete = (form: PredictionForm): boolean =>
 
 export const createPredictionForm = (
   step: StepNumber,
+  mode: PredictionMode,
   draft: PredictionDraft,
-): PredictionForm => ({ ...draft, step });
+): PredictionForm => ({ ...draft, step, mode });
 
 export const isGroupPickPrediction = (
   prediction: Prediction,

@@ -8,6 +8,7 @@ import type {
   MatchPrediction,
   Prediction,
   PredictionDraft,
+  WinnerPrediction,
 } from "@/shared/prediction/types";
 
 import {
@@ -17,10 +18,8 @@ import {
 import { getTeamById } from "@/shared/config";
 import { PLAYOFF_ROUND_KEYS } from "@/shared/tournament/playoffRounds";
 
+/** Сколько матчей нужно заполнить: 4 в 1/4 + 2 в 1/2 + финал. */
 export const PLAYOFF_MATCH_COUNT = 7;
-
-/** 7 матчей + чемпион. */
-export const PLAYOFF_PREDICTION_COUNT = PLAYOFF_MATCH_COUNT + 1;
 
 const createMatchPrediction = (
   round: RoundState,
@@ -50,26 +49,17 @@ const createMatchPrediction = (
   };
 };
 
-const createDraft = (
-  predictions: readonly Prediction[],
-  filledCount: number,
-): PredictionDraft => ({
-  predictions,
-  filledCount,
-  requiredCount: PLAYOFF_PREDICTION_COUNT,
-});
-
 /**
- * Собирает плей-офф в ту же модель `Prediction`, что и общая сетка:
- * 4 матча 1/4 + 2 матча 1/2 + финал + чемпион.
- * Встретили незаполненный матч — дальше не идём, поэтому `filledCount`
- * показывает реальный прогресс заполнения сетки.
+ * Собирает плей-офф в ту же модель `Prediction`, что и общая сетка.
+ * Считаются только матчи (чемпион выводится из счёта финала автоматически),
+ * поэтому прогресс читается как «N из 7», а `firstIncompleteRound` показывает,
+ * в каком раунде заполнение остановилось.
  */
 export const buildPlayoffPredictions = (
   state: PlayoffState,
   teams: ReadonlyMap<TeamId, Team>,
 ): PredictionDraft => {
-  const predictions: Prediction[] = [];
+  const matches: MatchPrediction[] = [];
 
   for (const roundKey of PLAYOFF_ROUND_KEYS) {
     const round = state.rounds[roundKey];
@@ -78,23 +68,33 @@ export const buildPlayoffPredictions = (
       const prediction = createMatchPrediction(round, matchIndex, match, teams);
 
       if (!prediction) {
-        return createDraft(predictions, predictions.length);
+        return {
+          predictions: matches,
+          filledCount: matches.length,
+          requiredCount: PLAYOFF_MATCH_COUNT,
+          firstIncompleteRound: roundKey,
+        };
       }
 
-      predictions.push(prediction);
+      matches.push(prediction);
     }
   }
 
   const winner = getTeamById(teams, state.winnerId);
 
-  if (!winner) {
-    return createDraft(predictions, predictions.length);
-  }
+  const predictions: readonly Prediction[] = winner
+    ? [
+        ...matches,
+        {
+          kind: "winner",
+          team: { id: winner.id, name: winner.nameTeam },
+        } satisfies WinnerPrediction,
+      ]
+    : matches;
 
-  predictions.push({
-    kind: "winner",
-    team: { id: winner.id, name: winner.nameTeam },
-  });
-
-  return createDraft(predictions, predictions.length);
+  return {
+    predictions,
+    filledCount: matches.length,
+    requiredCount: PLAYOFF_MATCH_COUNT,
+  };
 };

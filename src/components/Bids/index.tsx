@@ -62,11 +62,16 @@ export const Bids: FC = () => {
    * поэтому форма ниже не знает, какой этап сейчас идёт.
    */
   const predictionForm = useMemo<PredictionForm>(() => {
-    const draft = bettingStatus.isFinalStep
+    const isPlayoff = bettingStatus.isFinalStep;
+    const draft = isPlayoff
       ? buildPlayoffPredictions(playoffState, playoffTeamIndex)
       : buildStagePredictions(stageSelection, stageTeamIndex);
 
-    return createPredictionForm(bettingStatus.currentStep, draft);
+    return createPredictionForm(
+      bettingStatus.currentStep,
+      isPlayoff ? "playoff" : "stage",
+      draft,
+    );
   }, [
     bettingStatus,
     playoffState,
