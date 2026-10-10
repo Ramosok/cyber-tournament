@@ -185,3 +185,20 @@ h6 {
     overflow: hidden;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .btnSubmit {
+    transition:
+      transform 0.15s ease,
+      filter 0.15s ease;
+  }
+
+  .btnSubmit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+
+  .btnSubmit:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
