@@ -3,8 +3,8 @@ import type { FC } from "react";
 import { Picture } from "@/components/Picture";
 import { Icon } from "@/shared/ui/icon";
 
-import bonus360 from "../../shared/assets/bonus360.png";
-import bonus1920 from "../../shared/assets/bonus1920.png";
+import bonus360 from "../../shared/assets/bonus360.webp";
+import bonus1920 from "../../shared/assets/bonus1920.webp";
 import goose360 from "../../shared/assets/goose360.webp";
 import goose1920 from "../../shared/assets/goose1920.webp";
 
@@ -33,6 +33,7 @@ export const Header: FC = () => {
             },
           ]}
           loading="eager"
+          fetchPriority="high"
         />
         <p className={styles.description}>
           <span>ЗА ВЕРНЫЙ ПРОГНОЗ</span> на StarLadder Budapest Major 2025

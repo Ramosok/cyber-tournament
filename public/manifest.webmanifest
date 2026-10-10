@@ -1,0 +1,14 @@
+{
+  "name": "MaxLine Major PlayOff — прогнозы на StarLadder Budapest Major 2025",
+  "short_name": "Major PlayOff",
+  "description": "Собери верный прогноз на StarLadder Budapest Major 2025 и участвуй в розыгрыше 20 000 BYN.",
+  "lang": "ru",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

@@ -23,6 +23,8 @@
   «турнир окончен». Показывает нужный экран без правки дат.
 - `VITE_ALLOWED_HOSTS=".e2b.app,localhost"` — дополнительные Host для dev-сервера
   (превью за прокси).
+- `VITE_SITE_URL` — публичный адрес сайта для canonical/OG/JSON-LD
+  (по умолчанию из `.env`, для продакшена переопределяется окружением).
 - `VITE_SKIP_WEBFONTS=1` — не тянуть шрифты с Google Fonts на сборке. Без сети
   `vite-plugin-webfont-dl` трижды ретраит TLS и всё равно отдаёт сборку без
   `@font-face` (шрифты откатываются к системному sans-serif), так что для CI и
@@ -131,6 +133,30 @@ type PredictionForm = {
 
 `.github/workflows/ci.yml` на каждый push и PR гоняет typecheck → lint → test →
 build (сборка с `VITE_SKIP_WEBFONTS=1`, чтобы не зависеть от сети).
+
+## Производительность
+
+- Логотипы команд были SVG-обёртками с base64-растром (до 4096×2749) на
+  **3.79 MB** — сконвертированы в WebP 192×192 под 2× DPR: **241 KB** суммарно.
+- Фоновые и промо-растры уменьшены до реальных размеров вывода и пережаты
+  (исходники 2.09 MB → 584 KB; в прод-сборке `vite-plugin-image-optimizer`
+  дожимает до ~490 KB).
+- Бандл разрезан на `react-*` (вендор, кэшируется между деплоями) и `index-*`.
+- Изображения: `loading="lazy"` + `decoding="async"` по умолчанию,
+  `fetchPriority="high"` только у LCP-баннера в шапке.
+- Раздача: brotli + gzip пресеты лежат рядом (`*.brotli`, `*.gz`).
+
+## SEO
+
+- Чистый `<head>`: один title, один description, canonical, robots,
+  Open Graph (включая `og:image` 1200×630 — `public/og-cover.jpg`),
+  Twitter Card `summary_large_image`, JSON-LD `SportsEvent`.
+- `public/robots.txt`, `public/manifest.webmanifest`,
+  `public/apple-touch-icon.png`.
+- Абсолютные URL в canonical/OG/JSON-LD собираются из `VITE_SITE_URL`
+  (подстановка Vite в `index.html`).
+- Убраны мусорные мета-теги (`http-equiv="refresh"`, дублирующий
+  `Content-Type`, `meta property="title"`, `og:image` с favicon.ico).
 
 ## Структура
 

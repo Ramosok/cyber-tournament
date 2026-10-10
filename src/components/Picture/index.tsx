@@ -16,6 +16,7 @@ export type PictureProps = {
   readonly className?: string;
   readonly style?: CSSProperties;
   readonly loading?: "lazy" | "eager";
+  readonly fetchPriority?: "high" | "low" | "auto";
 };
 
 export const Picture: FC<PictureProps> = ({
@@ -25,6 +26,7 @@ export const Picture: FC<PictureProps> = ({
   className,
   style,
   loading = "lazy",
+  fetchPriority = "auto",
 }) => {
   return (
     <picture className={className} style={style}>
@@ -37,7 +39,14 @@ export const Picture: FC<PictureProps> = ({
           sizes={source.sizes}
         />
       ))}
-      <img src={src} alt={alt} loading={loading} className={styles.img} />
+      <img
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        fetchPriority={fetchPriority}
+        className={styles.img}
+      />
     </picture>
   );
 };

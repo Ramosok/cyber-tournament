@@ -21,4 +21,10 @@ interface ImportMetaEnv {
    * например `VITE_ALLOWED_HOSTS=".e2b.app"`.
    */
   readonly VITE_ALLOWED_HOSTS?: string;
+
+  /**
+   * Публичный адрес сайта для canonical/OG/JSON-LD в index.html
+   * (подставляется Vite при сборке, по умолчанию — из .env).
+   */
+  readonly VITE_SITE_URL?: string;
 }

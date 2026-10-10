@@ -85,6 +85,18 @@ export default defineConfig({
     minify: "esbuild",
     cssCodeSplit: true,
     chunkSizeWarningLimit: CHUNK_SIZE_WARNING_LIMIT_KB,
+    rollupOptions: {
+      output: {
+        advancedChunks: {
+          groups: [
+            {
+              name: "react",
+              test: /node_modules\/(react|react-dom|scheduler)\//,
+            },
+          ],
+        },
+      },
+    },
   },
 
   base: "./",
