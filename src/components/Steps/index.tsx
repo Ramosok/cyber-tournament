@@ -1,47 +1,48 @@
 import type { FC } from "react";
-import type { BettingStatus } from "@/shared/utils/getCurrentBettingEndDate";
+import type { StepNumber } from "@/shared/tournament/bettingStatus";
 
 import { Step } from "@/components/Steps/Step";
-import { getCurrentBettingEndDate } from "@/shared/utils/getCurrentBettingEndDate";
+import { MILLISECONDS_PER_MINUTE } from "@/components/Timer/utils/calculateTimeLeft";
+import { useNow } from "@/shared/hooks/useNow";
+import {
+  FINAL_STEP,
+  getBettingStatus,
+} from "@/shared/tournament/bettingStatus";
 
 import styles from "./steps.module.css";
 
-export const Steps: FC = () => {
-  const bettingStatus: BettingStatus = getCurrentBettingEndDate();
+type StepView = {
+  readonly step: StepNumber;
+  readonly title: string;
+  readonly hasArrow: boolean;
+};
 
-  const currentStep = bettingStatus?.currentTour;
+const STEP_VIEWS: readonly StepView[] = [
+  { step: 1, title: "1 ЭТАП", hasArrow: true },
+  { step: 2, title: "2 ЭТАП", hasArrow: true },
+  { step: 3, title: "3 ЭТАП", hasArrow: true },
+  { step: FINAL_STEP, title: "ФИНАЛ", hasArrow: false },
+];
+
+export const Steps: FC = () => {
+  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_MINUTE));
 
   return (
     <section className={styles.container}>
       <div className={styles.wrapper}>
-        <Step
-          key="1 ЭТАП"
-          isCurrentStep={currentStep === 1}
-          isComplete={currentStep > 1}
-          title="1 ЭТАП"
-          isNeededArrow={true}
-        />
-        <Step
-          key="2 ЭТАП"
-          isCurrentStep={currentStep === 2}
-          isComplete={currentStep > 2}
-          title="2 ЭТАП"
-          isNeededArrow={true}
-        />
-        <Step
-          key="3 ЭТАП"
-          isCurrentStep={currentStep === 3}
-          isComplete={currentStep > 3}
-          title="3 ЭТАП"
-          isNeededArrow={true}
-        />
-        <Step
-          key="ФИНАЛ"
-          isCurrentStep={currentStep === 4}
-          isComplete={currentStep > 4}
-          title="ФИНАЛ"
-          isNeededArrow={false}
-        />
+        {STEP_VIEWS.map(({ step, title, hasArrow }) => (
+          <Step
+            key={title}
+            title={title}
+            hasArrow={hasArrow}
+            isCurrent={
+              !bettingStatus.isFinished && bettingStatus.currentStep === step
+            }
+            isComplete={
+              bettingStatus.isFinished || bettingStatus.currentStep > step
+            }
+          />
+        ))}
       </div>
     </section>
   );

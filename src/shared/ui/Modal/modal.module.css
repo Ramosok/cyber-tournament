@@ -1,11 +1,45 @@
 .dialog {
   background-color: transparent;
   border: none;
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    display 0.25s allow-discrete,
+    overlay 0.25s allow-discrete;
+}
+
+.dialog:not([open]) {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    transform: scale(0.92);
+  }
 }
 
 .dialog::backdrop {
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(9px);
+  opacity: 1;
+  transition:
+    opacity 0.25s ease,
+    display 0.25s allow-discrete,
+    overlay 0.25s allow-discrete;
+}
+
+.dialog:not([open])::backdrop {
+  opacity: 0;
+}
+
+@starting-style {
+  .dialog[open]::backdrop {
+    opacity: 0;
+  }
 }
 
 .content {

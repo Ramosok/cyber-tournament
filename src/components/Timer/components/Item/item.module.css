@@ -35,3 +35,15 @@
     width: 102px;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .item.highlighted {
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    background-color: rgba(255, 0, 170, 0.6);
+  }
+}

@@ -1,24 +1,41 @@
-import type { Dispatch, SetStateAction } from "react";
-import type { PlayOffTeams } from "@/components/AccountNumberForm/api/submitPredictionAction";
-import type { Team } from "@/shared/config";
+import type { MatchScore } from "@/components/Bids/components/Playoff/utils/matchScore";
+import type { Team, TeamId } from "@/shared/config";
+import type {
+  BestOf,
+  MatchSlot,
+  PlayoffRoundKey,
+} from "@/shared/tournament/playoffRounds";
 
-export type MatchScore = { team1: string; team2: string };
+/** В слоте матча либо команда, либо пусто (ждём победителя прошлого раунда). */
+export type MatchSlotTeam = TeamId | null;
 
-export type Round = {
-  teams: [number | undefined, number | undefined][];
-  scores: MatchScore[];
+export type MatchTeams = readonly [MatchSlotTeam, MatchSlotTeam];
+
+export type Match = {
+  readonly teams: MatchTeams;
+  readonly score: MatchScore;
 };
 
+export type RoundState = {
+  readonly key: PlayoffRoundKey;
+  readonly bestOf: BestOf;
+  readonly matches: readonly Match[];
+};
+
+export type PlayoffRounds = Readonly<Record<PlayoffRoundKey, RoundState>>;
+
 export type PlayoffState = {
-  quarter: Round;
-  semi: Round;
-  final: Round;
-  winnerIndex?: number | undefined;
+  readonly rounds: PlayoffRounds;
+  readonly winnerId: MatchSlotTeam;
 };
 
 export type PlayoffProps = {
-  teams: (Team | null)[];
-  setSelectedTeams: Dispatch<SetStateAction<PlayOffTeams[]>>;
-  setState: Dispatch<SetStateAction<PlayoffState>>;
-  state: PlayoffState;
+  readonly state: PlayoffState;
+  readonly teams: readonly Team[];
+  readonly onScoreChange: (
+    round: PlayoffRoundKey,
+    matchIndex: number,
+    slot: MatchSlot,
+    value: string,
+  ) => void;
 };

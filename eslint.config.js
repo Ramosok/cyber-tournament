@@ -235,5 +235,13 @@ export default [
       ],
     },
   },
+  {
+    // В .d.ts типы расширяются через declaration merging, а он работает
+    // только с interface.
+    files: ["**/*.d.ts"],
+    rules: {
+      "@typescript-eslint/consistent-type-definitions": "off",
+    },
+  },
   ...prettierConfigs,
 ];

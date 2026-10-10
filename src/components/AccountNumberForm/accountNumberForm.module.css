@@ -58,7 +58,7 @@
   cursor: pointer;
   text-wrap: nowrap;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #fff500;
     color: black;
   }
@@ -100,6 +100,29 @@
 h6 {
   margin: 0;
   padding: 0;
+}
+
+.progress {
+  color: var(--white);
+  opacity: 0.5;
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin-top: 14px;
+}
+
+.success {
+  color: #3ddc84;
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  margin-top: 14px;
 }
 
 .error {
@@ -160,5 +183,22 @@ h6 {
     width: 70vw;
     height: 70vh;
     overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btnSubmit {
+    transition:
+      transform 0.15s ease,
+      filter 0.15s ease;
+  }
+
+  .btnSubmit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+
+  .btnSubmit:active:not(:disabled) {
+    transform: scale(0.98);
   }
 }

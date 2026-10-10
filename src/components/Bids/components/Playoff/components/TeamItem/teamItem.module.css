@@ -52,30 +52,9 @@
   opacity: 0.5;
 }
 
-.scoreInput {
-  width: 60px;
-  height: 36px;
-  text-align: center;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--white);
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 22px;
-  outline: none;
-}
-
 .winner {
   border: 2px solid #fff500;
   background: rgba(255, 245, 0, 0.1);
-}
-
-.trophy {
-  position: absolute;
-  right: 0;
-  bottom: 0;
 }
 
 @media (min-width: 568px) {
