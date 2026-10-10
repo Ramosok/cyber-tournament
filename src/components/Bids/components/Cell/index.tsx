@@ -43,6 +43,7 @@ export const Cell: FC<CellProps> = ({ label, team, onClick }) => {
           src={team.logo}
           alt={team.nameTeam}
           loading="lazy"
+          decoding="async"
         />
         <span className={styles.teamName}>{team.nameTeam}</span>
       </span>

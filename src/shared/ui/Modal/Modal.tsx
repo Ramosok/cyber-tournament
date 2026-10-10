@@ -18,6 +18,8 @@ type ModalProps = PropsWithChildren<{
   onClose?: () => void;
   noCross?: boolean;
   className?: string;
+  /** Доступное имя диалога для скринридеров. */
+  ariaLabel?: string;
   /** В React 19 ref передаётся как обычный проп — forwardRef не нужен. */
   ref?: Ref<ModalHandle>;
 }>;
@@ -27,6 +29,7 @@ export const Modal = ({
   noCross,
   onClose,
   className = "",
+  ariaLabel,
   ref,
 }: ModalProps): ReactElement => {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -115,6 +118,7 @@ export const Modal = ({
       ref={dialogRef}
       onClose={handleClose}
       onClick={handleBackdropClick}
+      aria-label={ariaLabel}
     >
       <div className={styles.content}>
         {!noCross && (

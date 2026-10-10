@@ -34,6 +34,8 @@ export const Header: FC = () => {
           ]}
           loading="eager"
           fetchPriority="high"
+          width={1652}
+          height={513}
         />
         <p className={styles.description}>
           <span>ЗА ВЕРНЫЙ ПРОГНОЗ</span> на StarLadder Budapest Major 2025
@@ -43,6 +45,8 @@ export const Header: FC = () => {
         key="гусь в маске с ножом"
         className={styles.goose}
         src={goose1920}
+        width={1386}
+        height={1235}
         alt="гусь в маске с ножом"
         sources={[
           {

@@ -19,7 +19,7 @@ export const Timer: FC = () => {
   const timeLeft = calculateTimeLeft(endsAt, now);
 
   return (
-    <section className={styles.container}>
+    <section className={styles.container} role="timer" aria-live="off">
       <h3 className={styles.title}>{getTimerTitle(bettingStatus)}</h3>
 
       {endsAt && (

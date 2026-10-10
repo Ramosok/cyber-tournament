@@ -66,7 +66,7 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
   return (
     <>
       <form className={styles.form} action={formAction}>
-        <h6 className={styles.title}>Номер игрового счёта</h6>
+        <h3 className={styles.title}>Номер игрового счёта</h3>
 
         <input
           className={styles.input}
@@ -125,13 +125,19 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
       </form>
 
       <Modal
+        ariaLabel="Условия турнира"
         className={styles.tournamentConditionsModal}
         ref={conditionsModalRef}
       >
         <TournamentConditions />
       </Modal>
 
-      <Modal className={styles.successModal} noCross ref={successModalRef}>
+      <Modal
+        ariaLabel="Прогноз отправлен"
+        className={styles.successModal}
+        noCross
+        ref={successModalRef}
+      >
         <SuccessModal onClose={handleCloseSuccessModal} />
       </Modal>
     </>

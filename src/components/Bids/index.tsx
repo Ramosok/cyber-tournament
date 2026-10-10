@@ -133,7 +133,7 @@ export const Bids: FC = () => {
       <AccountNumberForm form={predictionForm} onReset={handleReset} />
 
       {!isPlayoff && (
-        <Modal ref={teamPickerRef}>
+        <Modal ariaLabel="Выбор команды" ref={teamPickerRef}>
           <TeamList
             teams={STAGE_TEAM_LIST}
             selectedTeamIds={selectedTeamIds}
