@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import type { FC } from "react";
 import type { Team, TeamId } from "@/shared/config";
 import type { CellIndex, StageGroup } from "@/shared/tournament/stageGrid";
@@ -24,14 +22,10 @@ export const GroupColumn: FC<GroupColumnProps> = ({
   teams,
   onCellClick,
 }) => {
-  const cells = useMemo(
-    () =>
-      group.cellIndexes.map((cellIndex) => ({
-        cellIndex,
-        team: getTeamById(teams, selection[cellIndex]),
-      })),
-    [group.cellIndexes, selection, teams],
-  );
+  const cells = group.cellIndexes.map((cellIndex) => ({
+    cellIndex,
+    team: getTeamById(teams, selection[cellIndex]),
+  }));
 
   return (
     <div className={styles.group}>

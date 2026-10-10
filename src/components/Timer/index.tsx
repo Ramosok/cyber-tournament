@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
-
 import type { FC } from "react";
-import type { BettingStatus } from "@/shared/tournament/bettingStatus";
 
 import { Item } from "@/components/Timer/components/Item";
 import {
@@ -9,23 +6,17 @@ import {
   MILLISECONDS_PER_SECOND,
 } from "@/components/Timer/utils/calculateTimeLeft";
 import { getTimerTitle } from "@/components/Timer/utils/getTimerTitle";
+import { useNow } from "@/shared/hooks/useNow";
 import { getBettingStatus } from "@/shared/tournament/bettingStatus";
 
 import styles from "./timer.module.css";
 
+/** Раз в секунду пересчитывает остаток; статус — производная от того же `now`. */
 export const Timer: FC = () => {
-  const [bettingStatus] = useState<BettingStatus>(getBettingStatus);
+  const now = useNow(MILLISECONDS_PER_SECOND);
+  const bettingStatus = getBettingStatus(now);
   const { endsAt } = bettingStatus;
-
-  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(endsAt));
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(endsAt));
-    }, MILLISECONDS_PER_SECOND);
-
-    return () => clearInterval(timer);
-  }, [endsAt]);
+  const timeLeft = calculateTimeLeft(endsAt, now);
 
   return (
     <section className={styles.container}>

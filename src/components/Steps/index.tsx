@@ -1,12 +1,9 @@
-import { useState } from "react";
-
 import type { FC } from "react";
-import type {
-  BettingStatus,
-  StepNumber,
-} from "@/shared/tournament/bettingStatus";
+import type { StepNumber } from "@/shared/tournament/bettingStatus";
 
 import { Step } from "@/components/Steps/Step";
+import { MILLISECONDS_PER_MINUTE } from "@/components/Timer/utils/calculateTimeLeft";
+import { useNow } from "@/shared/hooks/useNow";
 import {
   FINAL_STEP,
   getBettingStatus,
@@ -28,7 +25,7 @@ const STEP_VIEWS: readonly StepView[] = [
 ];
 
 export const Steps: FC = () => {
-  const [bettingStatus] = useState<BettingStatus>(getBettingStatus);
+  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_MINUTE));
 
   return (
     <section className={styles.container}>

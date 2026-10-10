@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import type { FC } from "react";
 import type { PlayoffProps } from "@/components/Bids/components/Playoff/types";
 import type { PlayoffRoundKey } from "@/shared/tournament/playoffRounds";
@@ -19,11 +17,7 @@ const ROUND_CLASS_NAMES: Readonly<Record<PlayoffRoundKey, string>> = {
 };
 
 export const Playoff: FC<PlayoffProps> = ({ state, teams, onScoreChange }) => {
-  const teamIndex = useMemo(() => createTeamIndex(teams), [teams]);
-  const view = useMemo(
-    () => createPlayoffView(state, teamIndex),
-    [state, teamIndex],
-  );
+  const view = createPlayoffView(state, createTeamIndex(teams));
 
   return (
     <div className={styles.container}>

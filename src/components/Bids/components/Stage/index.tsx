@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from "react";
+import { Fragment } from "react";
 
 import type { FC } from "react";
 import type { Team } from "@/shared/config";
@@ -31,7 +31,7 @@ const ROW_VIEWS: readonly StageRowView[] = STAGE_ROWS.map((groups, index) => ({
 
 /** Общая сетка группового этапа (этапы 1–3). */
 export const Stage: FC<StageProps> = ({ selection, teams, onCellClick }) => {
-  const teamIndex = useMemo(() => createTeamIndex(teams), [teams]);
+  const teamIndex = createTeamIndex(teams);
 
   return (
     <div className={styles.gridWrapper}>

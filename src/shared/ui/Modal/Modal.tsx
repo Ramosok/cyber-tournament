@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
 import type { MouseEvent, PropsWithChildren } from "react";
 
@@ -63,37 +57,34 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
       }
     };
 
-    const updateThumb = useCallback(() => {
+    useEffect(() => {
       const scroller = scrollerRef.current;
       const thumb = thumbRef.current;
       if (!scroller || !thumb) return;
 
-      const { scrollTop, scrollHeight, clientHeight } = scroller;
+      const updateThumb = (): void => {
+        const { scrollTop, scrollHeight, clientHeight } = scroller;
 
-      if (scrollHeight <= clientHeight) {
-        thumb.style.display = "none";
-        return;
-      }
+        if (scrollHeight <= clientHeight) {
+          thumb.style.display = "none";
+          return;
+        }
 
-      thumb.style.display = "block";
+        thumb.style.display = "block";
 
-      const marginTop = 4;
-      const marginBottom = 4;
-      const trackHeight = clientHeight - marginTop - marginBottom;
-      const ratio = clientHeight / scrollHeight;
-      const thumbHeight = Math.max(maxHeight, ratio * trackHeight);
-      const maxScroll = scrollHeight - clientHeight;
-      const maxThumbPos = trackHeight - thumbHeight;
-      const scrollPos =
-        maxScroll > 0 ? (scrollTop / maxScroll) * maxThumbPos : 0;
+        const marginTop = 4;
+        const marginBottom = 4;
+        const trackHeight = clientHeight - marginTop - marginBottom;
+        const ratio = clientHeight / scrollHeight;
+        const thumbHeight = Math.max(maxHeight, ratio * trackHeight);
+        const maxScroll = scrollHeight - clientHeight;
+        const maxThumbPos = trackHeight - thumbHeight;
+        const scrollPos =
+          maxScroll > 0 ? (scrollTop / maxScroll) * maxThumbPos : 0;
 
-      thumb.style.height = `${thumbHeight}px`;
-      thumb.style.top = `${marginTop + scrollPos}px`;
-    }, []);
-
-    useEffect(() => {
-      const scroller = scrollerRef.current;
-      if (!scroller) return;
+        thumb.style.height = `${thumbHeight}px`;
+        thumb.style.top = `${marginTop + scrollPos}px`;
+      };
 
       const handleScroll = (): void => updateThumb();
 
@@ -109,7 +100,7 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
         scroller.removeEventListener("scroll", handleScroll);
         resizeObserver.disconnect();
       };
-    }, [updateThumb]);
+    }, []);
 
     return (
       <dialog

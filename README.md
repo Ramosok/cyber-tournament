@@ -134,6 +134,25 @@ type PredictionForm = {
 `.github/workflows/ci.yml` на каждый push и PR гоняет typecheck → lint → test →
 build (сборка с `VITE_SKIP_WEBFONTS=1`, чтобы не зависеть от сети).
 
+## React Compiler и хуки
+
+React 19 + `babel-plugin-react-compiler` (включён в `vite.config.ts`):
+компилятор сам мемоизирует компоненты и значения, поэтому ручной
+мемоизации в коде нет — `useMemo`/`useCallback` удалены полностью.
+
+`useState` оставлен только там, где это настоящие данные пользователя:
+
+- `Bids`: `stageSelection` и `playoffState` (выбор команд и счёт);
+- `AccountNumberForm`: номер счёта + `useActionState` для отправки.
+
+Всё выводимое — чистые производные:
+
+- `useNow(interval)` (`src/shared/hooks/useNow.ts`) — единственный тик;
+  `Timer`, `Steps` и `Bids` берут статус как `getBettingStatus(now)`,
+  а остаток — `calculateTimeLeft(endsAt, now)`;
+- `pickedCellIndex` стал `useRef` (не участвует в рендере);
+- статичные `createTeamIndex(...)` вынесены на уровень модуля.
+
 ## Производительность
 
 - Логотипы команд были SVG-обёртками с base64-растром (до 4096×2749) на
