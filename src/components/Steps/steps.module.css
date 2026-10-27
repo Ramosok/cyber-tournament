@@ -1,7 +1,8 @@
 .container {
   color: var(--white);
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,11 +10,56 @@
 }
 
 .wrapper {
-  display: flex;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  overflow-x: auto;
-  overflow-y: hidden;
+  justify-content: center;
+  gap: 14px;
+  min-height: 42px;
+  padding: 0 20px;
   max-width: 100%;
   white-space: nowrap;
+}
+
+.track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5px;
+  height: 32px;
+  border-radius: 6px;
+  transform: skewX(-10deg);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.trackLeft {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 245, 0, 0.26) 0%,
+    rgba(153, 147, 0, 0) 100%
+  );
+}
+
+.trackRight {
+  background: linear-gradient(
+    270deg,
+    rgba(255, 245, 0, 0.26) 0%,
+    rgba(153, 147, 0, 0) 100%
+  );
+}
+
+@media (min-width: 640px) {
+  .wrapper {
+    min-width: 620px;
+    min-height: 52px;
+    padding: 0 37px;
+    gap: 30px;
+  }
+
+  .track {
+    top: 6px;
+    height: 40px;
+  }
 }

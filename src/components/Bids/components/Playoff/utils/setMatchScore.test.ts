@@ -9,6 +9,9 @@ import { createTeamIndex, TEAM_LIST } from "@/shared/config";
 
 const teams = createTeamIndex(TEAM_LIST);
 const SPIRIT = "Team Spirit";
+const MONGOLZ = "The MongolZ";
+const FAZE = "FaZe Clan";
+const NAVI = "Natus Vincere";
 
 const namesOf = (
   state: PlayoffState,
@@ -32,12 +35,13 @@ const fill = (
 };
 
 describe("createInitialState", () => {
-  it("сеет 1/4 финала соседними парами из списка команд", () => {
+  it("сеет 1/4 финала соседними парами и создаёт пустые финал и матч за 3-е место", () => {
     const state = createInitialState(TEAM_LIST);
 
     expect(state.rounds.quarter.matches).toHaveLength(4);
     expect(state.rounds.semi.matches).toHaveLength(2);
     expect(state.rounds.final.matches).toHaveLength(1);
+    expect(state.rounds.thirdPlace.matches).toHaveLength(1);
     expect(namesOf(state, "quarter", 0)).toEqual([SPIRIT, "Team Falcons"]);
     expect(state.winnerId).toBeNull();
   });
@@ -63,28 +67,34 @@ describe("setMatchScore", () => {
     expect(namesOf(state, "semi", 0)).toEqual([SPIRIT, null]);
   });
 
-  it("продвигает победителей до финала и определяет чемпиона", () => {
+  it("продвигает победителей 1/2 в финал, а проигравших — в матч за 3-е место", () => {
     let state = createInitialState(TEAM_LIST);
     state = fill(state, "quarter", 0, 2, 0);
     state = fill(state, "quarter", 1, 2, 1);
     state = fill(state, "quarter", 2, 0, 2);
     state = fill(state, "quarter", 3, 2, 0);
 
-    expect(namesOf(state, "semi", 0)).toEqual([SPIRIT, "The MongolZ"]);
-    expect(namesOf(state, "semi", 1)).toEqual(["FaZe Clan", "Natus Vincere"]);
+    expect(namesOf(state, "semi", 0)).toEqual([SPIRIT, MONGOLZ]);
+    expect(namesOf(state, "semi", 1)).toEqual([FAZE, NAVI]);
 
     state = fill(state, "semi", 0, 2, 0);
     state = fill(state, "semi", 1, 1, 2);
 
-    expect(namesOf(state, "final", 0)).toEqual([SPIRIT, "Natus Vincere"]);
+    expect(namesOf(state, "final", 0)).toEqual([SPIRIT, NAVI]);
+    expect(namesOf(state, "thirdPlace", 0)).toEqual([MONGOLZ, FAZE]);
     expect(state.winnerId).toBeNull();
 
     state = fill(state, "final", 0, 3, 1);
+    state = fill(state, "thirdPlace", 0, 0, 2);
 
     expect(teams.get(state.winnerId ?? "")?.nameTeam).toBe(SPIRIT);
+    expect(state.rounds.thirdPlace.matches[0]?.score).toEqual({
+      team1: "0",
+      team2: "2",
+    });
   });
 
-  it("сбрасывает зависимые раунды при изменении счёта в 1/4", () => {
+  it("сбрасывает зависимые раунды (включая матч за 3-е место) при изменении счёта в 1/4", () => {
     let state = createInitialState(TEAM_LIST);
     state = fill(state, "quarter", 0, 2, 0);
     state = fill(state, "quarter", 1, 2, 1);
@@ -98,6 +108,7 @@ describe("setMatchScore", () => {
       team2: "",
     });
     expect(changed.rounds.final.matches[0]?.teams).toEqual([null, null]);
+    expect(changed.rounds.thirdPlace.matches[0]?.teams).toEqual([null, null]);
     expect(changed.winnerId).toBeNull();
   });
 

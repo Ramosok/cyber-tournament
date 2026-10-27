@@ -12,7 +12,12 @@ export type ChampionProps = {
 
 export const Champion: FC<ChampionProps> = ({ team }) => {
   return (
-    <TeamItem logo={team.logo} teamName={team.nameTeam} isWinner>
+    <TeamItem
+      logo={team.logo}
+      teamName={team.nameTeam}
+      isWinner
+      showScoreLabel={false}
+    >
       <img className={styles.trophy} src={trophy} alt="Кубок чемпиона" />
     </TeamItem>
   );

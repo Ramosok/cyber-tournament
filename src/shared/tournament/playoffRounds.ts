@@ -1,6 +1,11 @@
-/** Формат раундов плей-офф: 1/4 и 1/2 играются до двух побед, финал — до трёх. */
+/** Формат раундов плей-офф: 1/4, 1/2 и матч за 3-е место играются до двух побед, финал — до трёх. */
 
-export const PLAYOFF_ROUND_KEYS = ["quarter", "semi", "final"] as const;
+export const PLAYOFF_ROUND_KEYS = [
+  "quarter",
+  "semi",
+  "final",
+  "thirdPlace",
+] as const;
 
 export type PlayoffRoundKey = (typeof PLAYOFF_ROUND_KEYS)[number];
 
@@ -10,12 +15,14 @@ export const BEST_OF_BY_ROUND: Readonly<Record<PlayoffRoundKey, BestOf>> = {
   quarter: 3,
   semi: 3,
   final: 5,
+  thirdPlace: 3,
 };
 
 export const ROUND_LABELS: Readonly<Record<PlayoffRoundKey, string>> = {
   quarter: "1/4",
   semi: "1/2",
   final: "ФИНАЛ",
+  thirdPlace: "3-Е МЕСТО",
 };
 
 export const MATCH_SLOTS = [0, 1] as const;

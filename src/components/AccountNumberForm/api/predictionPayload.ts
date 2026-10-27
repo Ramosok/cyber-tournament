@@ -11,6 +11,7 @@ export const PREDICTION_FIELDS = [
   "f5",
   "f6",
   "f7",
+  "f8",
 ] as const;
 
 export type PredictionFieldName = (typeof PREDICTION_FIELDS)[number];

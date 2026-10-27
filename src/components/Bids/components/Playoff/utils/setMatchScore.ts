@@ -25,6 +25,22 @@ export const getMatchWinner = (
   return winnerSlot === null ? null : match.teams[winnerSlot];
 };
 
+/** Проигравшая команда пары (для посева в матч за 3-е место) либо null. */
+export const getMatchLoser = (
+  match: Match,
+  bestOf: RoundState["bestOf"],
+): MatchSlotTeam => {
+  const winnerSlot = getWinnerSlot(match.score, bestOf);
+
+  if (winnerSlot === null) {
+    return null;
+  }
+
+  const loserSlot: MatchSlot = winnerSlot === 0 ? 1 : 0;
+
+  return match.teams[loserSlot];
+};
+
 const replaceTeams = (
   teams: MatchTeams,
   slot: MatchSlot,
@@ -52,7 +68,8 @@ const clearRound = (round: RoundState): RoundState => ({
 
 /**
  * Единственная точка изменения сетки: записывает счёт матча, продвигает
- * победителя в следующий раунд и сбрасывает зависимые от него матчи.
+ * победителя в следующий раунд (а проигравших в 1/2 — в матч за 3-е место)
+ * и сбрасывает зависимые от него матчи.
  * Возвращает новое состояние — мутировать переданное нельзя.
  */
 export const setMatchScore = (
@@ -100,21 +117,31 @@ export const setMatchScore = (
             }),
           ),
           final: clearRound(state.rounds.final),
+          thirdPlace: clearRound(state.rounds.thirdPlace),
         },
         winnerId: null,
       };
     }
 
     case "semi": {
-      const finalSlot: MatchSlot = matchIndex === 0 ? 0 : 1;
+      const targetSlot: MatchSlot = matchIndex === 0 ? 0 : 1;
+      const loserId = getMatchLoser(updatedMatch, round.bestOf);
 
       return {
         rounds: {
           ...rounds,
           final: replaceMatch(state.rounds.final, 0, (finalMatch) => ({
-            teams: replaceTeams(finalMatch.teams, finalSlot, winnerId),
+            teams: replaceTeams(finalMatch.teams, targetSlot, winnerId),
             score: createEmptyScore(),
           })),
+          thirdPlace: replaceMatch(
+            state.rounds.thirdPlace,
+            0,
+            (thirdPlaceMatch) => ({
+              teams: replaceTeams(thirdPlaceMatch.teams, targetSlot, loserId),
+              score: createEmptyScore(),
+            }),
+          ),
         },
         winnerId: null,
       };
@@ -122,5 +149,8 @@ export const setMatchScore = (
 
     case "final":
       return { rounds, winnerId };
+
+    case "thirdPlace":
+      return { rounds, winnerId: state.winnerId };
   }
 };

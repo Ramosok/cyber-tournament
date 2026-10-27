@@ -48,6 +48,7 @@ export const createInitialState = (teams: readonly Team[]): PlayoffState => {
       quarter: createRound("quarter", seededMatches),
       semi: createRound("semi", createEmptyMatches(semiMatchCount)),
       final: createRound("final", createEmptyMatches(1)),
+      thirdPlace: createRound("thirdPlace", createEmptyMatches(1)),
     },
     winnerId: null,
   };

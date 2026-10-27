@@ -6,6 +6,7 @@ const MESSAGE_FINAL_IN_PROGRESS = "Прием прогнозов закрыт! �
 const NEXT_STEP_DATE_FORMAT = new Intl.DateTimeFormat("ru-RU", {
   day: "numeric",
   month: "long",
+  timeZone: "Europe/Minsk",
 });
 
 /** Сообщение, которое показывается вместо формы, пока этап идёт или турнир окончен. */
