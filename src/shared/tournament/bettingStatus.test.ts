@@ -2,15 +2,47 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { getTimerTitle } from "@/components/Timer/utils/getTimerTitle";
 import { getBettingClosedMessage } from "@/shared/tournament/bettingClosedMessage";
-import { getBettingStatus } from "@/shared/tournament/bettingStatus";
+import {
+  getBettingStatus,
+  PREVIEW_STEP_STORAGE_KEY,
+  setPreviewStep,
+} from "@/shared/tournament/bettingStatus";
+
+const BEFORE_STAGE_1_CLOSE = "2026-11-21T12:00:00+03:00";
+
+const createMemoryStorage = (): Storage => {
+  const store = new Map<string, string>();
+
+  return {
+    get length(): number {
+      return store.size;
+    },
+    clear(): void {
+      store.clear();
+    },
+    getItem(key: string): string | null {
+      return store.get(key) ?? null;
+    },
+    key(index: number): string | null {
+      return [...store.keys()][index] ?? null;
+    },
+    removeItem(key: string): void {
+      store.delete(key);
+    },
+    setItem(key: string, value: string): void {
+      store.set(key, value);
+    },
+  };
+};
 
 describe("getBettingStatus", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
   });
 
   it("до закрытия Stage 1 приём открыт, текущий шаг — первый", () => {
-    const status = getBettingStatus(new Date("2026-11-21T12:00:00+03:00"));
+    const status = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
 
     expect([
       status.currentStep,
@@ -103,13 +135,47 @@ describe("getBettingStatus", () => {
   it("VITE_PREVIEW_STEP=done показывает завершённый турнир", () => {
     vi.stubEnv("VITE_PREVIEW_STEP", "done");
 
-    const status = getBettingStatus(new Date("2026-11-21T12:00:00+03:00"));
+    const status = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
 
     expect([status.isBettingOpen, status.isFinished]).toEqual([false, true]);
   });
 
+  it("localStorage переключает этапы (1…4, N:closed, done) и перекрывает VITE_PREVIEW_STEP", () => {
+    const storage = createMemoryStorage();
+    vi.stubGlobal("localStorage", storage);
+    vi.stubEnv("VITE_PREVIEW_STEP", "1");
+
+    storage.setItem(PREVIEW_STEP_STORAGE_KEY, "4");
+    const playoffStatus = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
+    expect([
+      playoffStatus.currentStep,
+      playoffStatus.isBettingOpen,
+      playoffStatus.isFinalStep,
+    ]).toEqual([4, true, true]);
+
+    setPreviewStep("2:closed");
+    const closedStatus = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
+    expect([closedStatus.currentStep, closedStatus.isBettingOpen]).toEqual([
+      2,
+      false,
+    ]);
+    expect(getBettingClosedMessage(closedStatus)).toBe(
+      "Прием прогнозов на 2-й этап закрыт! Следующий этап откроется 28 ноября.",
+    );
+
+    setPreviewStep("done");
+    const doneStatus = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
+    expect([doneStatus.isBettingOpen, doneStatus.isFinished]).toEqual([
+      false,
+      true,
+    ]);
+
+    setPreviewStep(null);
+    expect(storage.getItem(PREVIEW_STEP_STORAGE_KEY)).toBeNull();
+  });
+
   it("открытый приём тикает до закрытия окна прогнозов этапа", () => {
-    const status = getBettingStatus(new Date("2026-11-21T12:00:00+03:00"));
+    const status = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
 
     expect(status.endsAt?.toISOString()).toBe(
       new Date("2026-11-24T08:55:00+03:00").toISOString(),

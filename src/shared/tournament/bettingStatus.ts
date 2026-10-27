@@ -1,9 +1,21 @@
+import { PREVIEW_STEP_EVENT } from "@/shared/hooks/useNow";
+
 export const STEP_COUNT = 4;
 
 /** Последний этап — плей-офф. На нём вместо общей сетки показывается Playoff. */
 export const FINAL_STEP = 4;
 
 export type StepNumber = 1 | 2 | 3 | 4;
+
+/** Основной ключ в `localStorage` для переключения этапов при тестировании. */
+export const PREVIEW_STEP_STORAGE_KEY = "step";
+
+const PREVIEW_STORAGE_KEYS = [
+  PREVIEW_STEP_STORAGE_KEY,
+  "previewStep",
+  "PREVIEW_STEP",
+  "VITE_PREVIEW_STEP",
+] as const;
 
 export const isStepNumber = (value: number): value is StepNumber =>
   Number.isInteger(value) && value >= 1 && value <= STEP_COUNT;
@@ -90,11 +102,17 @@ const createStatus = ({
   nextStepStartsAt,
 });
 
+const findTour = (step: StepNumber): Tour | undefined =>
+  TOURS.find((tour) => tour.step === step);
+
 const findTourOpensAt = (step: StepNumber): Date | null =>
-  TOURS.find((tour) => tour.step === step)?.opensAt ?? null;
+  findTour(step)?.opensAt ?? null;
 
 const findTourClosesAt = (step: StepNumber): Date | null =>
-  TOURS.find((tour) => tour.step === step)?.closesAt ?? null;
+  findTour(step)?.closesAt ?? null;
+
+const findTourEndsAt = (step: StepNumber): Date | null =>
+  findTour(step)?.endsAt ?? null;
 
 const isTourClosedNow = (tour: Tour, now: Date): boolean =>
   tour.step === FINAL_STEP
@@ -104,27 +122,89 @@ const isTourClosedNow = (tour: Tour, now: Date): boolean =>
 type PreviewMode =
   | { readonly kind: "off" }
   | { readonly kind: "step"; readonly step: StepNumber }
+  | { readonly kind: "closed"; readonly step: StepNumber }
   | { readonly kind: "finished" };
 
-/**
- * Отладка: `VITE_PREVIEW_STEP=1…4` включает этап, `VITE_PREVIEW_STEP=done` —
- * заглушку завершённого турнира. Так сетку и плей-офф можно посмотреть,
- * не переписывая даты.
- */
-const getPreviewMode = (): PreviewMode => {
-  const raw = import.meta.env.VITE_PREVIEW_STEP;
+const readStoragePreview = (): string | null => {
+  try {
+    if (typeof localStorage === "undefined") {
+      return null;
+    }
 
-  if (!raw) {
+    for (const key of PREVIEW_STORAGE_KEYS) {
+      const value = localStorage.getItem(key);
+
+      if (value !== null && value.trim() !== "") {
+        return value.trim();
+      }
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+};
+
+const parsePreviewValue = (raw: string | null | undefined): PreviewMode => {
+  if (!raw || raw === "off" || raw === "auto") {
     return { kind: "off" };
   }
 
-  if (raw === "done") {
+  if (raw === "done" || raw === "finished") {
     return { kind: "finished" };
+  }
+
+  if (raw.endsWith(":closed")) {
+    const step = Number(raw.slice(0, -":closed".length));
+
+    return isStepNumber(step) ? { kind: "closed", step } : { kind: "off" };
   }
 
   const step = Number(raw);
 
   return isStepNumber(step) ? { kind: "step", step } : { kind: "off" };
+};
+
+/**
+ * Отладка этапов:
+ * 1) `localStorage.setItem("step", "1" | "2" | "3" | "4" | "1:closed" | "done" | "auto")`
+ *    (также поддерживаются ключи `previewStep`, `PREVIEW_STEP`, `VITE_PREVIEW_STEP`);
+ * 2) переменная окружения `VITE_PREVIEW_STEP=1…4` или `done`.
+ * Значение из `localStorage` имеет приоритет над `VITE_PREVIEW_STEP`.
+ */
+const getPreviewMode = (): PreviewMode => {
+  const fromStorage = readStoragePreview();
+
+  if (fromStorage !== null) {
+    return parsePreviewValue(fromStorage);
+  }
+
+  return parsePreviewValue(import.meta.env.VITE_PREVIEW_STEP);
+};
+
+/** Утилита для переключения этапа в тестах или из консоли браузера. */
+export const setPreviewStep = (
+  value: StepNumber | `${StepNumber}:closed` | "done" | "auto" | null,
+): void => {
+  try {
+    if (typeof localStorage === "undefined") {
+      return;
+    }
+
+    if (value === null || value === "auto") {
+      for (const key of PREVIEW_STORAGE_KEYS) {
+        localStorage.removeItem(key);
+      }
+    } else {
+      localStorage.setItem(PREVIEW_STEP_STORAGE_KEY, String(value));
+    }
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event(PREVIEW_STEP_EVENT));
+    }
+  } catch {
+    // Игнорируем ошибки доступа к localStorage в приватном режиме / SSR.
+  }
 };
 
 const FINISHED_STATUS: BettingStatus = createStatus({
@@ -148,6 +228,19 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
       isBettingOpen: true,
       endsAt: findTourClosesAt(preview.step),
       nextStepStartsAt: null,
+    });
+  }
+
+  if (preview.kind === "closed") {
+    const nextStep = preview.step + 1;
+
+    return createStatus({
+      currentStep: preview.step,
+      isBettingOpen: false,
+      endsAt: findTourEndsAt(preview.step),
+      nextStepStartsAt: isStepNumber(nextStep)
+        ? findTourOpensAt(nextStep)
+        : null,
     });
   }
 

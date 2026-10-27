@@ -2,7 +2,7 @@ import type { FC } from "react";
 import type { StepNumber } from "@/shared/tournament/bettingStatus";
 
 import { Step } from "@/components/Steps/Step";
-import { MILLISECONDS_PER_MINUTE } from "@/components/Timer/utils/calculateTimeLeft";
+import { MILLISECONDS_PER_SECOND } from "@/components/Timer/utils/calculateTimeLeft";
 import { useNow } from "@/shared/hooks/useNow";
 import {
   FINAL_STEP,
@@ -25,7 +25,7 @@ const STEP_VIEWS: readonly StepView[] = [
 ];
 
 export const Steps: FC = () => {
-  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_MINUTE));
+  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_SECOND));
   const isRightward = bettingStatus.currentStep >= 3;
 
   return (

@@ -17,8 +17,12 @@
 | `npm run build`      | typecheck + прод-сборка в `build/`    |
 | `npm run preview`    | отдача прод-сборки                    |
 
-Переменные окружения:
+Переменные окружения и переключение этапов через `localStorage`:
 
+- `localStorage.setItem("step", "1" | "2" | "3" | "4" | "1:closed" | "done" | "auto")` —
+  переключает этап прямо в браузере (также поддерживаются ключи `previewStep`,
+  `PREVIEW_STEP`, `VITE_PREVIEW_STEP`), имеет приоритет над `VITE_PREVIEW_STEP`
+  и подхватывается без перезагрузки страницы.
 - `VITE_PREVIEW_STEP=1…3` — общая сетка, `=4` — плей-офф, `=done` — заглушка
   «турнир окончен». Показывает нужный экран без правки дат.
 - `VITE_ALLOWED_HOSTS=".e2b.app,localhost"` — дополнительные Host для dev-сервера
