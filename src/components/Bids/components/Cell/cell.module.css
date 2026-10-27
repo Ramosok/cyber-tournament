@@ -52,6 +52,31 @@
   flex-direction: column;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .selectedTeam {
+    animation: team-pop 0.25s ease;
+  }
+
+  .cell {
+    transition: transform 0.15s ease;
+  }
+
+  .cell:hover {
+    transform: translateY(-2px);
+  }
+
+  .cell:active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes team-pop {
+  from {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+}
+
 .teamLogo {
   width: 90px;
   height: 90px;

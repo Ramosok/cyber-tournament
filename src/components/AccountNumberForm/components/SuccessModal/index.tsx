@@ -14,7 +14,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({ onClose }) => {
       <Icon width="64" height="64" icon="success" />
       <p className={styles.title}>Ваш прогноз принят!</p>
       <span className={styles.subTitle}>Ожидайте результаты турнира</span>
-      <button onClick={onClose} className={styles.btn}>
+      <button type="button" onClick={onClose} className={styles.btn}>
         OK
       </button>
     </div>

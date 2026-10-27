@@ -5,19 +5,17 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
-    "strict": true,
 
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": false,
-    "outDir": "./build",
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
 
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
 
-    "baseUrl": "../../cyber-tournament/cb",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
@@ -25,11 +23,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
     "exactOptionalPropertyTypes": true,
 
-    "types": ["vite/client", "react", "react-dom"],
+    "types": ["vite/client", "node"],
     "skipLibCheck": true
   },
-  "include": ["src/**/*", ".storybook/**/*"],
-  "exclude": ["build", "node_modules"]
+  "include": ["src", "vite.config.ts", "vitest.config.ts"]
 }

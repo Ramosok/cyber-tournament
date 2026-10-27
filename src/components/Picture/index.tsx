@@ -2,18 +2,24 @@ import type { CSSProperties, FC } from "react";
 
 import styles from "./picture.module.css";
 
-type PictureProps = {
-  src: string;
-  alt?: string;
-  sources?: {
-    srcSet: string;
-    media?: string;
-    type?: string;
-    sizes?: string;
-  }[];
-  className?: string;
-  style?: CSSProperties;
-  loading?: "lazy" | "eager";
+export type PictureSource = {
+  readonly srcSet: string;
+  readonly media?: string;
+  readonly type?: string;
+  readonly sizes?: string;
+};
+
+export type PictureProps = {
+  readonly src: string;
+  readonly alt?: string;
+  readonly sources?: readonly PictureSource[];
+  readonly className?: string;
+  readonly style?: CSSProperties;
+  readonly loading?: "lazy" | "eager";
+  readonly fetchPriority?: "high" | "low" | "auto";
+  /** Интрисик-размеры: браузер резервирует место до загрузки (нет CLS). */
+  readonly width?: number;
+  readonly height?: number;
 };
 
 export const Picture: FC<PictureProps> = ({
@@ -23,19 +29,31 @@ export const Picture: FC<PictureProps> = ({
   className,
   style,
   loading = "lazy",
+  fetchPriority = "auto",
+  width,
+  height,
 }) => {
   return (
     <picture className={className} style={style}>
       {sources.map((source) => (
         <source
-          key={Math.random()}
+          key={source.srcSet}
           srcSet={source.srcSet}
           media={source.media}
           type={source.type}
           sizes={source.sizes}
         />
       ))}
-      <img src={src} alt={alt} loading={loading} className={styles.img} />
+      <img
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        fetchPriority={fetchPriority}
+        width={width}
+        height={height}
+        className={styles.img}
+      />
     </picture>
   );
 };

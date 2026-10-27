@@ -21,3 +21,15 @@
 .teamItem:disabled {
   background: #3c3b3b;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .teamItem {
+    transition:
+      transform 0.15s ease,
+      opacity 0.15s ease;
+  }
+
+  .teamItem:hover:not(:disabled) {
+    transform: translateX(2px);
+  }
+}

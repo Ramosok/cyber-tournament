@@ -1,123 +1,146 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import type { FC } from "react";
-import type { PlayOffTeams } from "@/components/AccountNumberForm/api/submitPredictionAction";
 import type { PlayoffState } from "@/components/Bids/components/Playoff/types";
-import type { Team } from "@/shared/config";
-import type { BettingStatus } from "@/shared/utils/getCurrentBettingEndDate";
+import type { TeamId } from "@/shared/config";
+import type {
+  MatchSlot,
+  PlayoffRoundKey,
+} from "@/shared/tournament/playoffRounds";
+import type { CellIndex } from "@/shared/tournament/stageGrid";
+import type { StageSelection } from "@/shared/tournament/stageSelection";
+import type { ModalHandle } from "@/shared/ui/Modal/Modal";
 
 import { AccountNumberForm } from "@/components/AccountNumberForm";
 import { Playoff } from "@/components/Bids/components/Playoff";
+import { buildPlayoffPredictions } from "@/components/Bids/components/Playoff/utils/buildPlayoffPredictions";
 import { createInitialState } from "@/components/Bids/components/Playoff/utils/createInitialState";
-// import { Stage } from "@/components/Bids/components/Stage";
-// import { TeamList } from "@/components/Bids/components/TeamList";
-import { TEAM_LIST } from "@/shared/config";
-// import { Modal, type ModalHandle } from "@/shared/ui/Modal/Modal";
-import { getCurrentBettingEndDate } from "@/shared/utils/getCurrentBettingEndDate";
+import { setMatchScore } from "@/components/Bids/components/Playoff/utils/setMatchScore";
+import { Stage } from "@/components/Bids/components/Stage";
+import { TeamList } from "@/components/Bids/components/TeamList";
+import { MILLISECONDS_PER_MINUTE } from "@/components/Timer/utils/calculateTimeLeft";
+import { createTeamIndex, STAGE_TEAM_LIST, TEAM_LIST } from "@/shared/config";
+import { useNow } from "@/shared/hooks/useNow";
+import { buildStagePredictions } from "@/shared/prediction/buildStagePredictions";
+import { createPredictionForm } from "@/shared/prediction/types";
+import { getBettingClosedMessage } from "@/shared/tournament/bettingClosedMessage";
+import { getBettingStatus } from "@/shared/tournament/bettingStatus";
+import {
+  createEmptyStageSelection,
+  getSelectedTeamIds,
+  setCellTeam,
+} from "@/shared/tournament/stageSelection";
+import { Modal } from "@/shared/ui/Modal/Modal";
 
 import styles from "./bids.module.css";
 
-const CELL_COUNT = 16;
-export const initialTeams = Array(CELL_COUNT).fill(null) as (Team | null)[];
+// Списки команд статичны — индексы строятся один раз на модуль.
+const stageTeamIndex = createTeamIndex(STAGE_TEAM_LIST);
+const playoffTeamIndex = createTeamIndex(TEAM_LIST);
 
 export const Bids: FC = () => {
-  // const modalRef = useRef<ModalHandle>(null);
+  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_MINUTE));
 
-  const [selectedTeams, setSelectedTeams] = useState<PlayOffTeams[]>([]);
-  const [state, setState] = useState<PlayoffState>(() => createInitialState());
-  // const [selectedTeamIds, setSelectedTeamIds] = useState<Set<string>>(
-  //   new Set(),
-  // );
-  // const [currentCellIndex, setCurrentCellIndex] = useState<number | null>(null);
+  const [stageSelection, setStageSelection] = useState<StageSelection>(
+    createEmptyStageSelection,
+  );
+  const [playoffState, setPlayoffState] = useState<PlayoffState>(() =>
+    createInitialState(TEAM_LIST),
+  );
 
-  // const handleCellClick = (index: number): void => {
-  //   const currentTeam = selectedTeams[index];
-  //
-  //   if (currentTeam) {
-  //     setSelectedTeams((prev) => {
-  //       const newArr = [...prev];
-  //       newArr[index] = null;
-  //       return newArr;
-  //     });
-  //
-  //     setSelectedTeamIds((prev) => {
-  //       const newSet = new Set(prev);
-  //       newSet.delete(currentTeam.id);
-  //       return newSet;
-  //     });
-  //   } else {
-  //     setCurrentCellIndex(index);
-  //     modalRef.current?.showModal();
-  //   }
-  // };
+  const pickedCellRef = useRef<CellIndex | null>(null);
+  const teamPickerRef = useRef<ModalHandle>(null);
 
-  // const handleTeamSelect = (teamId: string): void => {
-  //   const team = TEAM_LIST.find((t) => t.id === teamId);
-  //   if (!team || currentCellIndex === null) return;
-  //
-  //   const label = CELL_LABEL_MAP[currentCellIndex];
-  //
-  //   setSelectedTeams((prev) => {
-  //     const newArr = [...prev];
-  //
-  //     newArr[currentCellIndex] = {
-  //       ...team,
-  //       metaData: label,
-  //     };
-  //
-  //     return newArr;
-  //   });
-  //
-  //   setSelectedTeamIds((prev) => new Set([...prev, teamId]));
-  //   modalRef.current?.close();
-  //   setCurrentCellIndex(null);
-  // };
+  const selectedTeamIds = getSelectedTeamIds(stageSelection);
 
-  const onResetSelectedTeams = (): void => {
-    setSelectedTeams([]);
-    setState(createInitialState());
-    // selectedTeamIds.clear();
-    // setCurrentCellIndex(null);
+  /**
+   * И сетка, и плей-офф отдают одну и ту же модель PredictionForm,
+   * поэтому форма ниже не знает, какой этап сейчас идёт.
+   */
+  const isPlayoff = bettingStatus.isFinalStep;
+  const predictionForm = createPredictionForm(
+    bettingStatus.currentStep,
+    isPlayoff ? "playoff" : "stage",
+    isPlayoff
+      ? buildPlayoffPredictions(playoffState, playoffTeamIndex)
+      : buildStagePredictions(stageSelection, stageTeamIndex),
+  );
+
+  const handleCellClick = (cellIndex: CellIndex): void => {
+    if (stageSelection[cellIndex] !== null) {
+      setStageSelection((prev) => setCellTeam(prev, cellIndex, null));
+      return;
+    }
+
+    pickedCellRef.current = cellIndex;
+    teamPickerRef.current?.showModal();
   };
 
-  const bettingStatus: BettingStatus = getCurrentBettingEndDate();
+  const handleTeamSelect = (teamId: TeamId): void => {
+    const cellIndex = pickedCellRef.current;
+    if (cellIndex === null) {
+      return;
+    }
+
+    setStageSelection((prev) => setCellTeam(prev, cellIndex, teamId));
+    teamPickerRef.current?.close();
+    pickedCellRef.current = null;
+  };
+
+  const handleScoreChange = (
+    round: PlayoffRoundKey,
+    matchIndex: number,
+    slot: MatchSlot,
+    value: string,
+  ): void => {
+    setPlayoffState((prev) =>
+      setMatchScore(prev, round, matchIndex, slot, value),
+    );
+  };
+
+  const handleReset = (): void => {
+    setStageSelection(createEmptyStageSelection());
+    setPlayoffState(createInitialState(TEAM_LIST));
+    pickedCellRef.current = null;
+  };
+
+  if (!bettingStatus.isBettingOpen) {
+    return (
+      <div className={styles.msgClosed}>
+        {getBettingClosedMessage(bettingStatus)}
+      </div>
+    );
+  }
 
   return (
-    <>
-      {bettingStatus.hasActiveStage ? (
-        <div className={styles.msgUnvaluable}>
-          Прием прогнозов закрыт! Турнир окончен
-          {/*Прием прогнозов на 3-й этап закрыт! Следующий этап откроется 8*/}
-          {/*декабря.*/}
-        </div>
-      ) : (
-        <section className={styles.container}>
-          <h2 className={styles.title}>Выбери команды</h2>
+    <section className={styles.container}>
+      <h2 className={styles.title}>Выбери команды</h2>
 
-          <Playoff
-            setState={setState}
-            state={state}
-            setSelectedTeams={setSelectedTeams}
-            teams={TEAM_LIST}
-          />
-          {/*<Stage*/}
-          {/*  handleCellClick={handleCellClick}*/}
-          {/*  selectedTeams={selectedTeams}*/}
-          {/*/>*/}
-          <AccountNumberForm
-            onReset={onResetSelectedTeams}
-            teamList={selectedTeams}
-          />
-        </section>
+      {isPlayoff ? (
+        <Playoff
+          state={playoffState}
+          teams={TEAM_LIST}
+          onScoreChange={handleScoreChange}
+        />
+      ) : (
+        <Stage
+          selection={stageSelection}
+          teams={STAGE_TEAM_LIST}
+          onCellClick={handleCellClick}
+        />
       )}
 
-      {/*<Modal ref={modalRef}>*/}
-      {/*  <TeamList*/}
-      {/*    selectedTeamIds={selectedTeamIds}*/}
-      {/*    onTeamSelect={handleTeamSelect}*/}
-      {/*    currentCellIndex={currentCellIndex}*/}
-      {/*  />*/}
-      {/*</Modal>*/}
-    </>
+      <AccountNumberForm form={predictionForm} onReset={handleReset} />
+
+      {!isPlayoff && (
+        <Modal ariaLabel="Выбор команды" ref={teamPickerRef}>
+          <TeamList
+            teams={STAGE_TEAM_LIST}
+            selectedTeamIds={selectedTeamIds}
+            onTeamSelect={handleTeamSelect}
+          />
+        </Modal>
+      )}
+    </section>
   );
 };

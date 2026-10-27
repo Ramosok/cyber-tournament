@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import type { FC } from "react";
 
 import { Item } from "@/components/Timer/components/Item";
@@ -7,37 +5,31 @@ import {
   calculateTimeLeft,
   MILLISECONDS_PER_SECOND,
 } from "@/components/Timer/utils/calculateTimeLeft";
-import {
-  type BettingStatus,
-  getCurrentBettingEndDate,
-} from "@/shared/utils/getCurrentBettingEndDate";
+import { getTimerTitle } from "@/components/Timer/utils/getTimerTitle";
+import { useNow } from "@/shared/hooks/useNow";
+import { getBettingStatus } from "@/shared/tournament/bettingStatus";
 
 import styles from "./timer.module.css";
 
+/** Раз в секунду пересчитывает остаток; статус — производная от того же `now`. */
 export const Timer: FC = () => {
-  const bettingStatus: BettingStatus = getCurrentBettingEndDate();
-
-  const endDate = bettingStatus.hasActiveStage ? bettingStatus.endDate : null;
-
-  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(endDate));
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(endDate));
-    }, MILLISECONDS_PER_SECOND);
-
-    return () => clearInterval(timer);
-  }, [endDate]);
+  const now = useNow(MILLISECONDS_PER_SECOND);
+  const bettingStatus = getBettingStatus(now);
+  const { endsAt } = bettingStatus;
+  const timeLeft = calculateTimeLeft(endsAt, now);
 
   return (
-    <section className={styles.container}>
-      <h3 className={styles.title}>До окончания приёма прогнозов:</h3>
-      <div className={styles.timerWrapper}>
-        <Item count={timeLeft.days} label="дд" />
-        <Item count={timeLeft.hours} label="чч" />
-        <Item count={timeLeft.minutes} label="мм" />
-        <Item count={timeLeft.seconds} label="сс" isHighlighted />
-      </div>
+    <section className={styles.container} role="timer" aria-live="off">
+      <h3 className={styles.title}>{getTimerTitle(bettingStatus)}</h3>
+
+      {endsAt && (
+        <div className={styles.timerWrapper}>
+          <Item count={timeLeft.days} label="дд" />
+          <Item count={timeLeft.hours} label="чч" />
+          <Item count={timeLeft.minutes} label="мм" />
+          <Item count={timeLeft.seconds} label="сс" isHighlighted />
+        </div>
+      )}
     </section>
   );
 };

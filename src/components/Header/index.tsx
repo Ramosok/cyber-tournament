@@ -3,8 +3,8 @@ import type { FC } from "react";
 import { Picture } from "@/components/Picture";
 import { Icon } from "@/shared/ui/icon";
 
-import bonus360 from "../../shared/assets/bonus360.png";
-import bonus1920 from "../../shared/assets/bonus1920.png";
+import bonus360 from "../../shared/assets/bonus360.webp";
+import bonus1920 from "../../shared/assets/bonus1920.webp";
 import goose360 from "../../shared/assets/goose360.webp";
 import goose1920 from "../../shared/assets/goose1920.webp";
 
@@ -33,6 +33,9 @@ export const Header: FC = () => {
             },
           ]}
           loading="eager"
+          fetchPriority="high"
+          width={1652}
+          height={513}
         />
         <p className={styles.description}>
           <span>ЗА ВЕРНЫЙ ПРОГНОЗ</span> на StarLadder Budapest Major 2025
@@ -42,6 +45,8 @@ export const Header: FC = () => {
         key="гусь в маске с ножом"
         className={styles.goose}
         src={goose1920}
+        width={1386}
+        height={1235}
         alt="гусь в маске с ножом"
         sources={[
           {
