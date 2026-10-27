@@ -18,7 +18,7 @@ import { createInitialState } from "@/components/Bids/components/Playoff/utils/c
 import { setMatchScore } from "@/components/Bids/components/Playoff/utils/setMatchScore";
 import { Stage } from "@/components/Bids/components/Stage";
 import { TeamList } from "@/components/Bids/components/TeamList";
-import { MILLISECONDS_PER_MINUTE } from "@/components/Timer/utils/calculateTimeLeft";
+import { MILLISECONDS_PER_SECOND } from "@/components/Timer/utils/calculateTimeLeft";
 import { createTeamIndex, STAGE_TEAM_LIST, TEAM_LIST } from "@/shared/config";
 import { useNow } from "@/shared/hooks/useNow";
 import { buildStagePredictions } from "@/shared/prediction/buildStagePredictions";
@@ -39,7 +39,7 @@ const stageTeamIndex = createTeamIndex(STAGE_TEAM_LIST);
 const playoffTeamIndex = createTeamIndex(TEAM_LIST);
 
 export const Bids: FC = () => {
-  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_MINUTE));
+  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_SECOND));
 
   const [stageSelection, setStageSelection] = useState<StageSelection>(
     createEmptyStageSelection,
