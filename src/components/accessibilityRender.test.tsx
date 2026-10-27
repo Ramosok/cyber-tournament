@@ -3,6 +3,9 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { Cell } from "@/components/Bids/components/Cell";
+import { Playoff } from "@/components/Bids/components/Playoff";
+import { createInitialState } from "@/components/Bids/components/Playoff/utils/createInitialState";
+import { Steps } from "@/components/Steps";
 import { Timer } from "@/components/Timer";
 import { TEAM_LIST } from "@/shared/config";
 import { Modal } from "@/shared/ui/Modal/Modal";
@@ -53,5 +56,32 @@ describe("доступная разметка", () => {
     expect(
       container.querySelector("button")?.getAttribute("aria-label"),
     ).toContain("3-0");
+  });
+
+  it("степпер отображает все 4 этапа", () => {
+    const { container } = render(<Steps />);
+    const text = container.textContent ?? "";
+
+    expect(text).toContain("1 ЭТАП");
+    expect(text).toContain("2 ЭТАП");
+    expect(text).toContain("3 ЭТАП");
+    expect(text).toContain("ФИНАЛ");
+  });
+
+  it("плей-офф отображает 1/4, 1/2, ФИНАЛ, 3-Е МЕСТО и ПОБЕДИТЕЛЬ", () => {
+    const { container } = render(
+      <Playoff
+        state={createInitialState(TEAM_LIST)}
+        teams={TEAM_LIST}
+        onScoreChange={noop}
+      />,
+    );
+    const text = container.textContent ?? "";
+
+    expect(text).toContain("1/4");
+    expect(text).toContain("1/2");
+    expect(text).toContain("ФИНАЛ");
+    expect(text).toContain("3-Е МЕСТО");
+    expect(text).toContain("ПОБЕДИТЕЛЬ");
   });
 });

@@ -8,6 +8,7 @@ const ROUND_NAMES: Readonly<Record<PlayoffRoundKey, string>> = {
   quarter: "1/4 финала",
   semi: "1/2 финала",
   final: "финала",
+  thirdPlace: "матча за 3-е место",
 };
 
 const getPlayoffError = (form: PredictionForm): string => {

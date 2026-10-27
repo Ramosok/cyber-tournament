@@ -8,41 +8,52 @@ export type StepNumber = 1 | 2 | 3 | 4;
 export const isStepNumber = (value: number): value is StepNumber =>
   Number.isInteger(value) && value >= 1 && value <= STEP_COUNT;
 
-type Tour = {
+export type Tour = {
   readonly step: StepNumber;
-  readonly start: Date;
-  readonly end: Date;
+  /** Когда открывается приём прогнозов (Минск, UTC+3). */
+  readonly opensAt: Date;
+  /** Когда закрывается приём прогнозов — за ~5 минут до старта этапа (Минск, UTC+3). */
+  readonly closesAt: Date;
+  /** До какого момента закрыт приём: открытие следующего этапа либо конец турнира. */
+  readonly endsAt: Date;
 };
 
 /**
- * Расписание: турнир стартует 10.10.2026, каждый этап идёт сутки,
- * плей-офф — четвёртые сутки. После окончания последнего этапа турнир завершён.
+ * График этапов по минскому времени (UTC+3):
+ * - Stage 1 (24–27 ноября): приём 20.11 18:00 — 24.11 08:55
+ * - Stage 2 (28 ноября – 1 декабря): приём 24.11 18:00 — 28.11 08:55
+ * - Stage 3 (2–6 декабря): приём 28.11 18:00 — 02.12 08:55
+ * - Playoffs (10–13 декабря): приём 07.12 10:00 — 10.12 11:55, финал до 13.12 23:59:59
  */
-const TOURS: readonly Tour[] = [
+export const TOURS: readonly Tour[] = [
   {
     step: 1,
-    start: new Date("2026-10-10T00:00:00"),
-    end: new Date("2026-10-10T23:59:59"),
+    opensAt: new Date("2026-11-20T18:00:00+03:00"),
+    closesAt: new Date("2026-11-24T08:55:00+03:00"),
+    endsAt: new Date("2026-11-24T18:00:00+03:00"),
   },
   {
     step: 2,
-    start: new Date("2026-10-11T00:00:00"),
-    end: new Date("2026-10-11T23:59:59"),
+    opensAt: new Date("2026-11-24T18:00:00+03:00"),
+    closesAt: new Date("2026-11-28T08:55:00+03:00"),
+    endsAt: new Date("2026-11-28T18:00:00+03:00"),
   },
   {
     step: 3,
-    start: new Date("2026-10-12T00:00:00"),
-    end: new Date("2026-10-12T23:59:59"),
+    opensAt: new Date("2026-11-28T18:00:00+03:00"),
+    closesAt: new Date("2026-12-02T08:55:00+03:00"),
+    endsAt: new Date("2026-12-07T10:00:00+03:00"),
   },
   {
     step: FINAL_STEP,
-    start: new Date("2026-10-13T00:00:00"),
-    end: new Date("2026-10-13T23:59:59"),
+    opensAt: new Date("2026-12-07T10:00:00+03:00"),
+    closesAt: new Date("2026-12-10T11:55:00+03:00"),
+    endsAt: new Date("2026-12-13T23:59:59+03:00"),
   },
 ];
 
 export type BettingStatus = {
-  /** Прогнозы принимаются: не идёт ни один этап и турнир не завершён. */
+  /** Прогнозы принимаются: открыто окно текущего этапа и турнир не завершён. */
   readonly isBettingOpen: boolean;
   /** Все этапы позади — показываем заглушку «турнир окончен». */
   readonly isFinished: boolean;
@@ -79,8 +90,16 @@ const createStatus = ({
   nextStepStartsAt,
 });
 
-const findTourStart = (step: StepNumber): Date | null =>
-  TOURS.find((tour) => tour.step === step)?.start ?? null;
+const findTourOpensAt = (step: StepNumber): Date | null =>
+  TOURS.find((tour) => tour.step === step)?.opensAt ?? null;
+
+const findTourClosesAt = (step: StepNumber): Date | null =>
+  TOURS.find((tour) => tour.step === step)?.closesAt ?? null;
+
+const isTourClosedNow = (tour: Tour, now: Date): boolean =>
+  tour.step === FINAL_STEP
+    ? now >= tour.closesAt && now <= tour.endsAt
+    : now >= tour.closesAt && now < tour.endsAt;
 
 type PreviewMode =
   | { readonly kind: "off" }
@@ -127,33 +146,35 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: preview.step,
       isBettingOpen: true,
-      endsAt: null,
+      endsAt: findTourClosesAt(preview.step),
       nextStepStartsAt: null,
     });
   }
 
-  const activeTour = TOURS.find((tour) => now >= tour.start && now <= tour.end);
+  const closedTour = TOURS.find((tour) => isTourClosedNow(tour, now));
 
-  // Этап идёт — прогнозы не принимаем, таймер до его окончания.
-  if (activeTour) {
-    const nextStep = activeTour.step + 1;
+  // Приём на этап закрыт — ждём открытия следующего этапа или окончания финала.
+  if (closedTour) {
+    const nextStep = closedTour.step + 1;
 
     return createStatus({
-      currentStep: activeTour.step,
+      currentStep: closedTour.step,
       isBettingOpen: false,
-      endsAt: activeTour.end,
-      nextStepStartsAt: isStepNumber(nextStep) ? findTourStart(nextStep) : null,
+      endsAt: closedTour.endsAt,
+      nextStepStartsAt: isStepNumber(nextStep)
+        ? findTourOpensAt(nextStep)
+        : null,
     });
   }
 
-  const upcomingTour = TOURS.find((tour) => now < tour.start);
+  const openTour = TOURS.find((tour) => now < tour.closesAt);
 
-  // Этап ещё не начался — приём открыт, таймер идёт до его старта.
-  if (upcomingTour) {
+  // Окно приёма прогнозов открыто — таймер тикает до закрытия приёма на этап.
+  if (openTour) {
     return createStatus({
-      currentStep: upcomingTour.step,
+      currentStep: openTour.step,
       isBettingOpen: true,
-      endsAt: upcomingTour.start,
+      endsAt: openTour.closesAt,
       nextStepStartsAt: null,
     });
   }

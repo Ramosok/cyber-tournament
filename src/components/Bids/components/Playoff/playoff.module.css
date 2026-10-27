@@ -2,13 +2,20 @@
   display: grid;
   grid-template-columns: 1fr;
   column-gap: 14px;
+  row-gap: 32px;
+  width: 100%;
+  max-width: 1320px;
+  padding: 0 16px;
 }
 
-.container > div {
-  height: 100%;
+.column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
-.title {
+.title,
+.thirdPlaceTitle {
   color: var(--white);
   text-align: center;
   font-size: 36px;
@@ -16,34 +23,48 @@
   font-weight: 600;
   line-height: 42px;
   text-transform: uppercase;
-  height: min-content;
+  margin-bottom: 24px;
+}
+
+.thirdPlaceTitle {
+  margin-bottom: 16px;
 }
 
 .step1 {
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
+  justify-content: flex-start;
   align-items: stretch;
-  padding-top: 30px;
-  height: 100%;
+  gap: 24px;
+  flex: 1;
 }
 
 .step2 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding-bottom: 30px;
+  align-items: stretch;
+  gap: 24px;
+  flex: 1;
 }
 
 .step3 {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  padding-bottom: 30px;
-  height: 100%;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 32px;
+  flex: 1;
+}
+
+.finalMatch {
+  width: 100%;
+}
+
+.thirdPlace {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .step4 {
@@ -51,88 +72,55 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  padding-bottom: 30px;
-}
-
-.title {
-  margin-top: 24px;
+  flex: 1;
 }
 
 @media (min-width: 568px) {
   .container {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
     row-gap: 48px;
-  }
-  .step1 {
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
-    align-items: stretch;
-    gap: 16px;
+    padding: 0 24px;
   }
 
   .step2 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 110px;
-    align-items: center;
-    height: 100%;
-    padding-bottom: 70px;
+    justify-content: space-between;
+    padding: 92px 0;
   }
 
   .step3 {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    gap: 110px;
-    height: 100%;
-    padding-bottom: 30px;
-  }
-
-  .step4 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-  }
-  .title {
-    margin-top: 0;
+    padding-top: 92px;
   }
 }
 
 @media (min-width: 868px) {
   .container {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr;
     column-gap: 14px;
-    padding: 0 24px;
   }
+
+  .step3 {
+    padding-top: 276px;
+  }
+
   .winner {
     grid-column: 1 / -1;
     align-self: center;
     justify-self: center;
-    margin-top: 48px;
     min-width: 317px;
-  }
-  .title {
-    margin-bottom: 24px;
   }
 }
 
 @media (min-width: 1025px) {
   .container {
     grid-template-columns: repeat(4, 1fr);
+    row-gap: 0;
   }
+
   .winner {
-    min-width: auto;
+    min-width: 0;
     grid-column: 4 / 5;
-    height: 100%;
-    margin-top: 0;
+    align-self: stretch;
+    justify-self: stretch;
     width: 100%;
   }
 }

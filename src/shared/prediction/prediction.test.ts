@@ -55,6 +55,8 @@ const fillPlayoff = (): PlayoffState => {
   state = setMatchScore(state, "semi", 1, 1, "2");
   state = setMatchScore(state, "final", 0, 0, "3");
   state = setMatchScore(state, "final", 0, 1, "1");
+  state = setMatchScore(state, "thirdPlace", 0, 0, "0");
+  state = setMatchScore(state, "thirdPlace", 0, 1, "2");
 
   return state;
 };
@@ -101,16 +103,16 @@ describe("buildPlayoffPredictions", () => {
       playoffTeams,
     );
 
-    expect([draft.filledCount, draft.requiredCount]).toEqual([0, 7]);
+    expect([draft.filledCount, draft.requiredCount]).toEqual([0, 8]);
     expect(draft.firstIncompleteRound).toBe("quarter");
   });
 
-  it("собирает 7 матчей и чемпиона", () => {
+  it("собирает 8 матчей (включая матч за 3-е место) и чемпиона", () => {
     const draft = buildPlayoffPredictions(fillPlayoff(), playoffTeams);
 
-    expect([draft.filledCount, draft.requiredCount]).toEqual([7, 7]);
-    expect(draft.predictions).toHaveLength(8);
-    expect(draft.predictions[7]).toEqual({
+    expect([draft.filledCount, draft.requiredCount]).toEqual([8, 8]);
+    expect(draft.predictions).toHaveLength(9);
+    expect(draft.predictions[8]).toEqual({
       kind: "winner",
       team: { id: "27", name: "Team Spirit" },
     });
@@ -127,18 +129,19 @@ describe("formatPredictionLines", () => {
     expect(lines[5]).toBe("2-3: FlyQuest, Fnatic, Ninjas in Pyjamas");
   });
 
-  it("для плей-офф отдаёт строку на матч", () => {
+  it("для плей-офф отдаёт строку на матч (включая 3-е место)", () => {
     const draft = buildPlayoffPredictions(fillPlayoff(), playoffTeams);
     const lines = formatPredictionLines(draft.predictions);
 
-    expect(lines).toHaveLength(7);
+    expect(lines).toHaveLength(8);
     expect(lines[0]).toBe("Team Spirit 2:0 Team Falcons");
     expect(lines[6]).toBe("Team Spirit 3:1 Natus Vincere");
+    expect(lines[7]).toBe("The MongolZ 0:2 FaZe Clan");
   });
 });
 
 describe("buildPredictionPayload", () => {
-  it("раскладывает строки по полям f1…f7", () => {
+  it("раскладывает строки по полям f1…f8", () => {
     const draft = buildPlayoffPredictions(fillPlayoff(), playoffTeams);
     const payload = buildPredictionPayload(
       createPredictionForm(4, "playoff", draft),
@@ -148,6 +151,7 @@ describe("buildPredictionPayload", () => {
 
     expect(payload.f1).toBe("Team Spirit 2:0 Team Falcons");
     expect(payload.f7).toBe("Team Spirit 3:1 Natus Vincere");
+    expect(payload.f8).toBe("The MongolZ 0:2 FaZe Clan");
     expect(payload.step).toBe("4");
     expect(payload.account_number).toBe("123456789");
     expect(payload.time).toBe("09.10.2026 (12:00)");
@@ -176,7 +180,7 @@ describe("getPredictionValidationError", () => {
     );
 
     expect(getPredictionValidationError(form)).toBe(
-      "Заполните счёт в матчах 1/4 финала (0 из 7)",
+      "Заполните счёт в матчах 1/4 финала (0 из 8)",
     );
   });
 
@@ -197,7 +201,23 @@ describe("getPredictionValidationError", () => {
     );
 
     expect(getPredictionValidationError(form)).toBe(
-      "Заполните счёт в матчах 1/4 финала (0 из 7)",
+      "Заполните счёт в матчах 1/4 финала (0 из 8)",
+    );
+  });
+
+  it("подсказывает про матч за 3-е место, если заполнены 1/4, 1/2 и финал", () => {
+    let state = fillPlayoff();
+    state = setMatchScore(state, "thirdPlace", 0, 0, "");
+    state = setMatchScore(state, "thirdPlace", 0, 1, "");
+
+    const form = createPredictionForm(
+      4,
+      "playoff",
+      buildPlayoffPredictions(state, playoffTeams),
+    );
+
+    expect(getPredictionValidationError(form)).toBe(
+      "Заполните счёт в матчах матча за 3-е место (7 из 8)",
     );
   });
 

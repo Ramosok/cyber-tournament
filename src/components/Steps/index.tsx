@@ -26,10 +26,15 @@ const STEP_VIEWS: readonly StepView[] = [
 
 export const Steps: FC = () => {
   const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_MINUTE));
+  const isRightward = bettingStatus.currentStep >= 3;
 
   return (
     <section className={styles.container}>
       <div className={styles.wrapper}>
+        <div
+          className={`${styles.track} ${isRightward ? styles.trackRight : styles.trackLeft}`}
+          aria-hidden="true"
+        />
         {STEP_VIEWS.map(({ step, title, hasArrow }) => (
           <Step
             key={title}

@@ -11,23 +11,16 @@ export type StepProps = {
   readonly hasArrow: boolean;
 };
 
-export const Step: FC<StepProps> = ({
-  title,
-  isComplete,
-  isCurrent,
-  hasArrow,
-}) => {
-  const isHighlighted = isComplete || isCurrent;
-
+export const Step: FC<StepProps> = ({ title, isCurrent, hasArrow }) => {
   return (
     <span className={styles.step}>
-      <span className={isHighlighted ? styles.color : styles.opacity}>
-        {title}
-      </span>{" "}
+      <span
+        className={`${styles.title} ${isCurrent ? styles.current : styles.inactive}`}
+      >
+        <span className={styles.titleText}>{title}</span>
+      </span>
       {hasArrow && (
-        <span
-          className={isComplete && !isCurrent ? styles.current : styles.opacity}
-        >
+        <span className={styles.arrow}>
           <Icon width="18" height="18" icon="fast-forward" />
         </span>
       )}
