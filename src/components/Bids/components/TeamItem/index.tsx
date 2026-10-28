@@ -9,7 +9,6 @@ export type TeamItemProps = {
   readonly onSelect: (teamId: TeamId) => void;
 };
 
-/** Команда в модалке выбора. Уже выбранную команду выбрать повторно нельзя. */
 export const TeamItem: FC<TeamItemProps> = ({ team, isSelected, onSelect }) => {
   const handleClick = (): void => {
     onSelect(team.id);

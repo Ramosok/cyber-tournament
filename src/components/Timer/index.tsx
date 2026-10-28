@@ -11,7 +11,6 @@ import { getBettingStatus } from "@/shared/tournament/bettingStatus";
 
 import styles from "./timer.module.css";
 
-/** Раз в секунду пересчитывает остаток; статус — производная от того же `now`. */
 export const Timer: FC = () => {
   const now = useNow(MILLISECONDS_PER_SECOND);
   const bettingStatus = getBettingStatus(now);

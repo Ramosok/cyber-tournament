@@ -2,7 +2,6 @@ import type { BestOf, MatchSlot } from "@/shared/tournament/playoffRounds";
 
 import { getMaxWins } from "@/shared/tournament/playoffRounds";
 
-/** Счёт вводится пользователем, поэтому до валидации хранится строкой. */
 export type MatchScore = {
   readonly team1: string;
   readonly team2: string;
@@ -10,7 +9,6 @@ export type MatchScore = {
 
 export const createEmptyScore = (): MatchScore => ({ team1: "", team2: "" });
 
-/** 0…maxWins либо null, если в ячейке пусто или посторонние символы. */
 export const parseScore = (value: string, bestOf: BestOf): number | null => {
   const trimmed = value.trim();
 
@@ -29,7 +27,6 @@ export const parseScore = (value: string, bestOf: BestOf): number | null => {
   return wins < 0 || wins > maxWins ? null : wins;
 };
 
-/** Серия сыграна до конца: лидер взял нужное число карт. */
 export const isFinishedScore = (
   score1: number,
   score2: number,
@@ -42,7 +39,6 @@ export const isFinishedScore = (
   );
 };
 
-/** Индекс победившей команды в паре либо null, если серия ещё не сыграна. */
 export const getWinnerSlot = (
   score: MatchScore,
   bestOf: BestOf,
@@ -61,7 +57,6 @@ export const getWinnerSlot = (
   return score1 > score2 ? 0 : 1;
 };
 
-/** Единственный источник правды для подсветки победителя в UI. */
 export const getWinnerFlags = (
   score: MatchScore,
   bestOf: BestOf,

@@ -29,7 +29,6 @@ const ROW_VIEWS: readonly StageRowView[] = STAGE_ROWS.map((groups, index) => ({
   hasTopDivider: index > 0,
 }));
 
-/** Общая сетка группового этапа (этапы 1–3). */
 export const Stage: FC<StageProps> = ({ selection, teams, onCellClick }) => {
   const teamIndex = createTeamIndex(teams);
 

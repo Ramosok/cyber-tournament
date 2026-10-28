@@ -10,7 +10,6 @@ import {
 } from "@/shared/prediction/types";
 import { GROUP_LABELS } from "@/shared/tournament/stageGrid";
 
-/** «Team Spirit 2:1 Team Falcons» — формат, который ждёт бэкенд. */
 export const formatMatchPrediction = (match: MatchPrediction): string =>
   `${match.team1.name} ${match.team1.score}:${match.team2.score} ${match.team2.name}`;
 
@@ -25,10 +24,6 @@ const formatGroupLines = (
     return names.length === 0 ? "" : `${label}: ${names.join(", ")}`;
   });
 
-/**
- * Строки для полей f1…f7.
- * Плей-офф: по одной строке на матч. Общая сетка: по одной строке на группу.
- */
 export const formatPredictionLines = (
   predictions: readonly Prediction[],
 ): readonly string[] => {

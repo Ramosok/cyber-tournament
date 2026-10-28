@@ -32,7 +32,6 @@ import TheMongolZ from "./assets/teamsIcon/TheMongolZ.webp";
 import TYLOO from "./assets/teamsIcon/TYLOO.webp";
 import Wildcard from "./assets/teamsIcon/Wildcard.webp";
 
-/** Идентификатор команды во внешней системе (строка, а не индекс массива). */
 export type TeamId = string;
 
 export type Team = {
@@ -41,7 +40,6 @@ export type Team = {
   readonly logo: string;
 };
 
-/** Команды, прошедшие в плей-офф (сетка 1/4 финала). */
 export const TEAM_LIST: readonly Team[] = [
   { logo: Spirit, nameTeam: "Team Spirit", id: "27" },
   { logo: Falcons, nameTeam: "Team Falcons", id: "25" },
@@ -53,7 +51,6 @@ export const TEAM_LIST: readonly Team[] = [
   { logo: FURIA, nameTeam: "Furia", id: "1" },
 ];
 
-/** Команды 1-го этапа (Stage 1 — 16 команд). */
 export const STAGE_1_TEAM_LIST: readonly Team[] = [
   { logo: HEROIC, nameTeam: "HEROIC", id: "1" },
   { logo: NinjasInPyjamas, nameTeam: "Ninjas in Pyjamas", id: "2" },
@@ -73,7 +70,6 @@ export const STAGE_1_TEAM_LIST: readonly Team[] = [
   { logo: LynnVision, nameTeam: "Lynn Vision", id: "16" },
 ];
 
-/** Команды 2-го этапа (Stage 2 — 8 команд + 8 заглушек для победителей 1-го круга). */
 export const STAGE_2_TEAM_LIST: readonly Team[] = [
   { logo: G2, nameTeam: "G2", id: "1" },
   { logo: NatusVincere, nameTeam: "Natus Vincere", id: "2" },
@@ -93,7 +89,6 @@ export const STAGE_2_TEAM_LIST: readonly Team[] = [
   { logo: TBD, nameTeam: "TBD 8", id: "16" },
 ];
 
-/** Команды 3-го этапа (Stage 3 — 8 команд + 8 заглушек для победителей 2-го круга). */
 export const STAGE_3_TEAM_LIST: readonly Team[] = [
   { logo: Vitality, nameTeam: "Vitality", id: "1" },
   { logo: MOUZ, nameTeam: "MOUZ", id: "2" },
@@ -113,9 +108,6 @@ export const STAGE_3_TEAM_LIST: readonly Team[] = [
   { logo: TBD, nameTeam: "TBD 8", id: "16" },
 ];
 
-/**
- * Пул для выбора в общую сетку по умолчанию (1-й этап: 16 команд = 16 ячеек).
- */
 export const STAGE_TEAM_LIST: readonly Team[] = STAGE_1_TEAM_LIST;
 
 const STAGE_2_STEP = 2;
@@ -133,10 +125,25 @@ export const getStageTeamListByStep = (step: number): readonly Team[] => {
   return STAGE_1_TEAM_LIST;
 };
 
-/** Быстрый поиск команды по id (вместо линейного `find` на каждый рендер). */
+const teamIndexCache = new WeakMap<
+  readonly Team[],
+  ReadonlyMap<TeamId, Team>
+>();
+
 export const createTeamIndex = (
   teams: readonly Team[],
-): ReadonlyMap<TeamId, Team> => new Map(teams.map((team) => [team.id, team]));
+): ReadonlyMap<TeamId, Team> => {
+  const cached = teamIndexCache.get(teams);
+
+  if (cached) {
+    return cached;
+  }
+
+  const index = new Map(teams.map((team) => [team.id, team]));
+  teamIndexCache.set(teams, index);
+
+  return index;
+};
 
 export const getTeamById = (
   teams: ReadonlyMap<TeamId, Team>,

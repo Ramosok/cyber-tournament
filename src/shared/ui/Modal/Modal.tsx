@@ -18,9 +18,7 @@ type ModalProps = PropsWithChildren<{
   onClose?: () => void;
   noCross?: boolean;
   className?: string;
-  /** Доступное имя диалога для скринридеров. */
   ariaLabel?: string;
-  /** В React 19 ref передаётся как обычный проп — forwardRef не нужен. */
   ref?: Ref<ModalHandle>;
 }>;
 

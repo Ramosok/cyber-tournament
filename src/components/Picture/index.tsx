@@ -17,7 +17,6 @@ export type PictureProps = {
   readonly style?: CSSProperties;
   readonly loading?: "lazy" | "eager";
   readonly fetchPriority?: "high" | "low" | "auto";
-  /** Интрисик-размеры: браузер резервирует место до загрузки (нет CLS). */
   readonly width?: number;
   readonly height?: number;
 };

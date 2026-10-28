@@ -15,7 +15,6 @@ export type GroupColumnProps = {
   readonly onCellClick: (cellIndex: CellIndex) => void;
 };
 
-/** Колонка одной группы («3-0», «0-3», …) вместе с её ячейками. */
 export const GroupColumn: FC<GroupColumnProps> = ({
   group,
   selection,

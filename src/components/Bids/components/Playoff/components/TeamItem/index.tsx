@@ -9,7 +9,6 @@ export type TeamItemProps = PropsWithChildren<{
   readonly showScoreLabel?: boolean;
 }>;
 
-/** Команда в матче плей-офф. Содержимое слота счёта передаётся через children. */
 export const TeamItem: FC<TeamItemProps> = ({
   logo,
   teamName,

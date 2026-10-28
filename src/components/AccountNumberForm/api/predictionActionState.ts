@@ -1,4 +1,3 @@
-/** Состояние формы отправки прогноза. Ошибка всегда приходит вместе с текстом. */
 export type PredictionActionState =
   | { readonly status: "idle" }
   | { readonly status: "pending" }

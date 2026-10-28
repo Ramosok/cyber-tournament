@@ -9,7 +9,6 @@ const NEXT_STEP_DATE_FORMAT = new Intl.DateTimeFormat("ru-RU", {
   timeZone: "Europe/Minsk",
 });
 
-/** Сообщение, которое показывается вместо формы, пока этап идёт или турнир окончен. */
 export const getBettingClosedMessage = (status: BettingStatus): string => {
   if (status.isFinished) {
     return MESSAGE_TOURNAMENT_FINISHED;
