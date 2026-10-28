@@ -2,7 +2,6 @@ import type { PredictionForm } from "@/shared/prediction/types";
 
 import { formatPredictionLines } from "@/shared/prediction/formatPrediction";
 
-/** Поля таблицы, в которую уходит прогноз. Порядок фиксирован бэкендом. */
 export const PREDICTION_FIELDS = [
   "f1",
   "f2",

@@ -16,17 +16,7 @@ const COMPRESSION_THRESHOLD_BYTES = 10240;
 const COMPRESSION_LEVEL = 11;
 const IMAGE_QUALITY = 40;
 
-/**
- * Dev-сервер часто открывают через прокси (песочницы, туннели, превью),
- * а Vite по умолчанию отклоняет неизвестные Host-заголовки.
- * Пример: VITE_ALLOWED_HOSTS=".e2b.app,localhost"
- */
 const allowedHosts = process.env.VITE_ALLOWED_HOSTS?.split(",") ?? [];
-
-/**
- * Шрифты подтягиваются с Google Fonts на каждой сборке. Для офлайн-сборки
- * (CI без доступа в сеть) — VITE_SKIP_WEBFONTS=1.
- */
 const skipWebfonts = process.env.VITE_SKIP_WEBFONTS === "1";
 
 export default defineConfig({

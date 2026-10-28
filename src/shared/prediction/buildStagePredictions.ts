@@ -12,11 +12,6 @@ import {
   STAGE_CELL_INDEXES,
 } from "@/shared/tournament/stageGrid";
 
-/**
- * Собирает прогноз общей сетки (этапы 1–3) в единую модель `Prediction`.
- * Заполненные ячейки попадают в список, пустые — нет, поэтому по `filledCount`
- * видно прогресс заполнения.
- */
 export const buildStagePredictions = (
   selection: StageSelection,
   teams: ReadonlyMap<TeamId, Team>,

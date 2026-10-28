@@ -18,7 +18,6 @@ const createEmptyMatches = (matchCount: number): readonly Match[] =>
     }),
   );
 
-/** 1/4 финала: пары соседних команд из списка (1–2, 3–4, 5–6, 7–8). */
 const createSeededMatches = (teams: readonly Team[]): readonly Match[] => {
   const matches: Match[] = [];
 

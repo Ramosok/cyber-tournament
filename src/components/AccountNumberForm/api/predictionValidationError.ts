@@ -3,7 +3,6 @@ import type { PlayoffRoundKey } from "@/shared/tournament/playoffRounds";
 
 import { isPredictionFormComplete } from "@/shared/prediction/types";
 
-/** В сетке и в плей-оффе пользователь заполняет разное — и спрашиваем по-разному. */
 const ROUND_NAMES: Readonly<Record<PlayoffRoundKey, string>> = {
   quarter: "1/4 финала",
   semi: "1/2 финала",
@@ -22,7 +21,6 @@ const getPlayoffError = (form: PredictionForm): string => {
   return `Заполните счёт в матчах ${ROUND_NAMES[round]} (${progress})`;
 };
 
-/** Текст ошибки для незаполненного прогноза либо null, если всё заполнено. */
 export const getPredictionValidationError = (
   form: PredictionForm,
 ): string | null => {

@@ -3,10 +3,6 @@ import type { CellIndex } from "@/shared/tournament/stageGrid";
 
 import { STAGE_CELL_INDEXES } from "@/shared/tournament/stageGrid";
 
-/**
- * Выбор пользователя на групповом этапе: в каждой из 16 ячеек либо команда, либо пусто.
- * Ключ — индекс ячейки, поэтому пропуск ячейки невозможен на уровне типа.
- */
 export type StageSelection = Readonly<Record<CellIndex, TeamId | null>>;
 
 export const createEmptyStageSelection = (): StageSelection =>

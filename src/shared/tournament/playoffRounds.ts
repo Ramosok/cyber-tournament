@@ -1,5 +1,3 @@
-/** Формат раундов плей-офф: 1/4, 1/2 и матч за 3-е место играются до двух побед, финал — до трёх. */
-
 export const PLAYOFF_ROUND_KEYS = [
   "quarter",
   "semi",
@@ -29,5 +27,4 @@ export const MATCH_SLOTS = [0, 1] as const;
 
 export type MatchSlot = (typeof MATCH_SLOTS)[number];
 
-/** Сколько побед нужно для выигрыша серии. */
 export const getMaxWins = (bestOf: BestOf): number => Math.ceil(bestOf / 2);

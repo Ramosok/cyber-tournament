@@ -6,7 +6,6 @@ import type {
   PlayoffRoundKey,
 } from "@/shared/tournament/playoffRounds";
 
-/** В слоте матча либо команда, либо пусто (ждём победителя прошлого раунда). */
 export type MatchSlotTeam = TeamId | null;
 
 export type MatchTeams = readonly [MatchSlotTeam, MatchSlotTeam];

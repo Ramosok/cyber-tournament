@@ -57,10 +57,6 @@ export const Bids: FC = () => {
 
   const selectedTeamIds = getSelectedTeamIds(stageSelection);
 
-  /**
-   * И сетка, и плей-офф отдают одну и ту же модель PredictionForm,
-   * поэтому форма ниже не знает, какой этап сейчас идёт.
-   */
   const isPlayoff = bettingStatus.isFinalStep;
   const predictionForm = createPredictionForm(
     bettingStatus.currentStep,

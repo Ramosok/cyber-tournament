@@ -1,13 +1,14 @@
-export const getDateAndTime = (): string => {
-  const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
+const PAD_LENGTH = 2;
+
+const padTwoDigits = (value: number): string =>
+  String(value).padStart(PAD_LENGTH, "0");
+
+export const getDateAndTime = (date: Date = new Date()): string => {
+  const day = padTwoDigits(date.getDate());
+  const month = padTwoDigits(date.getMonth() + 1);
   const year = date.getFullYear();
-  const hour = date.getHours();
-  const min = date.getMinutes();
+  const hours = padTwoDigits(date.getHours());
+  const minutes = padTwoDigits(date.getMinutes());
 
-  const arr = [day, month, year, hour, min];
-  const newArr = arr.map((item) => (item < 10 ? `0${item}` : item));
-
-  return `${newArr[0]}.${newArr[1]}.${newArr[2]} (${newArr[3]}:${newArr[4]})`;
+  return `${day}.${month}.${year} (${hours}:${minutes})`;
 };

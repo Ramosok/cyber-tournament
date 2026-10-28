@@ -15,7 +15,6 @@ import {
   getWinnerSlot,
 } from "@/components/Bids/components/Playoff/utils/matchScore";
 
-/** Команда, выигравшая матч, либо null, если серия ещё не сыграна. */
 export const getMatchWinner = (
   match: Match,
   bestOf: RoundState["bestOf"],
@@ -25,7 +24,6 @@ export const getMatchWinner = (
   return winnerSlot === null ? null : match.teams[winnerSlot];
 };
 
-/** Проигравшая команда пары (для посева в матч за 3-е место) либо null. */
 export const getMatchLoser = (
   match: Match,
   bestOf: RoundState["bestOf"],
@@ -66,12 +64,6 @@ const clearRound = (round: RoundState): RoundState => ({
   })),
 });
 
-/**
- * Единственная точка изменения сетки: записывает счёт матча, продвигает
- * победителя в следующий раунд (а проигравших в 1/2 — в матч за 3-е место)
- * и сбрасывает зависимые от него матчи.
- * Возвращает новое состояние — мутировать переданное нельзя.
- */
 export const setMatchScore = (
   state: PlayoffState,
   roundKey: PlayoffRoundKey,

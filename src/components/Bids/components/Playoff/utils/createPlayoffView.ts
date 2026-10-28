@@ -58,7 +58,6 @@ const createRoundView = (
   };
 };
 
-/** Разворачивает состояние сетки в готовые к рендеру данные. */
 export const createPlayoffView = (
   state: PlayoffState,
   teams: ReadonlyMap<TeamId, Team>,

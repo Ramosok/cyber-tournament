@@ -1,8 +1,3 @@
-/**
- * Расписание сетки группового этапа (этапы 1–3).
- * 16 ячеек разбиты на 6 групп по итоговому счёту серии: 3-0, 0-3, 3-1, 3-2, 1-3, 2-3.
- */
-
 export const GROUP_LABELS = ["3-0", "0-3", "3-1", "3-2", "1-3", "2-3"] as const;
 
 export type GroupLabel = (typeof GROUP_LABELS)[number];
@@ -20,7 +15,6 @@ export type StageGroup = {
   readonly cellIndexes: readonly CellIndex[];
 };
 
-/** Две группы в ряду разделены вертикальной линией. */
 export type StageRow = readonly [StageGroup, StageGroup];
 
 export const STAGE_ROWS: readonly StageRow[] = [

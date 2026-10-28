@@ -14,7 +14,6 @@ export type TeamSlotProps = {
   readonly onScoreChange: (value: string) => void;
 };
 
-/** Слот матча: команда со счётом либо заглушка, если соперник ещё не определился. */
 export const TeamSlot: FC<TeamSlotProps> = ({
   team,
   score,

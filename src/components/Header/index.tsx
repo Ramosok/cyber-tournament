@@ -81,6 +81,8 @@ export const Header: FC = () => {
             className={styles.goose}
             src={goose1920}
             alt="Гусь"
+            loading="eager"
+            fetchPriority="high"
             sources={[
               {
                 srcSet: goose360,
@@ -93,6 +95,7 @@ export const Header: FC = () => {
             className={styles.gooseArmOverlay}
             src={goose1920}
             alt=""
+            decoding="async"
             aria-hidden="true"
           />
         </div>

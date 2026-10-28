@@ -12,7 +12,6 @@ export type MatchPairProps = {
   readonly onScoreChange: (slot: MatchSlot, value: string) => void;
 };
 
-/** Пара соперников в одном матче. */
 export const MatchPair: FC<MatchPairProps> = ({ match, onScoreChange }) => {
   const winnerFlags = getWinnerFlags(match.score, match.bestOf);
 

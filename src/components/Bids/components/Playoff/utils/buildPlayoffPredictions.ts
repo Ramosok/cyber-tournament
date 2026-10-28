@@ -18,7 +18,6 @@ import {
 import { getTeamById } from "@/shared/config";
 import { PLAYOFF_ROUND_KEYS } from "@/shared/tournament/playoffRounds";
 
-/** Сколько матчей нужно заполнить: 4 в 1/4 + 2 в 1/2 + финал + матч за 3-е место. */
 export const PLAYOFF_MATCH_COUNT = 8;
 
 const createMatchPrediction = (
@@ -49,12 +48,6 @@ const createMatchPrediction = (
   };
 };
 
-/**
- * Собирает плей-офф в ту же модель `Prediction`, что и общая сетка.
- * Считаются только матчи (чемпион выводится из счёта финала автоматически),
- * поэтому прогресс читается как «N из 8», а `firstIncompleteRound` показывает,
- * в каком раунде заполнение остановилось.
- */
 export const buildPlayoffPredictions = (
   state: PlayoffState,
   teams: ReadonlyMap<TeamId, Team>,
