@@ -134,6 +134,10 @@ describe("formatPredictionLines", () => {
 
     expect(lines).toHaveLength(6);
     expect(lines[0]).toBe("3-0: HEROIC, Ninjas in Pyjamas");
+    expect(lines[1]).toBe("0-3: FaZe, 1win");
+    expect(lines[2]).toBe("3-1: 100 Thieves, B8, M80");
+    expect(lines[3]).toBe("1-3: DENDELE, 9z, Imperial");
+    expect(lines[4]).toBe("3-2: Liquid, Wildcard, BC.Game");
     expect(lines[5]).toBe("2-3: TYLOO, FlyQuest, Lynn Vision");
   });
 

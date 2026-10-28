@@ -1,4 +1,4 @@
-export const GROUP_LABELS = ["3-0", "0-3", "3-1", "3-2", "1-3", "2-3"] as const;
+export const GROUP_LABELS = ["3-0", "0-3", "3-1", "1-3", "3-2", "2-3"] as const;
 
 export type GroupLabel = (typeof GROUP_LABELS)[number];
 
@@ -24,10 +24,10 @@ export const STAGE_ROWS: readonly StageRow[] = [
   ],
   [
     { label: "3-1", cellIndexes: [4, 5, 6] },
-    { label: "3-2", cellIndexes: [7, 8, 9] },
+    { label: "1-3", cellIndexes: [7, 8, 9] },
   ],
   [
-    { label: "1-3", cellIndexes: [10, 11, 12] },
+    { label: "3-2", cellIndexes: [10, 11, 12] },
     { label: "2-3", cellIndexes: [13, 14, 15] },
   ],
 ];
