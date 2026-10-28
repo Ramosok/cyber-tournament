@@ -9,7 +9,15 @@ import { normalizeAccountNumber } from "@/components/AccountNumberForm/utils/nor
 import { buildPlayoffPredictions } from "@/components/Bids/components/Playoff/utils/buildPlayoffPredictions";
 import { createInitialState } from "@/components/Bids/components/Playoff/utils/createInitialState";
 import { setMatchScore } from "@/components/Bids/components/Playoff/utils/setMatchScore";
-import { createTeamIndex, STAGE_TEAM_LIST, TEAM_LIST } from "@/shared/config";
+import {
+  createTeamIndex,
+  getStageTeamListByStep,
+  STAGE_1_TEAM_LIST,
+  STAGE_2_TEAM_LIST,
+  STAGE_3_TEAM_LIST,
+  STAGE_TEAM_LIST,
+  TEAM_LIST,
+} from "@/shared/config";
 import { buildStagePredictions } from "@/shared/prediction/buildStagePredictions";
 import { formatPredictionLines } from "@/shared/prediction/formatPrediction";
 import {
@@ -71,7 +79,7 @@ describe("buildStagePredictions", () => {
       kind: "groupPick",
       group: "3-0",
       cellIndex: 0,
-      team: { id: "20", name: "paiN Gaming" },
+      team: { id: "1", name: "HEROIC" },
     });
   });
 
@@ -125,8 +133,8 @@ describe("formatPredictionLines", () => {
     const lines = formatPredictionLines(draft.predictions);
 
     expect(lines).toHaveLength(6);
-    expect(lines[0]).toBe("3-0: paiN Gaming, G2 Esports");
-    expect(lines[5]).toBe("2-3: FlyQuest, Fnatic, Ninjas in Pyjamas");
+    expect(lines[0]).toBe("3-0: HEROIC, Ninjas in Pyjamas");
+    expect(lines[5]).toBe("2-3: TYLOO, FlyQuest, Lynn Vision");
   });
 
   it("для плей-офф отдаёт строку на матч (включая 3-е место)", () => {
@@ -241,5 +249,16 @@ describe("normalizeAccountNumber", () => {
 
   it("убирает ведущие нули", () => {
     expect(normalizeAccountNumber("00123")).toBe("123");
+  });
+});
+
+describe("getStageTeamListByStep", () => {
+  it("возвращает списки из 16 команд для этапов 1–3", () => {
+    expect(STAGE_1_TEAM_LIST).toHaveLength(16);
+    expect(STAGE_2_TEAM_LIST).toHaveLength(16);
+    expect(STAGE_3_TEAM_LIST).toHaveLength(16);
+    expect(getStageTeamListByStep(1)).toBe(STAGE_1_TEAM_LIST);
+    expect(getStageTeamListByStep(2)).toBe(STAGE_2_TEAM_LIST);
+    expect(getStageTeamListByStep(3)).toBe(STAGE_3_TEAM_LIST);
   });
 });

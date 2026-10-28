@@ -19,7 +19,11 @@ import { setMatchScore } from "@/components/Bids/components/Playoff/utils/setMat
 import { Stage } from "@/components/Bids/components/Stage";
 import { TeamList } from "@/components/Bids/components/TeamList";
 import { MILLISECONDS_PER_SECOND } from "@/components/Timer/utils/calculateTimeLeft";
-import { createTeamIndex, STAGE_TEAM_LIST, TEAM_LIST } from "@/shared/config";
+import {
+  createTeamIndex,
+  getStageTeamListByStep,
+  TEAM_LIST,
+} from "@/shared/config";
 import { useNow } from "@/shared/hooks/useNow";
 import { buildStagePredictions } from "@/shared/prediction/buildStagePredictions";
 import { createPredictionForm } from "@/shared/prediction/types";
@@ -34,12 +38,12 @@ import { Modal } from "@/shared/ui/Modal/Modal";
 
 import styles from "./bids.module.css";
 
-// Списки команд статичны — индексы строятся один раз на модуль.
-const stageTeamIndex = createTeamIndex(STAGE_TEAM_LIST);
 const playoffTeamIndex = createTeamIndex(TEAM_LIST);
 
 export const Bids: FC = () => {
   const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_SECOND));
+  const stageTeams = getStageTeamListByStep(bettingStatus.currentStep);
+  const stageTeamIndex = createTeamIndex(stageTeams);
 
   const [stageSelection, setStageSelection] = useState<StageSelection>(
     createEmptyStageSelection,
@@ -125,7 +129,7 @@ export const Bids: FC = () => {
       ) : (
         <Stage
           selection={stageSelection}
-          teams={STAGE_TEAM_LIST}
+          teams={stageTeams}
           onCellClick={handleCellClick}
         />
       )}
@@ -135,7 +139,7 @@ export const Bids: FC = () => {
       {!isPlayoff && (
         <Modal ariaLabel="Выбор команды" ref={teamPickerRef}>
           <TeamList
-            teams={STAGE_TEAM_LIST}
+            teams={stageTeams}
             selectedTeamIds={selectedTeamIds}
             onTeamSelect={handleTeamSelect}
           />
