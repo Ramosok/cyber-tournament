@@ -70,7 +70,6 @@
   z-index: 0;
 }
 
-/* Step 1: Yellow */
 .currentStep1 {
   color: var(--black);
 }
@@ -80,7 +79,6 @@
   border: 2.31px solid #a59d00;
 }
 
-/* Step 2: Orange */
 .currentStep2 {
   color: var(--black);
 }
@@ -90,7 +88,6 @@
   border: 2.31px solid #a55800;
 }
 
-/* Step 3: Pink / Magenta */
 .currentStep3 {
   color: var(--black);
 }
@@ -100,7 +97,6 @@
   border: 2.31px solid #8e0042;
 }
 
-/* Step 4: Playoff gradient */
 .currentStep4 {
   color: var(--white);
 }
