@@ -2,8 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: 32px;
   padding-bottom: 48px;
+  overflow-x: hidden;
 }
 
 .title {
@@ -15,7 +16,17 @@
   font-weight: 600;
   line-height: 1.2;
   text-transform: uppercase;
-  margin-bottom: 24px;
+  margin-bottom: -16px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    gap: 48px;
+  }
+
+  .title {
+    margin-bottom: 0;
+  }
 }
 
 .msgClosed {

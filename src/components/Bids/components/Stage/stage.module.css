@@ -33,15 +33,15 @@
 
 @media (max-width: 767px) {
   .watermark {
-    width: 271px;
+    width: clamp(230px, 72.26vw, 360px);
     left: 50%;
     transform: translateX(-50%);
     top: -12.37px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: 260px;
-    line-height: 234px;
+    font-size: clamp(210px, 69.33vw, 340px);
+    line-height: 0.9;
     word-wrap: break-word;
     word-break: break-all;
     overflow-wrap: break-word;
@@ -57,7 +57,7 @@
     justify-content: center;
     align-items: center;
     white-space: nowrap;
-    font-size: 480px;
+    font-size: clamp(160px, 25vw, 480px);
     line-height: 1;
     letter-spacing: -0.01em;
     width: auto;
