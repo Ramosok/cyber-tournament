@@ -64,7 +64,7 @@ describe("доступная разметка", () => {
     expect(text).toContain("1 ЭТАП");
     expect(text).toContain("2 ЭТАП");
     expect(text).toContain("3 ЭТАП");
-    expect(text).toContain("ФИНАЛ");
+    expect(text).toContain("Плей-офф");
   });
 
   it("плей-офф отображает 1/4, 1/2, ФИНАЛ, 3-Е МЕСТО и ПОБЕДИТЕЛЬ", () => {

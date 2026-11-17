@@ -1,4 +1,5 @@
 .gridWrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -6,7 +7,80 @@
   padding: 0 20px;
 }
 
+.watermark {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  opacity: 0.2;
+  font-family: Gilroy, "Roboto", sans-serif;
+  font-weight: 1000;
+  text-align: center;
+}
+
+.watermarkStage1 {
+  color: #fff500;
+}
+
+.watermarkStage2 {
+  color: #ffb01f;
+}
+
+.watermarkStage3 {
+  color: #fd0e7d;
+}
+
+.watermarkMobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  font-size: clamp(48px, 14vw, 76px);
+  line-height: 0.95;
+  padding: 10px 0;
+}
+
+.watermarkDesktop {
+  display: none;
+  white-space: nowrap;
+  font-size: clamp(140px, 25vw, 480px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 767px) {
+  .watermark {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .watermark {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .watermarkMobile {
+    display: none;
+  }
+
+  .watermarkDesktop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 .row {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -34,6 +108,8 @@
 }
 
 .verticalDivider {
+  position: relative;
+  z-index: 1;
   width: 2px;
   opacity: 0.2;
   background: #fff;
@@ -42,6 +118,8 @@
 }
 
 .horizontalDivider {
+  position: relative;
+  z-index: 1;
   height: 2px;
   width: 108%;
   transform: translateX(-4%);

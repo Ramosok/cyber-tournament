@@ -114,7 +114,9 @@ export const Bids: FC = () => {
 
   return (
     <section className={styles.container}>
-      <h2 className={styles.title}>Выбери команды</h2>
+      <h2 className={styles.title}>
+        {isPlayoff ? "Выберите команды и счет" : "Выбери команды"}
+      </h2>
 
       {isPlayoff ? (
         <Playoff
@@ -124,6 +126,7 @@ export const Bids: FC = () => {
         />
       ) : (
         <Stage
+          step={bettingStatus.currentStep}
           selection={stageSelection}
           teams={stageTeams}
           onCellClick={handleCellClick}

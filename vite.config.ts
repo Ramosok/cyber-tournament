@@ -16,7 +16,6 @@ const COMPRESSION_THRESHOLD_BYTES = 10240;
 const COMPRESSION_LEVEL = 11;
 const IMAGE_QUALITY = 40;
 
-const allowedHosts = process.env.VITE_ALLOWED_HOSTS?.split(",") ?? [];
 const skipWebfonts = process.env.VITE_SKIP_WEBFONTS === "1";
 
 export default defineConfig({
@@ -92,7 +91,7 @@ export default defineConfig({
   base: "./",
   server: {
     port: DEV_SERVER_PORT,
-    allowedHosts,
+    allowedHosts: true,
     hmr: {
       overlay: true,
     },
