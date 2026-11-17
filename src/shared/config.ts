@@ -3,7 +3,6 @@ import NineZ from "./assets/teamsIcon/9z.webp";
 import HundredThieves from "./assets/teamsIcon/100Thieves.webp";
 import Astralis from "./assets/teamsIcon/Astralis.webp";
 import Aurora from "./assets/teamsIcon/AuroraGaming.webp";
-import B8 from "./assets/teamsIcon/B8.webp";
 import BCGame from "./assets/teamsIcon/BCGame.webp";
 import BETBOOM from "./assets/teamsIcon/BETBOOM.webp";
 import DENDELE from "./assets/teamsIcon/DENDELE.webp";
@@ -29,8 +28,9 @@ import Liquid from "./assets/teamsIcon/TeamLiquid.webp";
 import Spirit from "./assets/teamsIcon/TeamSpirit.webp";
 import Vitality from "./assets/teamsIcon/TeamVitality.webp";
 import TheMongolZ from "./assets/teamsIcon/TheMongolZ.webp";
-import TYLOO from "./assets/teamsIcon/TYLOO.webp";
 import Wildcard from "./assets/teamsIcon/Wildcard.webp";
+import EternalFire from "./assets/teamsIcon/EternalFire.webp";
+import ChinggisWarriors from "./assets/teamsIcon/ChinggisWarriors.webp";
 
 export type TeamId = string;
 
@@ -52,32 +52,32 @@ export const TEAM_LIST: readonly Team[] = [
 ];
 
 export const STAGE_1_TEAM_LIST: readonly Team[] = [
-  { logo: HEROIC, nameTeam: "HEROIC", id: "1" },
-  { logo: NinjasInPyjamas, nameTeam: "Ninjas in Pyjamas", id: "2" },
-  { logo: FaZe, nameTeam: "FaZe", id: "3" },
-  { logo: Onewin, nameTeam: "1win", id: "4" },
-  { logo: HundredThieves, nameTeam: "100 Thieves", id: "5" },
-  { logo: B8, nameTeam: "B8", id: "6" },
-  { logo: M80, nameTeam: "M80", id: "7" },
-  { logo: DENDELE, nameTeam: "DENDELE", id: "8" },
-  { logo: NineZ, nameTeam: "9z", id: "9" },
-  { logo: Imperial, nameTeam: "Imperial", id: "10" },
-  { logo: Liquid, nameTeam: "Liquid", id: "11" },
-  { logo: Wildcard, nameTeam: "Wildcard", id: "12" },
-  { logo: BCGame, nameTeam: "BC.Game", id: "13" },
-  { logo: TYLOO, nameTeam: "TYLOO", id: "14" },
-  { logo: FlyQuest, nameTeam: "FlyQuest", id: "15" },
+  { logo: NinjasInPyjamas, nameTeam: "Ninjas in Pyjamas", id: "1" },
+  { logo: HEROIC, nameTeam: "HEROIC", id: "2" },
+  { logo: EternalFire, nameTeam: "Eternal Fire", id: "3" },
+  { logo: Liquid, nameTeam: "Liquid", id: "4" },
+  { logo: M80, nameTeam: "M80", id: "5" },
+  { logo: Imperial, nameTeam: "Imperial", id: "6" },
+  { logo: BCGame, nameTeam: "BC.Game", id: "7" },
+  { logo: FlyQuest, nameTeam: "FlyQuest", id: "8" },
+  { logo: PARIVISION, nameTeam: "PARIVISION", id: "9" },
+  { logo: FaZe, nameTeam: "FaZe", id: "10" },
+  { logo: HundredThieves, nameTeam: "100 Thieves", id: "11" },
+  { logo: NineZ, nameTeam: "9z", id: "12" },
+  { logo: DENDELE, nameTeam: "DENDELE", id: "13" },
+  { logo: Wildcard, nameTeam: "Wildcard", id: "14" },
+  { logo: ChinggisWarriors, nameTeam: "Chinggis Warriors", id: "15" },
   { logo: LynnVision, nameTeam: "Lynn Vision", id: "16" },
 ];
 
 export const STAGE_2_TEAM_LIST: readonly Team[] = [
-  { logo: G2, nameTeam: "G2", id: "1" },
+  { logo: FUT, nameTeam: "FUT", id: "1" },
   { logo: NatusVincere, nameTeam: "Natus Vincere", id: "2" },
-  { logo: Astralis, nameTeam: "Astralis", id: "3" },
-  { logo: PARIVISION, nameTeam: "PARIVISION", id: "4" },
+  { logo: Onewin, nameTeam: "1win", id: "3" },
+  { logo: MIBR, nameTeam: "MIBR", id: "4" },
   { logo: Nemiga, nameTeam: "Nemiga", id: "5" },
-  { logo: Falcons, nameTeam: "Falcons", id: "6" },
-  { logo: MIBR, nameTeam: "MIBR", id: "7" },
+  { logo: G2, nameTeam: "G2", id: "6" },
+  { logo: Astralis, nameTeam: "Astralis", id: "7" },
   { logo: TheMongolZ, nameTeam: "The MongolZ", id: "8" },
   { logo: TBD, nameTeam: "TBD 1", id: "9" },
   { logo: TBD, nameTeam: "TBD 2", id: "10" },
@@ -90,13 +90,13 @@ export const STAGE_2_TEAM_LIST: readonly Team[] = [
 ];
 
 export const STAGE_3_TEAM_LIST: readonly Team[] = [
-  { logo: Vitality, nameTeam: "Vitality", id: "1" },
-  { logo: MOUZ, nameTeam: "MOUZ", id: "2" },
-  { logo: Spirit, nameTeam: "Spirit", id: "3" },
-  { logo: Aurora, nameTeam: "Aurora", id: "4" },
-  { logo: BETBOOM, nameTeam: "BETBOOM", id: "5" },
-  { logo: FUT, nameTeam: "FUT", id: "6" },
-  { logo: FURIA, nameTeam: "FURIA", id: "7" },
+  { logo: MOUZ, nameTeam: "MOUZ", id: "1" },
+  { logo: Aurora, nameTeam: "Aurora", id: "2" },
+  { logo: BETBOOM, nameTeam: "BETBOOM", id: "3" },
+  { logo: FURIA, nameTeam: "FURIA", id: "4" },
+  { logo: Vitality, nameTeam: "Vitality", id: "5" },
+  { logo: Spirit, nameTeam: "Spirit", id: "6" },
+  { logo: Falcons, nameTeam: "Falcons", id: "7" },
   { logo: Legacy, nameTeam: "Legacy", id: "8" },
   { logo: TBD, nameTeam: "TBD 1", id: "9" },
   { logo: TBD, nameTeam: "TBD 2", id: "10" },

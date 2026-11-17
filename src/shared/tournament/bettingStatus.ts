@@ -236,7 +236,9 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     });
   }
 
-  const openTour = TOURS.find((tour) => now < tour.closesAt);
+  const openTour = TOURS.find(
+    (tour) => now < tour.closesAt && now >= tour.opensAt,
+  );
 
   if (openTour) {
     return createStatus({

@@ -1,0 +1,14 @@
+{
+  "name": "Maxline Major PlayOff — прогнозы на PGL Major Singapore 2026",
+  "short_name": "PGL Major 2026",
+  "description": "Собери верный прогноз на PGL Major Singapore 2026 и участвуй в розыгрыше 30 000 BYN.",
+  "lang": "ru",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

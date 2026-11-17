@@ -12,8 +12,8 @@ export const App: FC = () => {
   return (
     <div className={styles.container}>
       <Header />
-      <Timer />
       <main className={styles.main}>
+        <Timer />
         <Steps />
         <Bids />
       </main>

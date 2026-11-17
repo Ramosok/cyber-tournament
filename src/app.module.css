@@ -9,14 +9,12 @@
   flex: 1;
   background-image: url("shared/assets/bg1920.webp");
   background-repeat: no-repeat;
-  background-size: 170% auto;
-  background-position: top center;
-  margin-top: 65px;
+  background-size: cover;
+  background-position: top;
 }
 
 @media (min-width: 768px) {
   .main {
-    background-size: 100% auto;
-    background-position: center 120px;
+    background-size: cover;
   }
 }

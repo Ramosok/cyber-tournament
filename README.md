@@ -1,6 +1,7 @@
 # cyber-tournament
 ## https://www.hltv.org/events/9303/pgl-major-singapore-2026-stage-1
 ## https://arena.ai/agent/01a17e31-fbac-727d-b994-505eb608d45a
+## **https://www.hltv.org/team/12646/chinggis-warriors**
 
 Лендинг прогнозов на StarLadder Budapest Major 2025: пользователь собирает прогноз
 (общая сетка группового этапа или плей-офф) и отправляет его вместе с номером игрового счёта.
