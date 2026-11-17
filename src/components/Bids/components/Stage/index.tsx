@@ -47,15 +47,7 @@ export const Stage: FC<StageProps> = ({
           className={`${styles.watermark} ${stageWatermarkClass}`}
           aria-hidden="true"
         >
-          <div className={styles.watermarkMobile}>
-            <span>S</span>
-            <span>T</span>
-            <span>A</span>
-            <span>G</span>
-            <span>E</span>
-            <span>{step}</span>
-          </div>
-          <div className={styles.watermarkDesktop}>{`STAGE ${step}`}</div>
+          {`STAGE ${step}`}
         </div>
       )}
 

@@ -132,4 +132,13 @@ describe("Stage watermark and stepper layout", () => {
     const activeStep = container.querySelector("[class*='currentStep3']");
     expect(activeStep).not.toBeNull();
   });
+
+  it("шапка рендерит баннер гуся без ограничения по ширине", async () => {
+    const { Header } = await import("@/components/Header");
+    const { container } = render(<Header />);
+    const gooseWrapper = container.querySelector("[class*='gooseWrapper']");
+    expect(gooseWrapper).not.toBeNull();
+    const gooseImg = container.querySelector("img[alt='Гусь']");
+    expect(gooseImg).not.toBeNull();
+  });
 });
