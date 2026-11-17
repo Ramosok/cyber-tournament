@@ -1,12 +1,14 @@
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { AccountNumberForm } from "@/components/AccountNumberForm";
 import { Cell } from "@/components/Bids/components/Cell";
 import { Playoff } from "@/components/Bids/components/Playoff";
 import { createInitialState } from "@/components/Bids/components/Playoff/utils/createInitialState";
 import { Steps } from "@/components/Steps";
 import { Timer } from "@/components/Timer";
 import { TEAM_LIST } from "@/shared/config";
+import { createPredictionForm } from "@/shared/prediction/types";
 import { Modal } from "@/shared/ui/Modal/Modal";
 
 const noop = (): void => undefined;
@@ -82,5 +84,39 @@ describe("доступная разметка", () => {
     expect(text).toContain("ФИНАЛ");
     expect(text).toContain("3-Е МЕСТО");
     expect(text).toContain("ПОБЕДИТЕЛЬ");
+  });
+
+  it("форма отображает 'Условия турнира' и ссылку 'Посмотреть мой прогноз' с url вкладки этапа", () => {
+    const stage1Form = createPredictionForm(1, "stage", {
+      predictions: [],
+      filledCount: 0,
+      requiredCount: 16,
+    });
+    const { container, rerender } = render(
+      <AccountNumberForm form={stage1Form} onReset={noop} />,
+    );
+
+    const conditionsBtn = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.includes("Условия турнира"),
+    );
+    expect(conditionsBtn).toBeDefined();
+
+    const viewPredictionLink = container.querySelector(
+      `a[href="https://docs.google.com/spreadsheets/d/1yEW2fCOmHdTIExshkgFpa749Rlb68C9yEVvjtglxssc/edit?gid=0#gid=0"]`,
+    );
+    expect(viewPredictionLink).not.toBeNull();
+    expect(viewPredictionLink?.textContent).toContain("Посмотреть мой прогноз");
+
+    const playoffForm = createPredictionForm(4, "playoff", {
+      predictions: [],
+      filledCount: 0,
+      requiredCount: 8,
+    });
+    rerender(<AccountNumberForm form={playoffForm} onReset={noop} />);
+
+    const playoffLink = container.querySelector(
+      `a[href="https://docs.google.com/spreadsheets/d/1yEW2fCOmHdTIExshkgFpa749Rlb68C9yEVvjtglxssc/edit?gid=1951409102#gid=1951409102"]`,
+    );
+    expect(playoffLink).not.toBeNull();
   });
 });
