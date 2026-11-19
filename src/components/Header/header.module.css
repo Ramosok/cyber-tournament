@@ -1,187 +1,121 @@
 .header {
   width: 100%;
+  max-width: 700px;
+  aspect-ratio: 1920 / 700;
+  margin: 0 auto;
   background-color: #fff500;
   color: var(--white);
   overflow: hidden;
+  container-type: inline-size;
 }
 
 .inner {
-  width: 100%;
-  max-width: 1920px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .banner {
-  width: 100%;
-  padding: 20px 10px 0;
+  position: absolute;
+  top: 9.286%;
+  left: 5.729%;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  z-index: 2;
+  width: 50.885%;
 }
 
 .logo {
-  color: var(--black);
-  width: 152px;
+  width: 40.94%;
   height: auto;
-  margin-bottom: 14px;
+  margin-bottom: 4.09%;
+  color: var(--black);
 }
 
 .prizeCard {
-  width: 100%;
-  max-width: 355px;
-  background-color: #fd0e7d;
-  border-radius: 22px;
-  padding: 14px 18px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  width: 100%;
+  padding: 1.45cqw 2.1cqw 6.8cqw;
+  background-color: #fd0e7d;
+  border-radius: 2.5cqw;
+  box-shadow: 0 0.8cqw 1.5cqw rgba(0, 0, 0, 0.22);
 }
 
 .title {
+  margin: 0 0 0.3cqw;
   color: var(--white);
   text-align: center;
   font-family: Roboto, sans-serif;
-  font-size: 14px;
+  font-size: 1.7cqw;
   font-style: normal;
   font-weight: 900;
-  line-height: 18px;
+  line-height: 2.1cqw;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin: 0 0 2px;
 }
 
 .prizeAmount {
-  width: 100%;
-  max-width: 305px;
-  height: auto;
   display: block;
+  width: 100%;
+  height: auto;
   color: var(--white);
 }
 
 .subtitlePill {
-  background-color: var(--white);
-  border-radius: 12px;
-  padding: 7px 16px;
-  margin-top: -18px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 3;
+  margin-top: -2.57cqw;
+  padding: 1cqw 2.28cqw;
+  background-color: var(--white);
+  border-radius: 1.7cqw;
+  box-shadow: 0 0.5cqw 1.2cqw rgba(0, 0, 0, 0.2);
 }
 
 .description {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0;
   color: #fd0e7d;
   text-align: center;
   font-family: Roboto, sans-serif;
-  font-size: 11px;
+  font-size: 1.15cqw;
   font-style: normal;
   font-weight: 900;
-  line-height: 14px;
+  line-height: 1.4cqw;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  margin: 0;
 }
 
 .gooseWrapper {
-  position: relative;
-  width: 100%;
-  margin-top: -8px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  position: absolute;
+  top: 0;
+  left: 21.042%;
   z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 78.958%;
+  height: 100%;
 }
 
 .goose {
+  display: block;
   width: 100%;
-  height: auto;
-  display: flex;
+  height: 100%;
 }
 
 .gooseArmOverlay {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .inner {
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: flex-end;
-    min-height: 420px;
-  }
-
-  .banner {
-    position: absolute;
-    left: clamp(16px, 5.5vw, 110px);
-    top: 50%;
-    transform: translateY(-52%);
-    width: clamp(360px, 50.5vw, 974px);
-    padding: 0;
-    z-index: 2;
-  }
-
-  .logo {
-    width: clamp(150px, 16vw, 310px);
-    margin-bottom: clamp(12px, 2vw, 38px);
-  }
-
-  .prizeCard {
-    max-width: none;
-    width: 100%;
-    border-radius: clamp(24px, 2.5vw, 48px);
-    padding: clamp(16px, 2.1vw, 40px) clamp(20px, 3vw, 58px)
-      clamp(32px, 3.8vw, 72px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-  }
-
-  .title {
-    font-size: clamp(15px, 1.8vw, 34px);
-    line-height: 1.2;
-    margin-bottom: clamp(2px, 0.4vw, 8px);
-  }
-
-  .prizeAmount {
-    max-width: 100%;
-  }
-
-  .subtitlePill {
-    border-radius: clamp(12px, 1.25vw, 24px);
-    padding: clamp(8px, 1vw, 20px) clamp(18px, 2.8vw, 54px);
-    margin-top: clamp(-42px, -2.1vw, -18px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
-  }
-
-  .description {
-    font-size: clamp(11px, 1.35vw, 26px);
-    line-height: 1.25;
-  }
-
-  .gooseWrapper {
-    width: 100%;
-    max-width: 700px;
-    margin-top: 0;
-    margin-left: auto;
-    z-index: 1;
-  }
-
-  .gooseArmOverlay {
-    display: block;
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    pointer-events: none;
-    z-index: 3;
-    clip-path: circle(9.2% at 48.2% 42.5%);
-  }
+  position: absolute;
+  top: 0;
+  left: 21.042%;
+  z-index: 3;
+  width: 78.958%;
+  height: 100%;
+  pointer-events: none;
+  object-fit: contain;
+  clip-path: circle(9.2% at 48.2% 42.5%);
 }

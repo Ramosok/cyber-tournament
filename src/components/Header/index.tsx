@@ -1,7 +1,6 @@
 import type { FC } from "react";
 
 import { Picture } from "@/components/Picture";
-import goose360 from "@/shared/assets/goose360.webp";
 import goose1920 from "@/shared/assets/goose1920.webp";
 import { Icon } from "@/shared/ui/icon";
 
@@ -83,22 +82,15 @@ export const Header: FC = () => {
             alt="Гусь"
             loading="eager"
             fetchPriority="high"
-            sources={[
-              {
-                srcSet: goose360,
-                type: "image/webp",
-                media: "(max-width: 767px)",
-              },
-            ]}
-          />
-          <img
-            className={styles.gooseArmOverlay}
-            src={goose1920}
-            alt=""
-            decoding="async"
-            aria-hidden="true"
           />
         </div>
+        <img
+          className={styles.gooseArmOverlay}
+          src={goose1920}
+          alt=""
+          decoding="async"
+          aria-hidden="true"
+        />
       </div>
     </header>
   );
