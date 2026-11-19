@@ -15,6 +15,7 @@ export type StageProps = {
   readonly selection: StageSelection;
   readonly teams: readonly Team[];
   readonly onCellClick: (cellIndex: CellIndex) => void;
+  readonly step?: number;
 };
 
 type StageRowView = {
@@ -29,11 +30,27 @@ const ROW_VIEWS: readonly StageRowView[] = STAGE_ROWS.map((groups, index) => ({
   hasTopDivider: index > 0,
 }));
 
-export const Stage: FC<StageProps> = ({ selection, teams, onCellClick }) => {
+export const Stage: FC<StageProps> = ({
+  selection,
+  teams,
+  onCellClick,
+  step = 1,
+}) => {
   const teamIndex = createTeamIndex(teams);
+  const showWatermark = step >= 1 && step <= 3;
+  const stageWatermarkClass = styles[`watermarkStage${step}`] ?? "";
 
   return (
     <div className={styles.gridWrapper}>
+      {showWatermark && (
+        <div
+          className={`${styles.watermark} ${stageWatermarkClass}`}
+          aria-hidden="true"
+        >
+          {`STAGE ${step}`}
+        </div>
+      )}
+
       {ROW_VIEWS.map(({ key, groups, hasTopDivider }) => (
         <Fragment key={key}>
           {hasTopDivider && (

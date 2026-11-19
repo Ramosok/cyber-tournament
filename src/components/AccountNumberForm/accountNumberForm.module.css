@@ -79,6 +79,14 @@
   margin-bottom: 28px;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
 .link {
   color: var(--white);
   text-align: center;
@@ -95,6 +103,9 @@
   text-underline-position: from-font;
   opacity: 0.5;
   cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 h6 {

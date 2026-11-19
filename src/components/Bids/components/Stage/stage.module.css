@@ -1,4 +1,5 @@
 .gridWrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -6,7 +7,69 @@
   padding: 0 20px;
 }
 
+.watermark {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  opacity: 0.2;
+  font-family: Gilroy, "Roboto", sans-serif;
+  font-weight: 1000;
+  font-size: 480px;
+  text-align: center;
+}
+
+.watermarkStage1 {
+  color: #fff500;
+}
+
+.watermarkStage2 {
+  color: #ffb01f;
+}
+
+.watermarkStage3 {
+  color: #fd0e7d;
+}
+
+@media (max-width: 767px) {
+  .watermark {
+    width: clamp(230px, 72vw, 320px);
+    left: 50%;
+    transform: translateX(-50%);
+    top: -36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: clamp(210px, 68vw, 260px);
+    line-height: clamp(185px, 58vw, 225px);
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+  }
+}
+
+@media (min-width: 768px) {
+  .watermark {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    font-size: clamp(160px, 25vw, 480px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    width: auto;
+    word-break: normal;
+    word-wrap: normal;
+    overflow-wrap: normal;
+  }
+}
+
 .row {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -34,6 +97,8 @@
 }
 
 .verticalDivider {
+  position: relative;
+  z-index: 1;
   width: 2px;
   opacity: 0.2;
   background: #fff;
@@ -42,6 +107,8 @@
 }
 
 .horizontalDivider {
+  position: relative;
+  z-index: 1;
   height: 2px;
   width: 108%;
   transform: translateX(-4%);

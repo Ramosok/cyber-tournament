@@ -1,15 +1,29 @@
 .step {
   text-align: center;
   font-family: Roboto, sans-serif;
-  font-size: 15px;
+  font-size: 13px;
   font-style: normal;
-  line-height: 20px;
+  line-height: 16px;
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
   min-width: max-content;
+}
+
+.stepButton {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.stepButton:focus-visible {
+  outline: 2px solid #fff500;
+  outline-offset: 3px;
 }
 
 .title {
@@ -17,10 +31,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 42px;
+  height: 30px;
+  padding: 0 8px;
   transition:
-    opacity 0.3s ease,
-    color 0.3s ease;
+    opacity 0.2s ease,
+    color 0.2s ease;
 }
 
 .titleText {
@@ -34,8 +49,11 @@
   opacity: 0.3;
 }
 
+.inactive:hover {
+  opacity: 0.75;
+}
+
 .current {
-  color: var(--black);
   font-weight: 900;
   opacity: 1;
 }
@@ -45,13 +63,47 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: -10px;
-  right: -10px;
-  background: #fff500;
-  border: 3px solid #a59b00;
-  border-radius: 8px;
+  left: -8px;
+  right: -8px;
+  border-radius: 6px;
   transform: skewX(-10deg);
   z-index: 0;
+}
+
+.currentStep1 {
+  color: var(--black);
+}
+
+.currentStep1::before {
+  background: #fff500;
+  border: 2.31px solid #a59d00;
+}
+
+.currentStep2 {
+  color: var(--black);
+}
+
+.currentStep2::before {
+  background: #ffb01f;
+  border: 2.31px solid #a55800;
+}
+
+.currentStep3 {
+  color: var(--black);
+}
+
+.currentStep3::before {
+  background: #fd0e7d;
+  border: 2.31px solid #8e0042;
+}
+
+.currentStep4 {
+  color: var(--white);
+}
+
+.currentStep4::before {
+  background: linear-gradient(90deg, #e4db01 0%, #fe813f 50%, #fd0e7d 100%);
+  border: 2.31px solid rgba(0, 0, 0, 0.2);
 }
 
 .arrow {
@@ -60,26 +112,32 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 18px;
-  height: 18px;
+  width: 12px;
+  height: 12px;
   flex-shrink: 0;
 }
 
 @media (min-width: 640px) {
   .step {
-    font-size: 22px;
-    line-height: 26px;
-    gap: 30px;
+    font-size: 16px;
+    line-height: 20px;
+    gap: 20px;
   }
 
   .title {
-    height: 52px;
+    height: 38px;
+    padding: 0 12px;
   }
 
   .current::before {
-    left: -20px;
-    right: -20px;
-    border-width: 4px;
-    border-radius: 10px;
+    left: -14px;
+    right: -14px;
+    border-width: 3px;
+    border-radius: 8px;
+  }
+
+  .arrow {
+    width: 16px;
+    height: 16px;
   }
 }

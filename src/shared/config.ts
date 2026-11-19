@@ -5,7 +5,9 @@ import Astralis from "./assets/teamsIcon/Astralis.webp";
 import Aurora from "./assets/teamsIcon/AuroraGaming.webp";
 import BCGame from "./assets/teamsIcon/BCGame.webp";
 import BETBOOM from "./assets/teamsIcon/BETBOOM.webp";
+import ChinggisWarriors from "./assets/teamsIcon/ChinggisWarriors.webp";
 import DENDELE from "./assets/teamsIcon/DENDELE.webp";
+import EternalFire from "./assets/teamsIcon/EternalFire.webp";
 import FaZe from "./assets/teamsIcon/FaZeClan.webp";
 import FlyQuest from "./assets/teamsIcon/FlyQuest.webp";
 import FURIA from "./assets/teamsIcon/Furia.webp";
@@ -29,8 +31,6 @@ import Spirit from "./assets/teamsIcon/TeamSpirit.webp";
 import Vitality from "./assets/teamsIcon/TeamVitality.webp";
 import TheMongolZ from "./assets/teamsIcon/TheMongolZ.webp";
 import Wildcard from "./assets/teamsIcon/Wildcard.webp";
-import EternalFire from "./assets/teamsIcon/EternalFire.webp";
-import ChinggisWarriors from "./assets/teamsIcon/ChinggisWarriors.webp";
 
 export type TeamId = string;
 

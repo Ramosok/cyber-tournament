@@ -79,7 +79,7 @@ describe("buildStagePredictions", () => {
       kind: "groupPick",
       group: "3-0",
       cellIndex: 0,
-      team: { id: "1", name: "HEROIC" },
+      team: { id: "1", name: "Ninjas in Pyjamas" },
     });
   });
 
@@ -133,12 +133,12 @@ describe("formatPredictionLines", () => {
     const lines = formatPredictionLines(draft.predictions);
 
     expect(lines).toHaveLength(6);
-    expect(lines[0]).toBe("3-0: HEROIC, Ninjas in Pyjamas");
-    expect(lines[1]).toBe("0-3: FaZe, 1win");
-    expect(lines[2]).toBe("3-1: 100 Thieves, B8, M80");
-    expect(lines[3]).toBe("1-3: DENDELE, 9z, Imperial");
-    expect(lines[4]).toBe("3-2: Liquid, Wildcard, BC.Game");
-    expect(lines[5]).toBe("2-3: TYLOO, FlyQuest, Lynn Vision");
+    expect(lines[0]).toBe("3-0: Ninjas in Pyjamas, HEROIC");
+    expect(lines[1]).toBe("0-3: Eternal Fire, Liquid");
+    expect(lines[2]).toBe("3-1: M80, Imperial, BC.Game");
+    expect(lines[3]).toBe("3-2: FlyQuest, PARIVISION, FaZe");
+    expect(lines[4]).toBe("1-3: 100 Thieves, 9z, DENDELE");
+    expect(lines[5]).toBe("2-3: Wildcard, Chinggis Warriors, Lynn Vision");
   });
 
   it("для плей-офф отдаёт строку на матч (включая 3-е место)", () => {

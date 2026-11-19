@@ -15,9 +15,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  min-height: 42px;
-  padding: 0 20px;
+  gap: 12px;
+  min-height: 36px;
+  padding: 0 16px;
   max-width: 100%;
   white-space: nowrap;
 }
@@ -26,40 +26,63 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 5px;
-  height: 32px;
-  border-radius: 6px;
+  top: 4px;
+  height: 28px;
+  border-radius: 5px;
   transform: skewX(-10deg);
   pointer-events: none;
   z-index: -1;
+  transition: background 0.3s ease;
 }
 
-.trackLeft {
+.trackStep1 {
   background: linear-gradient(
     90deg,
-    rgba(255, 245, 0, 0.26) 0%,
-    rgba(153, 147, 0, 0) 100%
+    rgba(153, 89.25, 0, 0.1) 0%,
+    rgba(255, 176, 31, 0.35) 12%,
+    rgba(255, 176, 31, 0.35) 12%,
+    rgba(153, 89, 0, 0) 100%
   );
 }
 
-.trackRight {
+.trackStep2 {
   background: linear-gradient(
-    270deg,
-    rgba(255, 245, 0, 0.26) 0%,
-    rgba(153, 147, 0, 0) 100%
+    90deg,
+    rgba(153, 89.25, 0, 0.1) 0%,
+    rgba(255, 176, 31, 0.35) 40%,
+    rgba(255, 176, 31, 0.35) 41%,
+    rgba(153, 89, 0, 0) 100%
+  );
+}
+
+.trackStep3 {
+  background: linear-gradient(
+    90deg,
+    rgba(153, 0, 140.25, 0) 0%,
+    rgba(253, 14, 125, 0.35) 69%,
+    rgba(153, 0, 140, 0) 100%
+  );
+}
+
+.trackStep4 {
+  background: linear-gradient(
+    90deg,
+    rgba(153, 147, 0, 0) 0%,
+    rgba(255, 245, 0, 0.36) 100%
   );
 }
 
 @media (min-width: 640px) {
   .wrapper {
-    min-width: 620px;
-    min-height: 52px;
-    padding: 0 37px;
-    gap: 30px;
+    min-width: 580px;
+    min-height: 48px;
+    padding: 0 32px;
+    gap: 24px;
   }
 
   .track {
-    top: 6px;
-    height: 40px;
+    top: 5px;
+    height: 38px;
+    border-radius: 8px;
   }
 }

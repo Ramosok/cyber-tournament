@@ -5,6 +5,7 @@ import type { PredictionActionState } from "@/components/AccountNumberForm/api/p
 import type { PredictionForm } from "@/shared/prediction/types";
 import type { ModalHandle } from "@/shared/ui/Modal/Modal";
 
+import { STAGE_SPREADSHEET_URLS } from "@/components/AccountNumberForm/api/config";
 import { INITIAL_ACTION_STATE } from "@/components/AccountNumberForm/api/predictionActionState";
 import { submitPrediction } from "@/components/AccountNumberForm/api/submitPredictionAction";
 import { SuccessModal } from "@/components/AccountNumberForm/components/SuccessModal";
@@ -50,6 +51,9 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
 
     return result;
   }, INITIAL_ACTION_STATE);
+
+  const currentSpreadsheetUrl =
+    STAGE_SPREADSHEET_URLS[form.step] ?? STAGE_SPREADSHEET_URLS[1];
 
   const handleAccountChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setAccountNumber(normalizeAccountNumber(event.target.value));
@@ -114,14 +118,25 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
           </a>{" "}
         </span>
 
-        <button
-          disabled={isPending}
-          type="button"
-          className={styles.link}
-          onClick={handleOpenConditions}
-        >
-          Условия турнира
-        </button>
+        <div className={styles.actions}>
+          <button
+            disabled={isPending}
+            type="button"
+            className={styles.link}
+            onClick={handleOpenConditions}
+          >
+            Условия турнира
+          </button>
+
+          <a
+            className={styles.link}
+            target="_blank"
+            rel="noreferrer"
+            href={currentSpreadsheetUrl}
+          >
+            Посмотреть мой прогноз
+          </a>
+        </div>
       </form>
 
       <Modal
