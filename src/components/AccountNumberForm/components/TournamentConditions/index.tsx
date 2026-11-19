@@ -58,7 +58,7 @@ export const TournamentConditions: FC<TournamentConditionsProps> = ({
     <article className={styles.container}>
       <header className={styles.hero}>
         <p className={styles.eyebrow}>PGL Major Singapore 2026</p>
-        <h2>Условия турнира прогнозистов</h2>
+        <h2>Условия турнира</h2>
       </header>
 
       <div className={styles.content}>
