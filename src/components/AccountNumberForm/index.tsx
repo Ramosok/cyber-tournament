@@ -141,6 +141,7 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
 
       <Modal
         ariaLabel="Условия турнира"
+        dialogClassName={styles.conditionsDialog}
         className={styles.tournamentConditionsModal}
         closeButtonClassName={styles.conditionsCloseButton}
         scrollerClassName={styles.conditionsScroller}

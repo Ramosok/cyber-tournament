@@ -155,8 +155,16 @@ h6 {
   gap: 8px;
 }
 
-.tournamentConditionsModal {
+.conditionsDialog {
   width: min(94vw, 960px);
+  max-width: calc(100vw - 24px);
+  padding: 0;
+  margin: auto;
+  background: transparent;
+}
+
+.tournamentConditionsModal {
+  width: 100%;
   height: min(86dvh, 820px);
   overflow: hidden;
   isolation: isolate;

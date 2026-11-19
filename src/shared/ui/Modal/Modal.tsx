@@ -18,6 +18,7 @@ type ModalProps = PropsWithChildren<{
   onClose?: () => void;
   noCross?: boolean;
   className?: string;
+  dialogClassName?: string;
   closeButtonClassName?: string;
   scrollerClassName?: string;
   scrollbarClassName?: string;
@@ -30,6 +31,7 @@ export const Modal = ({
   noCross,
   onClose,
   className = "",
+  dialogClassName = "",
   closeButtonClassName = "",
   scrollerClassName = "",
   scrollbarClassName = "",
@@ -118,7 +120,7 @@ export const Modal = ({
 
   return (
     <dialog
-      className={styles.dialog}
+      className={`${styles.dialog} ${dialogClassName}`}
       ref={dialogRef}
       onClose={handleClose}
       onClick={handleBackdropClick}
