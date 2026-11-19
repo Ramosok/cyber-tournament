@@ -159,6 +159,7 @@ h6 {
   width: min(94vw, 960px);
   height: min(86dvh, 820px);
   overflow: hidden;
+  isolation: isolate;
   background: var(--white);
   border-radius: 24px;
 }
@@ -166,8 +167,10 @@ h6 {
 .conditionsScroller {
   display: block !important;
   overflow-y: auto !important;
+  isolation: isolate;
   scrollbar-width: thin !important;
-  scrollbar-color: #fd0e7d #f0f0f0;
+  scrollbar-color: #fff500 #f0f0f0;
+  border-radius: 24px;
 }
 
 .conditionsScroller::-webkit-scrollbar {
@@ -182,7 +185,7 @@ h6 {
 }
 
 .conditionsScroller::-webkit-scrollbar-thumb {
-  background: #fd0e7d;
+  background: #fff500;
   border: 2px solid #f0f0f0;
   border-radius: 10px;
 }
@@ -193,20 +196,21 @@ h6 {
 
 .conditionsCloseButton {
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  color: var(--white);
   cursor: pointer;
   place-items: center;
-  background-color: #fd0e7d !important;
-  border: 2px solid var(--white) !important;
-  border-radius: 50%;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 0.62;
 }
 
 .conditionsCloseButton:hover {
-  background-color: #cf0061 !important;
+  background-color: transparent !important;
+  opacity: 1;
 }
 
 @media (min-width: 460px) {
