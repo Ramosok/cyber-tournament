@@ -6,7 +6,6 @@ import { Cell } from "@/components/Bids/components/Cell";
 import { Playoff } from "@/components/Bids/components/Playoff";
 import { createInitialState } from "@/components/Bids/components/Playoff/utils/createInitialState";
 import { Steps } from "@/components/Steps";
-import { Timer } from "@/components/Timer";
 import { TEAM_LIST } from "@/shared/config";
 import { createPredictionForm } from "@/shared/prediction/types";
 import { Modal } from "@/shared/ui/Modal/Modal";
@@ -28,14 +27,6 @@ describe("доступная разметка", () => {
     expect(container.querySelector("dialog")?.getAttribute("aria-label")).toBe(
       "Выбор команды",
     );
-  });
-
-  it("таймер объявлен как role=timer без live-анонсов", () => {
-    const { container } = render(<Timer />);
-    const timer = container.querySelector("[role='timer']");
-
-    expect(timer).not.toBeNull();
-    expect(timer?.getAttribute("aria-live")).toBe("off");
   });
 
   it("ячейка с командой: логотип с alt и async-декодированием", () => {

@@ -24,10 +24,10 @@ export const STAGE_ROWS: readonly StageRow[] = [
   ],
   [
     { label: "3-1", cellIndexes: [4, 5, 6] },
-    { label: "3-2", cellIndexes: [7, 8, 9] },
+    { label: "1-3", cellIndexes: [10, 11, 12] },
   ],
   [
-    { label: "1-3", cellIndexes: [10, 11, 12] },
+    { label: "3-2", cellIndexes: [7, 8, 9] },
     { label: "2-3", cellIndexes: [13, 14, 15] },
   ],
 ];

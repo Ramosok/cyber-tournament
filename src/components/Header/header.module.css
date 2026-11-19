@@ -166,8 +166,8 @@
   }
 
   .gooseWrapper {
-    width: 79%;
-    max-width: 1517px;
+    width: 100%;
+    max-width: 700px;
     margin-top: 0;
     margin-left: auto;
     z-index: 1;

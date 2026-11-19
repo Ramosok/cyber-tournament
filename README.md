@@ -53,7 +53,6 @@
 - `isBettingOpen` — можно ли оставлять прогноз (false, пока приём на этап закрыт и после турнира);
 - `isFinished` — все этапы позади (после 13.12.2026 23:59:59);
 - `currentStep` / `isFinalStep` — текущий или ближайший этап;
-- `endsAt` — до чего тикает таймер;
 - `nextStepStartsAt` — когда откроется следующий этап.
 
 Что видит пользователь:
@@ -141,8 +140,8 @@ type PredictionForm = {
 - `formatPredictionLines` / `buildPredictionPayload` — формат строк и раскладка
   по `f1…f7`;
 - `getPredictionValidationError` — тексты отдельно для сетки и для плей-офф;
-- `getBettingStatus` / `getBettingClosedMessage` / `getTimerTitle` — весь
-  календарь, включая `VITE_PREVIEW_STEP`.
+- `getBettingStatus` / `getBettingClosedMessage` — весь календарь, включая
+  `VITE_PREVIEW_STEP`.
 
 `.github/workflows/ci.yml` на каждый push и PR гоняет typecheck → lint → test →
 build (сборка с `VITE_SKIP_WEBFONTS=1`, чтобы не зависеть от сети).
@@ -160,9 +159,8 @@ React 19 + `babel-plugin-react-compiler` (включён в `vite.config.ts`):
 
 Всё выводимое — чистые производные:
 
-- `useNow(interval)` (`src/shared/hooks/useNow.ts`) — единственный тик;
-  `Timer`, `Steps` и `Bids` берут статус как `getBettingStatus(now)`,
-  а остаток — `calculateTimeLeft(endsAt, now)`;
+- `useNow()` (`src/shared/hooks/useNow.ts`) — единый тик статуса раз в минуту;
+  `Steps` и `Bids` получают актуальный статус через `getBettingStatus(now)`;
 - `pickedCellIndex` стал `useRef` (не участвует в рендере);
 - статичные `createTeamIndex(...)` вынесены на уровень модуля.
 
