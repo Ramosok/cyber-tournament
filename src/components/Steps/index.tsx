@@ -44,7 +44,12 @@ export const Steps: FC = () => {
   return (
     <section className={styles.container}>
       <div className={styles.wrapper}>
-        <div className={`${styles.track} ${trackClass}`} aria-hidden="true" />
+        <div
+          className={`${styles.track} ${
+            bettingStatus.isBettingOpen ? trackClass : ""
+          }`}
+          aria-hidden="true"
+        />
         {STEP_VIEWS.map(({ step, title, hasArrow }) => (
           <Step
             key={title}
@@ -52,7 +57,7 @@ export const Steps: FC = () => {
             title={title}
             hasArrow={hasArrow}
             isCurrent={
-              !bettingStatus.isFinished && bettingStatus.currentStep === step
+              bettingStatus.isBettingOpen && bettingStatus.currentStep === step
             }
             isComplete={
               bettingStatus.isFinished || bettingStatus.currentStep > step

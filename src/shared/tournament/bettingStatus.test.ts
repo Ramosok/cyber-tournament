@@ -40,6 +40,18 @@ describe("getBettingStatus", () => {
     vi.unstubAllGlobals();
   });
 
+  it("до открытия Stage 1 приём закрыт, а турнир ещё не завершён", () => {
+    const status = getBettingStatus(new Date("2026-11-20T17:59:59+03:00"));
+
+    expect([
+      status.currentStep,
+      status.isBettingOpen,
+      status.isFinished,
+      status.nextStepStartsAt?.toISOString(),
+    ]).toEqual([1, false, false, "2026-11-20T15:00:00.000Z"]);
+    expect(status.isFinalStep).toBe(false);
+  });
+
   it("до закрытия Stage 1 приём открыт, текущий шаг — первый", () => {
     const status = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
 

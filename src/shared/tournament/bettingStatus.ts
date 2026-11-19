@@ -208,6 +208,16 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     });
   }
 
+  const firstTour = TOURS[0];
+
+  if (now < firstTour.opensAt) {
+    return createStatus({
+      currentStep: firstTour.step,
+      isBettingOpen: false,
+      nextStepStartsAt: firstTour.opensAt,
+    });
+  }
+
   const closedTour = TOURS.find((tour) => isTourClosedNow(tour, now));
 
   if (closedTour) {
