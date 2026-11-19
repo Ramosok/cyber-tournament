@@ -1,4 +1,6 @@
-export const GROUP_LABELS = ["3-0", "0-3", "3-1", "3-2", "1-3", "2-3"] as const;
+// This is also the submission order: it matches the six prediction columns
+// in the Google Sheet (3-0, 3-1, 3-2, 0-3, 1-3, 2-3).
+export const GROUP_LABELS = ["3-0", "3-1", "3-2", "0-3", "1-3", "2-3"] as const;
 
 export type GroupLabel = (typeof GROUP_LABELS)[number];
 
@@ -24,10 +26,10 @@ export const STAGE_ROWS: readonly StageRow[] = [
   ],
   [
     { label: "3-1", cellIndexes: [4, 5, 6] },
-    { label: "3-2", cellIndexes: [7, 8, 9] },
+    { label: "1-3", cellIndexes: [7, 8, 9] },
   ],
   [
-    { label: "1-3", cellIndexes: [10, 11, 12] },
+    { label: "3-2", cellIndexes: [10, 11, 12] },
     { label: "2-3", cellIndexes: [13, 14, 15] },
   ],
 ];

@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { getTimerTitle } from "@/components/Timer/utils/getTimerTitle";
 import { getBettingClosedMessage } from "@/shared/tournament/bettingClosedMessage";
 import {
   getBettingStatus,
@@ -50,9 +49,6 @@ describe("getBettingStatus", () => {
       status.isFinished,
     ]).toEqual([1, true, false]);
     expect(status.isFinalStep).toBe(false);
-    expect(status.endsAt?.toISOString()).toBe(
-      new Date("2026-11-24T08:55:00+03:00").toISOString(),
-    );
   });
 
   it("между закрытием Stage 1 (08:55) и открытием Stage 2 (18:00) приём закрыт", () => {
@@ -63,16 +59,12 @@ describe("getBettingStatus", () => {
     expect(getBettingClosedMessage(status)).toBe(
       "Прием прогнозов на 1-й этап закрыт! Следующий этап откроется 24 ноября.",
     );
-    expect(getTimerTitle(status)).toBe("До окончания этапа:");
   });
 
   it("в окно Stage 2 (24.11 18:00 — 28.11 08:55) приём открыт на 2-й этап", () => {
     const status = getBettingStatus(new Date("2026-11-25T15:00:00+03:00"));
 
     expect([status.currentStep, status.isBettingOpen]).toEqual([2, true]);
-    expect(status.endsAt?.toISOString()).toBe(
-      new Date("2026-11-28T08:55:00+03:00").toISOString(),
-    );
   });
 
   it("после закрытия Stage 3 (02.12 08:55) ждёт открытия плей-офф 7 декабря", () => {
@@ -93,9 +85,6 @@ describe("getBettingStatus", () => {
       status.isBettingOpen,
       status.isFinalStep,
     ]).toEqual([4, true, true]);
-    expect(status.endsAt?.toISOString()).toBe(
-      new Date("2026-12-10T11:55:00+03:00").toISOString(),
-    );
   });
 
   it("во время матчей плей-офф (10.12 11:55 — 13.12 23:59:59) приём закрыт", () => {
@@ -116,8 +105,6 @@ describe("getBettingStatus", () => {
     expect(getBettingClosedMessage(status)).toBe(
       "Прием прогнозов закрыт! Турнир окончен",
     );
-    expect(getTimerTitle(status)).toBe("Турнир завершён");
-    expect(status.endsAt).toBeNull();
   });
 
   it("VITE_PREVIEW_STEP принудительно включает этап", () => {
@@ -172,14 +159,5 @@ describe("getBettingStatus", () => {
 
     setPreviewStep(null);
     expect(storage.getItem(PREVIEW_STEP_STORAGE_KEY)).toBeNull();
-  });
-
-  it("открытый приём тикает до закрытия окна прогнозов этапа", () => {
-    const status = getBettingStatus(new Date(BEFORE_STAGE_1_CLOSE));
-
-    expect(status.endsAt?.toISOString()).toBe(
-      new Date("2026-11-24T08:55:00+03:00").toISOString(),
-    );
-    expect(getTimerTitle(status)).toBe("До окончания приёма прогнозов:");
   });
 });

@@ -2,8 +2,7 @@ import type { FC } from "react";
 import type { StepNumber } from "@/shared/tournament/bettingStatus";
 
 import { Step } from "@/components/Steps/Step";
-import { MILLISECONDS_PER_SECOND } from "@/components/Timer/utils/calculateTimeLeft";
-import { useNow } from "@/shared/hooks/useNow";
+import { STATUS_REFRESH_INTERVAL_MS, useNow } from "@/shared/hooks/useNow";
 import {
   FINAL_STEP,
   getBettingStatus,
@@ -26,7 +25,7 @@ const STEP_VIEWS: readonly StepView[] = [
 ];
 
 export const Steps: FC = () => {
-  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_SECOND));
+  const bettingStatus = getBettingStatus(useNow(STATUS_REFRESH_INTERVAL_MS));
   const currentStep = bettingStatus.currentStep;
 
   const trackClass =

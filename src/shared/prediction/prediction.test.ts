@@ -27,6 +27,7 @@ import {
 import {
   STAGE_CELL_COUNT,
   STAGE_CELL_INDEXES,
+  STAGE_ROWS,
 } from "@/shared/tournament/stageGrid";
 import {
   createEmptyStageSelection,
@@ -70,6 +71,16 @@ const fillPlayoff = (): PlayoffState => {
 };
 
 describe("buildStagePredictions", () => {
+  it("раскладывает группы по сторонам сетки как в макете", () => {
+    expect(
+      STAGE_ROWS.map(([left, right]) => [left.label, right.label]),
+    ).toEqual([
+      ["3-0", "0-3"],
+      ["3-1", "1-3"],
+      ["3-2", "2-3"],
+    ]);
+  });
+
   it("считает каждую из 16 ячеек", () => {
     const draft = buildStagePredictions(fillAllCells(), stageTeams);
 
@@ -132,13 +143,14 @@ describe("formatPredictionLines", () => {
     const draft = buildStagePredictions(fillAllCells(), stageTeams);
     const lines = formatPredictionLines(draft.predictions);
 
-    expect(lines).toHaveLength(6);
-    expect(lines[0]).toBe("3-0: Ninjas in Pyjamas, HEROIC");
-    expect(lines[1]).toBe("0-3: Eternal Fire, Liquid");
-    expect(lines[2]).toBe("3-1: M80, Imperial, BC.Game");
-    expect(lines[3]).toBe("3-2: FlyQuest, PARIVISION, FaZe");
-    expect(lines[4]).toBe("1-3: 100 Thieves, 9z, DENDELE");
-    expect(lines[5]).toBe("2-3: Wildcard, Chinggis Warriors, Lynn Vision");
+    expect(lines).toEqual([
+      "3-0: Ninjas in Pyjamas, HEROIC",
+      "3-1: M80, Imperial, BC.Game",
+      "3-2: 100 Thieves, 9z, DENDELE",
+      "0-3: Eternal Fire, Liquid",
+      "1-3: FlyQuest, PARIVISION, FaZe",
+      "2-3: Wildcard, Chinggis Warriors, Lynn Vision",
+    ]);
   });
 
   it("для плей-офф отдаёт строку на матч (включая 3-е место)", () => {
@@ -153,6 +165,31 @@ describe("formatPredictionLines", () => {
 });
 
 describe("buildPredictionPayload", () => {
+  it("отправляет группы в порядке колонок Google-таблицы", () => {
+    const draft = buildStagePredictions(fillAllCells(), stageTeams);
+    const payload = buildPredictionPayload(
+      createPredictionForm(1, "stage", draft),
+      "123456789",
+      "09.10.2026 (12:00)",
+    );
+
+    expect([
+      payload.f1,
+      payload.f2,
+      payload.f3,
+      payload.f4,
+      payload.f5,
+      payload.f6,
+    ]).toEqual([
+      "3-0: Ninjas in Pyjamas, HEROIC",
+      "3-1: M80, Imperial, BC.Game",
+      "3-2: 100 Thieves, 9z, DENDELE",
+      "0-3: Eternal Fire, Liquid",
+      "1-3: FlyQuest, PARIVISION, FaZe",
+      "2-3: Wildcard, Chinggis Warriors, Lynn Vision",
+    ]);
+  });
+
   it("раскладывает строки по полям f1…f8", () => {
     const draft = buildPlayoffPredictions(fillPlayoff(), playoffTeams);
     const payload = buildPredictionPayload(

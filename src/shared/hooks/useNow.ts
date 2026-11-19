@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
 export const PREVIEW_STEP_EVENT = "preview-step-change";
+export const STATUS_REFRESH_INTERVAL_MS = 60_000;
 
 const listeners = new Set<() => void>();
 let currentNow = new Date();
-let activeTimer: ReturnType<typeof setInterval> | null = null;
+let activeTicker: ReturnType<typeof setInterval> | null = null;
 let activeIntervalMs = 0;
 
 const notifyListeners = (): void => {
@@ -16,16 +17,16 @@ const notifyListeners = (): void => {
 };
 
 const startTicker = (intervalMs: number): void => {
-  if (activeTimer !== null && activeIntervalMs === intervalMs) {
+  if (activeTicker !== null && activeIntervalMs === intervalMs) {
     return;
   }
 
-  if (activeTimer !== null) {
-    clearInterval(activeTimer);
+  if (activeTicker !== null) {
+    clearInterval(activeTicker);
   }
 
   activeIntervalMs = intervalMs;
-  activeTimer = setInterval(notifyListeners, intervalMs);
+  activeTicker = setInterval(notifyListeners, intervalMs);
 
   if (typeof window !== "undefined") {
     window.addEventListener("storage", notifyListeners);
@@ -35,12 +36,12 @@ const startTicker = (intervalMs: number): void => {
 };
 
 const stopTickerIfIdle = (): void => {
-  if (listeners.size > 0 || activeTimer === null) {
+  if (listeners.size > 0 || activeTicker === null) {
     return;
   }
 
-  clearInterval(activeTimer);
-  activeTimer = null;
+  clearInterval(activeTicker);
+  activeTicker = null;
   activeIntervalMs = 0;
 
   if (typeof window !== "undefined") {

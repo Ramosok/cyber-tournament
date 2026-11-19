@@ -53,7 +53,6 @@
 - `isBettingOpen` — можно ли оставлять прогноз (false, пока приём на этап закрыт и после турнира);
 - `isFinished` — все этапы позади (после 13.12.2026 23:59:59);
 - `currentStep` / `isFinalStep` — текущий или ближайший этап;
-- `endsAt` — до чего тикает таймер;
 - `nextStepStartsAt` — когда откроется следующий этап.
 
 Что видит пользователь:
@@ -109,7 +108,7 @@ type PredictionForm = {
 - `buildPlayoffPredictions(state, teamIndex)` — из сетки плей-офф (7 матчей + чемпион).
 
 Дальше всё общее: `isPredictionFormComplete()` для валидации и
-`buildPredictionPayload()` для полей `f1…f7` + `step`. Форма и API не знают,
+`buildPredictionPayload()` для полей `f1…f8` + `step`. Форма и API не знают,
 какой этап сейчас идёт.
 
 ### Валидация
@@ -125,10 +124,14 @@ type PredictionForm = {
 Незавершённая серия (например 1:1) матчем не считается, поэтому прогресс
 в плей-оффе не «залипает» на частично введённом счёте.
 
-Поля `f1…f7`:
+Поля `f1…f8`:
 
 - плей-офф — по одной строке на матч: `Team Spirit 2:0 Team Falcons`;
 - общая сетка — по одной строке на группу: `3-0: Team Spirit, Team Falcons` (6 групп).
+  Первые шесть полей идут в порядке колонок Google Sheets: `3-0`, `3-1`,
+  `3-2`, `0-3`, `1-3`, `2-3`. Apps Script дополнительно определяет группу
+  по метке в строке, поэтому изменение положения ячеек в сетке не меняет
+  сохранение прогноза.
 
 ## Тесты и CI
 
@@ -139,10 +142,10 @@ type PredictionForm = {
 - `buildStagePredictions` / `buildPlayoffPredictions` — счётчики ячеек (16) и
   матчей (7), `firstIncompleteRound`, чемпион;
 - `formatPredictionLines` / `buildPredictionPayload` — формат строк и раскладка
-  по `f1…f7`;
+  по `f1…f8`;
 - `getPredictionValidationError` — тексты отдельно для сетки и для плей-офф;
-- `getBettingStatus` / `getBettingClosedMessage` / `getTimerTitle` — весь
-  календарь, включая `VITE_PREVIEW_STEP`.
+- `getBettingStatus` / `getBettingClosedMessage` — весь календарь, включая
+  `VITE_PREVIEW_STEP`.
 
 `.github/workflows/ci.yml` на каждый push и PR гоняет typecheck → lint → test →
 build (сборка с `VITE_SKIP_WEBFONTS=1`, чтобы не зависеть от сети).
@@ -160,9 +163,8 @@ React 19 + `babel-plugin-react-compiler` (включён в `vite.config.ts`):
 
 Всё выводимое — чистые производные:
 
-- `useNow(interval)` (`src/shared/hooks/useNow.ts`) — единственный тик;
-  `Timer`, `Steps` и `Bids` берут статус как `getBettingStatus(now)`,
-  а остаток — `calculateTimeLeft(endsAt, now)`;
+- `useNow(interval)` (`src/shared/hooks/useNow.ts`) обновляет статус этапа;
+  `Steps` и `Bids` берут его как `getBettingStatus(now)`;
 - `pickedCellIndex` стал `useRef` (не участвует в рендере);
 - статичные `createTeamIndex(...)` вынесены на уровень модуля.
 

@@ -158,10 +158,13 @@ function extractGroupPredictions(params) {
     }
   });
 
+  // The fallback follows the same order as the Google Sheet columns and the
+  // client payload. Normally labels are parsed above, so fields may safely be
+  // received in any order.
   if (!groups["3-0"] && params.f1) groups["3-0"] = cleanGroupValue(params.f1, "3-0");
-  if (!groups["0-3"] && params.f2) groups["0-3"] = cleanGroupValue(params.f2, "0-3");
-  if (!groups["3-1"] && params.f3) groups["3-1"] = cleanGroupValue(params.f3, "3-1");
-  if (!groups["3-2"] && params.f4) groups["3-2"] = cleanGroupValue(params.f4, "3-2");
+  if (!groups["3-1"] && params.f2) groups["3-1"] = cleanGroupValue(params.f2, "3-1");
+  if (!groups["3-2"] && params.f3) groups["3-2"] = cleanGroupValue(params.f3, "3-2");
+  if (!groups["0-3"] && params.f4) groups["0-3"] = cleanGroupValue(params.f4, "0-3");
   if (!groups["1-3"] && params.f5) groups["1-3"] = cleanGroupValue(params.f5, "1-3");
   if (!groups["2-3"] && params.f6) groups["2-3"] = cleanGroupValue(params.f6, "2-3");
 
@@ -258,9 +261,9 @@ function testStage1() {
       account_number: "123456789",
       time: "24.11.2026 (12:00)",
       f1: "3-0: Ninjas in Pyjamas, HEROIC",
-      f2: "0-3: Eternal Fire, Liquid",
-      f3: "3-1: M80, Imperial, BC.Game",
-      f4: "3-2: FlyQuest, PARIVISION, FaZe",
+      f2: "3-1: M80, Imperial, BC.Game",
+      f3: "3-2: FlyQuest, PARIVISION, FaZe",
+      f4: "0-3: Eternal Fire, Liquid",
       f5: "1-3: 100 Thieves, 9z, DENDELE",
       f6: "2-3: Wildcard, Chinggis Warriors, Lynn Vision"
     }
@@ -275,9 +278,9 @@ function testStage2() {
       account_number: "223456789",
       time: "28.11.2026 (12:00)",
       f1: "3-0: Ninjas in Pyjamas, HEROIC",
-      f2: "0-3: Eternal Fire, Liquid",
-      f3: "3-1: M80, Imperial, BC.Game",
-      f4: "3-2: FlyQuest, PARIVISION, FaZe",
+      f2: "3-1: M80, Imperial, BC.Game",
+      f3: "3-2: FlyQuest, PARIVISION, FaZe",
+      f4: "0-3: Eternal Fire, Liquid",
       f5: "1-3: 100 Thieves, 9z, DENDELE",
       f6: "2-3: Wildcard, Chinggis Warriors, Lynn Vision"
     }
@@ -292,9 +295,9 @@ function testStage3() {
       account_number: "323456789",
       time: "02.12.2026 (12:00)",
       f1: "3-0: Ninjas in Pyjamas, HEROIC",
-      f2: "0-3: Eternal Fire, Liquid",
-      f3: "3-1: M80, Imperial, BC.Game",
-      f4: "3-2: FlyQuest, PARIVISION, FaZe",
+      f2: "3-1: M80, Imperial, BC.Game",
+      f3: "3-2: FlyQuest, PARIVISION, FaZe",
+      f4: "0-3: Eternal Fire, Liquid",
       f5: "1-3: 100 Thieves, 9z, DENDELE",
       f6: "2-3: Wildcard, Chinggis Warriors, Lynn Vision"
     }

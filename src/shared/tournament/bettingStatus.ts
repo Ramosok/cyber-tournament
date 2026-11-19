@@ -60,14 +60,12 @@ export type BettingStatus = {
   readonly isFinished: boolean;
   readonly currentStep: StepNumber;
   readonly isFinalStep: boolean;
-  readonly endsAt: Date | null;
   readonly nextStepStartsAt: Date | null;
 };
 
 type BettingStatusParams = {
   readonly currentStep: StepNumber;
   readonly isBettingOpen: boolean;
-  readonly endsAt: Date | null;
   readonly nextStepStartsAt: Date | null;
   readonly isFinished?: boolean;
 };
@@ -75,7 +73,6 @@ type BettingStatusParams = {
 const createStatus = ({
   currentStep,
   isBettingOpen,
-  endsAt,
   nextStepStartsAt,
   isFinished = false,
 }: BettingStatusParams): BettingStatus => ({
@@ -83,7 +80,6 @@ const createStatus = ({
   isFinished,
   currentStep,
   isFinalStep: currentStep === FINAL_STEP,
-  endsAt,
   nextStepStartsAt,
 });
 
@@ -92,12 +88,6 @@ const findTour = (step: StepNumber): Tour | undefined =>
 
 const findTourOpensAt = (step: StepNumber): Date | null =>
   findTour(step)?.opensAt ?? null;
-
-const findTourClosesAt = (step: StepNumber): Date | null =>
-  findTour(step)?.closesAt ?? null;
-
-const findTourEndsAt = (step: StepNumber): Date | null =>
-  findTour(step)?.endsAt ?? null;
 
 const isTourClosedNow = (tour: Tour, now: Date): boolean =>
   tour.step === FINAL_STEP
@@ -188,7 +178,6 @@ const FINISHED_STATUS: BettingStatus = createStatus({
   currentStep: FINAL_STEP,
   isBettingOpen: false,
   isFinished: true,
-  endsAt: null,
   nextStepStartsAt: null,
 });
 
@@ -203,7 +192,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: preview.step,
       isBettingOpen: true,
-      endsAt: findTourClosesAt(preview.step),
       nextStepStartsAt: null,
     });
   }
@@ -214,7 +202,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: preview.step,
       isBettingOpen: false,
-      endsAt: findTourEndsAt(preview.step),
       nextStepStartsAt: isStepNumber(nextStep)
         ? findTourOpensAt(nextStep)
         : null,
@@ -229,7 +216,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: closedTour.step,
       isBettingOpen: false,
-      endsAt: closedTour.endsAt,
       nextStepStartsAt: isStepNumber(nextStep)
         ? findTourOpensAt(nextStep)
         : null,
@@ -244,7 +230,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: openTour.step,
       isBettingOpen: true,
-      endsAt: openTour.closesAt,
       nextStepStartsAt: null,
     });
   }

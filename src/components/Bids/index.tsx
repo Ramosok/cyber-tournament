@@ -18,13 +18,12 @@ import { createInitialState } from "@/components/Bids/components/Playoff/utils/c
 import { setMatchScore } from "@/components/Bids/components/Playoff/utils/setMatchScore";
 import { Stage } from "@/components/Bids/components/Stage";
 import { TeamList } from "@/components/Bids/components/TeamList";
-import { MILLISECONDS_PER_SECOND } from "@/components/Timer/utils/calculateTimeLeft";
 import {
   createTeamIndex,
   getStageTeamListByStep,
   TEAM_LIST,
 } from "@/shared/config";
-import { useNow } from "@/shared/hooks/useNow";
+import { STATUS_REFRESH_INTERVAL_MS, useNow } from "@/shared/hooks/useNow";
 import { buildStagePredictions } from "@/shared/prediction/buildStagePredictions";
 import { createPredictionForm } from "@/shared/prediction/types";
 import { getBettingClosedMessage } from "@/shared/tournament/bettingClosedMessage";
@@ -41,7 +40,7 @@ import styles from "./bids.module.css";
 const playoffTeamIndex = createTeamIndex(TEAM_LIST);
 
 export const Bids: FC = () => {
-  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_SECOND));
+  const bettingStatus = getBettingStatus(useNow(STATUS_REFRESH_INTERVAL_MS));
   const stageTeams = getStageTeamListByStep(bettingStatus.currentStep);
   const stageTeamIndex = createTeamIndex(stageTeams);
 
