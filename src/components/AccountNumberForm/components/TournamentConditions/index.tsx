@@ -95,7 +95,17 @@ export const TournamentConditions: FC<TournamentConditionsProps> = ({
               по линии на матчи соответствующего этапа PGL Major Singapore 2026.
             </li>
             <li>
-              Оставить прогноз ЗДЕСЬ в установленный период действия тура.
+              Оставить прогноз{" "}
+              <a
+                className={styles.inlineSpreadsheetLink}
+                href={spreadsheetUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Открыть таблицу с прогнозами"
+              >
+                ЗДЕСЬ
+              </a>{" "}
+              в установленный период действия тура.
             </li>
           </ol>
         </section>

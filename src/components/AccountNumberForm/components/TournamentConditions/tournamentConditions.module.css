@@ -134,6 +134,32 @@
   font-weight: 900;
 }
 
+.inlineSpreadsheetLink {
+  display: inline-flex;
+  min-height: 28px;
+  padding: 3px 10px;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-decoration: none;
+  vertical-align: middle;
+  background: #fd0e7d;
+  border-radius: 999px;
+  box-shadow: 0 2px 0 #910044;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.inlineSpreadsheetLink:hover {
+  filter: brightness(0.92);
+  transform: translateY(-1px);
+}
+
 .prizeFund {
   display: inline-block;
   margin-top: 22px !important;

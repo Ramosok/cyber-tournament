@@ -41,9 +41,11 @@ describe("доступная разметка", () => {
     expect(container.textContent).toContain(
       "Турнир прогнозистов пройдет в 4 тура:",
     );
-    expect(
-      container.querySelector(`a[href="${spreadsheetUrl}"]`)?.textContent,
-    ).toBe("ЗДЕСЬ");
+    const spreadsheetLinks = container.querySelectorAll(
+      `a[href="${spreadsheetUrl}"]`,
+    );
+    expect(spreadsheetLinks).toHaveLength(2);
+    expect(spreadsheetLinks[0]?.textContent).toBe("ЗДЕСЬ");
   });
 
   it("ячейка с командой: логотип с alt и async-декодированием", () => {
