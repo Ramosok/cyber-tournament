@@ -18,7 +18,6 @@ import { createInitialState } from "@/components/Bids/components/Playoff/utils/c
 import { setMatchScore } from "@/components/Bids/components/Playoff/utils/setMatchScore";
 import { Stage } from "@/components/Bids/components/Stage";
 import { TeamList } from "@/components/Bids/components/TeamList";
-import { MILLISECONDS_PER_SECOND } from "@/components/Timer/utils/calculateTimeLeft";
 import {
   createTeamIndex,
   getStageTeamListByStep,
@@ -41,7 +40,7 @@ import styles from "./bids.module.css";
 const playoffTeamIndex = createTeamIndex(TEAM_LIST);
 
 export const Bids: FC = () => {
-  const bettingStatus = getBettingStatus(useNow(MILLISECONDS_PER_SECOND));
+  const bettingStatus = getBettingStatus(useNow());
   const stageTeams = getStageTeamListByStep(bettingStatus.currentStep);
   const stageTeamIndex = createTeamIndex(stageTeams);
 

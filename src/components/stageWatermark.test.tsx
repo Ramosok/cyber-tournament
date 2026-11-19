@@ -133,7 +133,7 @@ describe("Stage watermark and stepper layout", () => {
     expect(activeStep).not.toBeNull();
   });
 
-  it("шапка рендерит баннер гуся без ограничения по ширине", async () => {
+  it("шапка рендерит баннер гуся", async () => {
     const { Header } = await import("@/components/Header");
     const { container } = render(<Header />);
     const gooseWrapper = container.querySelector("[class*='gooseWrapper']");

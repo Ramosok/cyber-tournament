@@ -27,6 +27,7 @@ import {
 import {
   STAGE_CELL_COUNT,
   STAGE_CELL_INDEXES,
+  STAGE_ROWS,
 } from "@/shared/tournament/stageGrid";
 import {
   createEmptyStageSelection,
@@ -81,6 +82,19 @@ describe("buildStagePredictions", () => {
       cellIndex: 0,
       team: { id: "1", name: "Ninjas in Pyjamas" },
     });
+  });
+
+  it("располагает группы побед слева, а группы поражений справа", () => {
+    expect(
+      STAGE_ROWS.map(([leftGroup, rightGroup]) => [
+        leftGroup.label,
+        rightGroup.label,
+      ]),
+    ).toEqual([
+      ["3-0", "0-3"],
+      ["3-1", "1-3"],
+      ["3-2", "2-3"],
+    ]);
   });
 
   it("показывает прогресс по частично заполненной сетке", () => {
@@ -153,6 +167,31 @@ describe("formatPredictionLines", () => {
 });
 
 describe("buildPredictionPayload", () => {
+  it("сохраняет подписи групп в прежнем формате для Google Sheets", () => {
+    const draft = buildStagePredictions(fillAllCells(), stageTeams);
+    const payload = buildPredictionPayload(
+      createPredictionForm(1, "stage", draft),
+      "123456789",
+      "09.10.2026 (12:00)",
+    );
+
+    expect([
+      payload.f1,
+      payload.f2,
+      payload.f3,
+      payload.f4,
+      payload.f5,
+      payload.f6,
+    ]).toEqual([
+      "3-0: Ninjas in Pyjamas, HEROIC",
+      "0-3: Eternal Fire, Liquid",
+      "3-1: M80, Imperial, BC.Game",
+      "3-2: FlyQuest, PARIVISION, FaZe",
+      "1-3: 100 Thieves, 9z, DENDELE",
+      "2-3: Wildcard, Chinggis Warriors, Lynn Vision",
+    ]);
+  });
+
   it("раскладывает строки по полям f1…f8", () => {
     const draft = buildPlayoffPredictions(fillPlayoff(), playoffTeams);
     const payload = buildPredictionPayload(

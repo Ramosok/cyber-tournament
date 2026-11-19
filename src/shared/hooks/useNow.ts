@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 
 export const PREVIEW_STEP_EVENT = "preview-step-change";
 
+const STATUS_UPDATE_INTERVAL_MS = 60_000;
+
 const listeners = new Set<() => void>();
 let currentNow = new Date();
-let activeTimer: ReturnType<typeof setInterval> | null = null;
-let activeIntervalMs = 0;
+let activeTicker: ReturnType<typeof setInterval> | null = null;
 
 const notifyListeners = (): void => {
   currentNow = new Date();
@@ -15,17 +16,12 @@ const notifyListeners = (): void => {
   }
 };
 
-const startTicker = (intervalMs: number): void => {
-  if (activeTimer !== null && activeIntervalMs === intervalMs) {
+const startTicker = (): void => {
+  if (activeTicker !== null) {
     return;
   }
 
-  if (activeTimer !== null) {
-    clearInterval(activeTimer);
-  }
-
-  activeIntervalMs = intervalMs;
-  activeTimer = setInterval(notifyListeners, intervalMs);
+  activeTicker = setInterval(notifyListeners, STATUS_UPDATE_INTERVAL_MS);
 
   if (typeof window !== "undefined") {
     window.addEventListener("storage", notifyListeners);
@@ -35,13 +31,12 @@ const startTicker = (intervalMs: number): void => {
 };
 
 const stopTickerIfIdle = (): void => {
-  if (listeners.size > 0 || activeTimer === null) {
+  if (listeners.size > 0 || activeTicker === null) {
     return;
   }
 
-  clearInterval(activeTimer);
-  activeTimer = null;
-  activeIntervalMs = 0;
+  clearInterval(activeTicker);
+  activeTicker = null;
 
   if (typeof window !== "undefined") {
     window.removeEventListener("storage", notifyListeners);
@@ -50,7 +45,7 @@ const stopTickerIfIdle = (): void => {
   }
 };
 
-export const useNow = (intervalMs: number): Date => {
+export const useNow = (): Date => {
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -59,13 +54,13 @@ export const useNow = (intervalMs: number): Date => {
     };
 
     listeners.add(handleTick);
-    startTicker(intervalMs);
+    startTicker();
 
     return () => {
       listeners.delete(handleTick);
       stopTickerIfIdle();
     };
-  }, [intervalMs]);
+  }, []);
 
   return now;
 };

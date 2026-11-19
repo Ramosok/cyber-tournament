@@ -21,7 +21,7 @@ export type Tour = {
   readonly step: StepNumber;
   readonly opensAt: Date;
   readonly closesAt: Date;
-  readonly endsAt: Date;
+  readonly stageEndsAt: Date;
 };
 
 export const TOURS: readonly Tour[] = [
@@ -29,25 +29,25 @@ export const TOURS: readonly Tour[] = [
     step: 1,
     opensAt: new Date("2026-11-20T18:00:00+03:00"),
     closesAt: new Date("2026-11-24T08:55:00+03:00"),
-    endsAt: new Date("2026-11-24T18:00:00+03:00"),
+    stageEndsAt: new Date("2026-11-24T18:00:00+03:00"),
   },
   {
     step: 2,
     opensAt: new Date("2026-11-24T18:00:00+03:00"),
     closesAt: new Date("2026-11-28T08:55:00+03:00"),
-    endsAt: new Date("2026-11-28T18:00:00+03:00"),
+    stageEndsAt: new Date("2026-11-28T18:00:00+03:00"),
   },
   {
     step: 3,
     opensAt: new Date("2026-11-28T18:00:00+03:00"),
     closesAt: new Date("2026-12-02T08:55:00+03:00"),
-    endsAt: new Date("2026-12-07T10:00:00+03:00"),
+    stageEndsAt: new Date("2026-12-07T10:00:00+03:00"),
   },
   {
     step: FINAL_STEP,
     opensAt: new Date("2026-12-07T10:00:00+03:00"),
     closesAt: new Date("2026-12-10T11:55:00+03:00"),
-    endsAt: new Date("2026-12-13T23:59:59+03:00"),
+    stageEndsAt: new Date("2026-12-13T23:59:59+03:00"),
   },
 ];
 
@@ -60,14 +60,12 @@ export type BettingStatus = {
   readonly isFinished: boolean;
   readonly currentStep: StepNumber;
   readonly isFinalStep: boolean;
-  readonly endsAt: Date | null;
   readonly nextStepStartsAt: Date | null;
 };
 
 type BettingStatusParams = {
   readonly currentStep: StepNumber;
   readonly isBettingOpen: boolean;
-  readonly endsAt: Date | null;
   readonly nextStepStartsAt: Date | null;
   readonly isFinished?: boolean;
 };
@@ -75,7 +73,6 @@ type BettingStatusParams = {
 const createStatus = ({
   currentStep,
   isBettingOpen,
-  endsAt,
   nextStepStartsAt,
   isFinished = false,
 }: BettingStatusParams): BettingStatus => ({
@@ -83,7 +80,6 @@ const createStatus = ({
   isFinished,
   currentStep,
   isFinalStep: currentStep === FINAL_STEP,
-  endsAt,
   nextStepStartsAt,
 });
 
@@ -93,16 +89,10 @@ const findTour = (step: StepNumber): Tour | undefined =>
 const findTourOpensAt = (step: StepNumber): Date | null =>
   findTour(step)?.opensAt ?? null;
 
-const findTourClosesAt = (step: StepNumber): Date | null =>
-  findTour(step)?.closesAt ?? null;
-
-const findTourEndsAt = (step: StepNumber): Date | null =>
-  findTour(step)?.endsAt ?? null;
-
 const isTourClosedNow = (tour: Tour, now: Date): boolean =>
   tour.step === FINAL_STEP
-    ? now >= tour.closesAt && now <= tour.endsAt
-    : now >= tour.closesAt && now < tour.endsAt;
+    ? now >= tour.closesAt && now <= tour.stageEndsAt
+    : now >= tour.closesAt && now < tour.stageEndsAt;
 
 type PreviewMode =
   | { readonly kind: "off" }
@@ -188,7 +178,6 @@ const FINISHED_STATUS: BettingStatus = createStatus({
   currentStep: FINAL_STEP,
   isBettingOpen: false,
   isFinished: true,
-  endsAt: null,
   nextStepStartsAt: null,
 });
 
@@ -203,7 +192,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: preview.step,
       isBettingOpen: true,
-      endsAt: findTourClosesAt(preview.step),
       nextStepStartsAt: null,
     });
   }
@@ -214,7 +202,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: preview.step,
       isBettingOpen: false,
-      endsAt: findTourEndsAt(preview.step),
       nextStepStartsAt: isStepNumber(nextStep)
         ? findTourOpensAt(nextStep)
         : null,
@@ -229,7 +216,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: closedTour.step,
       isBettingOpen: false,
-      endsAt: closedTour.endsAt,
       nextStepStartsAt: isStepNumber(nextStep)
         ? findTourOpensAt(nextStep)
         : null,
@@ -244,7 +230,6 @@ export const getBettingStatus = (now: Date = new Date()): BettingStatus => {
     return createStatus({
       currentStep: openTour.step,
       isBettingOpen: true,
-      endsAt: openTour.closesAt,
       nextStepStartsAt: null,
     });
   }
