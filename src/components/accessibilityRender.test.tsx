@@ -2,6 +2,7 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { AccountNumberForm } from "@/components/AccountNumberForm";
+import { TournamentConditions } from "@/components/AccountNumberForm/components/TournamentConditions";
 import { Cell } from "@/components/Bids/components/Cell";
 import { Playoff } from "@/components/Bids/components/Playoff";
 import { createInitialState } from "@/components/Bids/components/Playoff/utils/createInitialState";
@@ -27,6 +28,22 @@ describe("доступная разметка", () => {
     expect(container.querySelector("dialog")?.getAttribute("aria-label")).toBe(
       "Выбор команды",
     );
+  });
+
+  it("условия турнира показываются в диалоге без PDF и содержат ссылку на таблицу", () => {
+    const spreadsheetUrl =
+      "https://docs.google.com/spreadsheets/d/1yEW2fCOmHdTIExshkgFpa749Rlb68C9yEVvjtglxssc/edit?gid=0#gid=0";
+    const { container } = render(
+      <TournamentConditions spreadsheetUrl={spreadsheetUrl} />,
+    );
+
+    expect(container.querySelector("iframe")).toBeNull();
+    expect(container.textContent).toContain(
+      "Турнир прогнозистов пройдет в 4 тура:",
+    );
+    expect(
+      container.querySelector(`a[href="${spreadsheetUrl}"]`)?.textContent,
+    ).toBe("ЗДЕСЬ");
   });
 
   it("ячейка с командой: логотип с alt и async-декодированием", () => {

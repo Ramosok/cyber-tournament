@@ -1,27 +1,356 @@
 .container {
-  width: 91vw;
-  height: 100%;
+  width: 100%;
+  min-height: 100%;
+  color: #181818;
+  background: #fff;
+  font-family: Roboto, sans-serif;
+}
+
+.hero {
+  position: relative;
   overflow: hidden;
+  padding: clamp(24px, 4vw, 42px) clamp(20px, 5vw, 56px);
+  color: var(--white);
+  background: #0b0b0b;
+}
+
+.hero::after {
+  position: absolute;
+  right: -64px;
+  bottom: -92px;
+  width: 235px;
+  height: 235px;
+  border: 30px solid rgba(255, 245, 0, 0.95);
+  border-radius: 50%;
+  content: "";
+}
+
+.eyebrow {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 8px;
+  color: #fff500;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hero h2 {
+  position: relative;
+  z-index: 1;
+  max-width: 660px;
+  margin: 0;
+  font-family: "Alumni Sans", Roboto, sans-serif;
+  font-size: clamp(34px, 5vw, 54px);
+  font-style: italic;
+  font-weight: 800;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.content {
+  padding: clamp(24px, 4vw, 52px);
+}
+
+.section {
+  padding: 0 0 clamp(24px, 3.5vw, 38px);
+  margin: 0 0 clamp(24px, 3.5vw, 38px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.section h3 {
+  max-width: 780px;
+  margin: 0 0 18px;
+  color: #111;
+  font-size: clamp(19px, 2.6vw, 25px);
+  font-weight: 900;
+  line-height: 1.18;
+}
+
+.section h4 {
+  margin: 0 0 8px;
+  color: #fd0e7d;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.section p {
+  max-width: 800px;
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.52;
+}
+
+.tourList,
+.numberedList,
+.legalList {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  counter-reset: list;
+}
+
+.tourList {
+  gap: 10px;
+}
+
+.tourList li,
+.numberedList li,
+.legalList li {
+  position: relative;
+  padding-left: 34px;
+  font-size: 16px;
+  line-height: 1.5;
+  list-style: none;
+  counter-increment: list;
+}
+
+.tourList li::before,
+.numberedList li::before,
+.legalList li::before {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  display: grid;
+  width: 23px;
+  height: 23px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  place-items: center;
+  background: #fff500;
+  border-radius: 50%;
+  content: counter(list);
+}
+
+.tourList strong,
+.numberedList strong {
+  font-weight: 900;
+}
+
+.prizeFund {
+  display: inline-block;
+  margin-top: 22px !important;
+  margin-bottom: 0 !important;
+  padding: 14px 16px;
+  color: #0b0b0b;
+  font-size: 17px !important;
+  background: #fff500;
+  border-radius: 12px;
+}
+
+.scoreGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.scoreCard {
+  padding: 18px;
+  background: #f4f4f4;
+  border-radius: 16px;
+}
+
+.scoreCard p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.totalScore {
+  margin-top: 18px !important;
+  margin-bottom: 0 !important;
+  color: #fd0e7d;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+}
+
+.prizeList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.prizeItem {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 12px;
+  color: #272727;
+  font-size: 14px;
+  line-height: 1.2;
+  list-style: none;
+  background: #f3f3f3;
+  border-radius: 9px;
 }
 
-.doc {
-  width: 91vw;
-  height: 100%;
-  border-radius: 21px;
+.prizeItem strong {
+  color: #e3006d;
+  font-size: 15px;
+  white-space: nowrap;
 }
 
-@media (min-width: 568px) {
-  .doc {
-    width: 100%;
-    height: 100%;
-    border-radius: 21px;
+.note {
+  margin-top: 16px !important;
+  margin-bottom: 0 !important;
+  color: #5e5e5e;
+  font-size: 13px !important;
+  font-style: italic;
+  line-height: 1.5 !important;
+}
+
+.superPrize {
+  padding: clamp(20px, 3vw, 30px);
+  color: var(--white);
+  background: linear-gradient(120deg, #161616 0%, #090909 70%, #47142e 100%);
+  border: 0;
+  border-radius: 20px;
+}
+
+.superPrize h3,
+.superPrize p {
+  color: var(--white);
+}
+
+.superPrize h3 {
+  color: #fff500;
+}
+
+.superPrize p:last-child {
+  margin-bottom: 0;
+}
+
+.superPrize .note {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.viewPredictions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: clamp(22px, 4vw, 36px);
+  margin-bottom: 24px;
+  text-align: center;
+  background: #f4f4f4;
+  border-radius: 18px;
+}
+
+.viewPredictions p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.viewPredictions a {
+  display: inline-flex;
+  min-height: 40px;
+  padding: 8px 20px;
+  align-items: center;
+  justify-content: center;
+  color: #080808;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  background: #fff500;
+  border-radius: 999px;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.viewPredictions a:hover {
+  filter: brightness(0.94);
+  transform: translateY(-1px);
+}
+
+.motto {
+  margin: 0 0 clamp(30px, 4vw, 48px);
+  color: #111;
+  font-family: "Alumni Sans", Roboto, sans-serif;
+  font-size: clamp(36px, 6vw, 60px);
+  font-style: italic;
+  font-weight: 800;
+  line-height: 0.9;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.legal {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  color: #666;
+  border-bottom: 0;
+}
+
+.legal p {
+  max-width: none;
+  color: inherit;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.54;
+}
+
+.legal a {
+  color: inherit;
+  font-weight: 700;
+}
+
+.legalList {
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.legalList li {
+  font-size: 13px;
+  font-style: italic;
+}
+
+.legalList li::before {
+  top: 0;
+  width: auto;
+  height: auto;
+  color: inherit;
+  font-size: inherit;
+  font-style: normal;
+  background: transparent;
+  content: counter(list) ".";
+}
+
+@media (max-width: 567px) {
+  .content {
+    padding: 24px 18px;
   }
-  .container {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+
+  .scoreGrid,
+  .prizeList {
+    grid-template-columns: 1fr;
+  }
+
+  .section p,
+  .tourList li,
+  .numberedList li {
+    font-size: 15px;
+  }
+
+  .prizeFund {
+    font-size: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewPredictions a {
+    transition: none;
   }
 }

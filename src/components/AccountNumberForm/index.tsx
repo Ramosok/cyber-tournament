@@ -144,7 +144,7 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
         className={styles.tournamentConditionsModal}
         ref={conditionsModalRef}
       >
-        <TournamentConditions />
+        <TournamentConditions spreadsheetUrl={currentSpreadsheetUrl} />
       </Modal>
 
       <Modal
