@@ -18,6 +18,9 @@ type ModalProps = PropsWithChildren<{
   onClose?: () => void;
   noCross?: boolean;
   className?: string;
+  closeButtonClassName?: string;
+  scrollerClassName?: string;
+  scrollbarClassName?: string;
   ariaLabel?: string;
   ref?: Ref<ModalHandle>;
 }>;
@@ -27,6 +30,9 @@ export const Modal = ({
   noCross,
   onClose,
   className = "",
+  closeButtonClassName = "",
+  scrollerClassName = "",
+  scrollbarClassName = "",
   ariaLabel,
   ref,
 }: ModalProps): ReactElement => {
@@ -120,15 +126,23 @@ export const Modal = ({
     >
       <div className={styles.content}>
         {!noCross && (
-          <button type="button" className={styles.cross} onClick={handleClose}>
+          <button
+            type="button"
+            className={`${styles.cross} ${closeButtonClassName}`}
+            onClick={handleClose}
+            aria-label="Закрыть окно"
+          >
             <Icon width="22" height="22" icon="cross" />
           </button>
         )}
         <section className={className === "" ? styles.container : className}>
-          <div className={styles.scroller} ref={scrollerRef}>
+          <div
+            className={`${styles.scroller} ${scrollerClassName}`}
+            ref={scrollerRef}
+          >
             {children}
           </div>
-          <div className={styles.scrollbar}>
+          <div className={`${styles.scrollbar} ${scrollbarClassName}`}>
             <div className={styles.thumb} ref={thumbRef} />
           </div>
         </section>

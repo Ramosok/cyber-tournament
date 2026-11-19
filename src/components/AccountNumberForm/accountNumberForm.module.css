@@ -163,23 +163,50 @@ h6 {
   border-radius: 24px;
 }
 
-.tournamentConditionsModal .thumb {
-  display: none !important;
-}
-
-.tournamentConditionsModal .scroller {
+.conditionsScroller {
   display: block !important;
   overflow-y: auto !important;
-  scrollbar-width: auto !important;
-  -ms-overflow-style: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #fd0e7d #f0f0f0;
 }
 
-.tournamentConditionsModal .scroller::-webkit-scrollbar {
+.conditionsScroller::-webkit-scrollbar {
   display: block !important;
+  width: 10px;
 }
 
-.tournamentConditionsModal .scrollbar {
+.conditionsScroller::-webkit-scrollbar-track {
+  margin: 8px 0;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.conditionsScroller::-webkit-scrollbar-thumb {
+  background: #fd0e7d;
+  border: 2px solid #f0f0f0;
+  border-radius: 10px;
+}
+
+.conditionsScrollbar {
   display: none !important;
+}
+
+.conditionsCloseButton {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--white);
+  cursor: pointer;
+  place-items: center;
+  background-color: #fd0e7d !important;
+  border: 2px solid var(--white) !important;
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.conditionsCloseButton:hover {
+  background-color: #cf0061 !important;
 }
 
 @media (min-width: 460px) {

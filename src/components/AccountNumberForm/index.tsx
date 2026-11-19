@@ -142,6 +142,9 @@ export const AccountNumberForm: FC<AccountNumberFormProps> = ({
       <Modal
         ariaLabel="Условия турнира"
         className={styles.tournamentConditionsModal}
+        closeButtonClassName={styles.conditionsCloseButton}
+        scrollerClassName={styles.conditionsScroller}
+        scrollbarClassName={styles.conditionsScrollbar}
         ref={conditionsModalRef}
       >
         <TournamentConditions spreadsheetUrl={currentSpreadsheetUrl} />
